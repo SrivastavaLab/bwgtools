@@ -2,7 +2,8 @@
 #'
 #' this function reads all the sheets in an excel book on dropbox
 #' @export
-read_sheet <- function(file, dest = tempdir(), sheetname, ...) {
+read_sheet <- function(file, dest = tempdir(), sheetname = NULL, ...) {
+  if (is.null(sheetname)) stop("c'mon give me a sheet name")
   localfile = paste0(dest, "/", basename(file))
   f <- match.fun(sheetname)
   if (file.exists(localfile)) {
@@ -30,3 +31,5 @@ leaf.waterdepths <- function(file_to_read){
                                    "numeric")
   )
 }
+
+### we need a function that checks the input sheetname
