@@ -1,0 +1,12 @@
+Package: bwg
+Type: Package
+Title: access data from the bromeliad working group
+Version: 0.1
+Date: 2015-04-20
+Authors@R : person("Andrew" "MacDonald", email = "aammacdonald@gmail.com", role = c("aut", "cre"))
+Description: This package combines data from the bwg rainfall experiment, validates and analyzes it.
+License:  MIT + file LICENSE
+LazyData: TRUE
+Imports:
+    rdrop2,
+    readxl
