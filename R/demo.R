@@ -20,7 +20,7 @@ read_sheet <- function(file, dest = tempdir(), sheetname = NULL, ...) {
 #'
 #' this function reads one water depth sheet
 #'
-#'
+#' @export
 leaf.waterdepths <- function(file_to_read){
   readxl::read_excel(path = file_to_read,
                      sheet = "leaf.waterdepths",

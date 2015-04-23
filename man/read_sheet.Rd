@@ -4,7 +4,7 @@
 \alias{read_sheet}
 \title{Read an excel file from dropbox account}
 \usage{
-read_sheet(file, dest = tempdir(), sheetname, ...)
+read_sheet(file, dest = tempdir(), sheetname = NULL, ...)
 }
 \description{
 this function reads all the sheets in an excel book on dropbox
