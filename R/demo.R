@@ -4,8 +4,11 @@
 #' @export
 read_sheet <- function(file, dest = tempdir(), sheetname = NULL, ...) {
   if (is.null(sheetname)) stop("c'mon give me a sheet name")
-  localfile = paste0(dest, "/", basename(file))
-  f <- match.fun(sheetname)
+  localfile <-  paste0(dest, "/", basename(file))
+
+  sheet <-  match.arg(sheetname, c("leaf.waterdepths"))
+  f <- switch(sheet,
+               leaf.waterdepths = leaf.waterdepths_read)
   if (file.exists(localfile)) {
     print("you downloaded that file already! reading from disk")
     f(localfile)
@@ -20,8 +23,7 @@ read_sheet <- function(file, dest = tempdir(), sheetname = NULL, ...) {
 #'
 #' this function reads one water depth sheet
 #'
-#' @export
-leaf.waterdepths <- function(file_to_read){
+leaf.waterdepths_read <- function(file_to_read){
   readxl::read_excel(path = file_to_read,
                      sheet = "leaf.waterdepths",
                      na = "NA",
