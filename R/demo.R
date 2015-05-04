@@ -37,4 +37,26 @@ leaf.waterdepths_read <- function(file_to_read){
   )
 }
 
-### we need a function that checks the input sheetname
+#' read in a sheet from all sites
+#'
+#' this function reads all the sheets in an excel book on dropbox
+#' @param file the file name to fetch
+#' @param sheetname the sheet name you want. must match exactly.
+#' @export
+read_site_sheet <- function(sitename, sheetname = NULL){
+  folders <- "BWG Drought Experiment/raw data/"
+  filename_start <- "Drought_data_"
+  file_ext <- ".xlsx"
+
+  file_wanted <- paste0(folders,filename_start,sitename,file_ext)
+  read_sheet(file_wanted, sheetname = sheetname)
+}
+
+#' Get all that data
+#'
+#' @param sites a vector of all the sites you want
+#' @param sheetname the sheet name
+#' @export
+get_all_sites <- function(sites = c("Argentina","Cardoso", "Colombia","French_Guiana", "Macae", "PuertoRico", "CostaRica"), sheetname = NULL){
+  lapply(sites, read_site_sheet, sheetname = sheetname)
+}
