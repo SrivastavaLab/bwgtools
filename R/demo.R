@@ -1,8 +1,11 @@
 #' Read an excel file from dropbox account
 #'
 #' this function reads all the sheets in an excel book on dropbox
+#' @param file the file name to fetch
+#' @param sheetname the sheet name you want. must match exactly.
+#' @param dest destination for download
 #' @export
-read_sheet <- function(file, dest = tempdir(), sheetname = NULL, ...) {
+read_sheet <- function(file, sheetname = NULL, dest = tempdir(), ...) {
   if (is.null(sheetname)) stop("c'mon give me a sheet name")
   localfile <-  paste0(dest, "/", basename(file))
 

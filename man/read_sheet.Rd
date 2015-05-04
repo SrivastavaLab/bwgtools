@@ -4,7 +4,14 @@
 \alias{read_sheet}
 \title{Read an excel file from dropbox account}
 \usage{
-read_sheet(file, dest = tempdir(), sheetname = NULL, ...)
+read_sheet(file, sheetname = NULL, dest = tempdir(), ...)
+}
+\arguments{
+\item{file}{the file name to fetch}
+
+\item{sheetname}{the sheet name you want. must match exactly.}
+
+\item{dest}{destination for download}
 }
 \description{
 this function reads all the sheets in an excel book on dropbox
