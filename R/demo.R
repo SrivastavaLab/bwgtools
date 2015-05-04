@@ -14,7 +14,7 @@ read_sheet <- function(file, dest = tempdir(), sheetname = NULL, ...) {
     f(localfile)
   } else {
     print("fetching from dropbox")
-    drop_get(file, local_file = localfile, overwrite = TRUE)
+    rdrop2::drop_get(file, local_file = localfile, overwrite = TRUE)
     f(localfile)
   }
 }
