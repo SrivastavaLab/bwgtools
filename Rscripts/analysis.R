@@ -1,1 +1,36 @@
 ## analysis file!
+library(bwg)
+
+## get just Macae --- See here @nacmarino
+read_site_sheet("Macae", "leaf.waterdepths")
+
+leaf_depth_list <- get_all_sites(sheetname = "leaf.waterdepths")
+
+namelist <- lapply(leaf_depth_list, names)
+Reduce(intersect, namelist) ## Are there problems?
+
+identical(namelist[[1]], namelist[[2]])
+
+library(dplyr)
+
+all_leaf <- rbind_all(leaf_depth_list)
+
+## date to date
+## control the day of the experiment for each bromeliad
+## the first day of the experiment is the first non-NA
+
+## proof of concept for macae
+
+
+mac <- read_site_sheet("Macae", "leaf.waterdepths")
+glimpse(mac)
+library("tidyr")
+mac %<>%
+  gather("data_name", "depth", starts_with("depth")) %>%
+  separate(data_name, into = c("depth_word", "leaf", "first_or_second","first")) %>%
+  filter(!is.na(depth)) %>%
+  select(-depth_word, -first)
+
+mac %<>%
+  group_by(bromeliad.id) %>%
+  mutate(day_of_exp = dense_rank(date))
