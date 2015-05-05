@@ -6,6 +6,19 @@ read_site_sheet("Macae", "leaf.waterdepths")
 
 leaf_depth_list <- get_all_sites(sheetname = "leaf.waterdepths")
 
+
+
+
+
+check_names(leaf_depth_list[[1]])
+
+names(leaf_depth_list[[2]])[1] <- "a"
+names(leaf_depth_list[[2]])[3] <- "b"
+
+lapply(leaf_depth_list, check_names)
+
+lapply(leaf_depth_list, function(x) all.equal(names(x), water_sheet_names))
+
 namelist <- lapply(leaf_depth_list, names)
 Reduce(intersect, namelist) ## Are there problems?
 

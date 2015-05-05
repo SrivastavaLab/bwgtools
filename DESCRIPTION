@@ -9,4 +9,5 @@ License:  MIT + file LICENSE
 LazyData: TRUE
 Imports:
     rdrop2,
-    readxl
+    readxl,
+    assertthat
