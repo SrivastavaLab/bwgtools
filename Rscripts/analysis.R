@@ -25,12 +25,30 @@ all_leaf <- rbind_all(leaf_depth_list)
 mac <- read_site_sheet("Macae", "leaf.waterdepths")
 glimpse(mac)
 library("tidyr")
-mac %<>%
+longwater <- . %>%
   gather("data_name", "depth", starts_with("depth")) %>%
   separate(data_name, into = c("depth_word", "leaf", "first_or_second","first")) %>%
   filter(!is.na(depth)) %>%
   select(-depth_word, -first)
 
-mac %<>%
+
+mac %>%
+  longwater %>%
   group_by(bromeliad.id) %>%
   mutate(day_of_exp = dense_rank(date))
+
+### CostaRica
+
+## get just Macae --- See here @nacmarino
+cr <- read_site_sheet("CostaRica", "leaf.waterdepths")
+
+library(ggplot2)
+cr %>%
+  longwater %>%
+  group_by(bromeliad.id) %>%
+  mutate(day_of_exp = dense_rank(date)) %>%
+  separate(trt.name, into = c("mu", "k"), sep = "k") %>%
+  mutate(mu = extract_numeric(mu)) %>%
+  ggplot(aes(x = date, y = depth, colour = leaf, group = bromeliad.id)) + geom_line() +
+  facet_grid(mu~k)
+
