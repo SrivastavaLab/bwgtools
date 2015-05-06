@@ -7,9 +7,7 @@ read_site_sheet("Macae", "leaf.waterdepths")
 leaf_depth_list <- get_all_sites(sheetname = "leaf.waterdepths")
 
 
-
-
-
+## checking names
 check_names(leaf_depth_list[[1]])
 
 names(leaf_depth_list[[2]])[1] <- "a"
