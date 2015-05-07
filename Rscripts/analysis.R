@@ -1,12 +1,15 @@
 ## analysis file!
 library(bwg)
+library("tidyr")
+library(dplyr)
+library(ggplot2)
 
 ## get just Macae --- See here @nacmarino
-read_site_sheet("Macae", "leaf.waterdepths")
+mac <- read_site_sheet("Macae", "leaf.waterdepths")
+cr <- read_site_sheet("CostaRica", "leaf.waterdepths")
 
 leaf_depth_list <- get_all_sites(sheetname = "leaf.waterdepths")
 
-library(dplyr)
 
 all_leaf <- rbind_all(leaf_depth_list)
 ## write a function that combines the data and also checks it
@@ -18,10 +21,7 @@ all_leaf <- rbind_all(leaf_depth_list)
 
 ## proof of concept for macae
 
-
-mac <- read_site_sheet("Macae", "leaf.waterdepths")
-glimpse(mac)
-library("tidyr")
+## make this into a function
 longwater <- . %>%
   gather("data_name", "depth", starts_with("depth")) %>%
   separate(data_name, into = c("depth_word", "leaf", "first_or_second","first")) %>%
@@ -36,16 +36,31 @@ mac %>%
 ### CostaRica
 
 ## get just Macae --- See here @nacmarino
-cr <- read_site_sheet("CostaRica", "leaf.waterdepths")
 
-library(ggplot2)
-cr %>%
+
+make_data <- . %>%
   longwater %>%
   group_by(bromeliad.id) %>%
   mutate(day_of_exp = dense_rank(date)) %>%
+  ### these would also make good additions to longwater
   separate(trt.name, into = c("mu", "k"), sep = "k") %>%
-  mutate(mu = extract_numeric(mu)) %>%
-  ggplot(aes(x = date, y = depth,
-             colour = leaf, group = bromeliad.id)) + geom_line() +
-  facet_grid(mu~k)
+  mutate(mu = extract_numeric(mu))
+
+cr_mac <- rbind_list(make_data(cr),make_data(mac))
+
+min(cr$date)-max(cr$date)
+
+daily <- data_frame(date = min(cr$date) + ddays(1:54))
+
+left_join(daily, cr)
+
+toplot <- cr_mac %>%
+  filter(!is.na(depth)) %>%
+  group_by(site, bromeliad.id) %>%
+  mutate(day_of_exp = as.numeric(date - min(date)))
+
+toplot %>%
+  ggplot(aes(x = day_of_exp, y = depth,
+             colour = leaf, group = leaf)) + geom_line() + geom_point() +
+  facet_grid(site + mu~k)
 
