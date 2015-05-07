@@ -54,6 +54,13 @@ daily <- data_frame(date = min(cr$date) + ddays(1:54))
 
 left_join(daily, cr)
 
+## trouble with the dates?
+## make a list of missing dates
+## loop over it, cbinding to information columns
+## rbind list
+## combine
+
+
 toplot <- cr_mac %>%
   filter(!is.na(depth)) %>%
   group_by(site, bromeliad.id) %>%
