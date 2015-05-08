@@ -16,7 +16,7 @@ check_names <- function(dataset, column_names = c("site", "trt.name", "bromeliad
   problem <- column_names[!checks]
   #browser()
   if(!all(checks)) {
-    msg <- sprintf("%s is misnamed", problem)
+    msg <- sprintf("%s is misnamed \n", problem)
     warning(msg)
   }
 }
