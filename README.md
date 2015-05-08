@@ -1,3 +1,5 @@
+[![Travis-CI Build Status](https://travis-ci.org/SrivastavaLab/bwg.png?branch=master)](https://travis-ci.org/SrivastavaLab/bwg)
+
 This is an R package for the bromeliad working group rainfall experiment. It uses [rdrop2](https://github.com/karthik/rdrop2) to access you Dropbox account, then uses [readxl](https://github.com/hadley/readxl) to download the data and read it directly into R.  
 
 ## Installation
