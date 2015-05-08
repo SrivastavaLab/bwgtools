@@ -15,11 +15,9 @@ check_names <- function(dataset, column_names = c("site", "trt.name", "bromeliad
   checks <- vapply(column_names, assertthat::has_name, TRUE, x = dataset)
   problem <- column_names[!checks]
   #browser()
-  if(all(checks)) {
-    msg <- "the names are all OK"
-  } else {
+  if(!all(checks)) {
     msg <- sprintf("%s is misnamed", problem)
+    warning(msg)
   }
-  return(msg)
 }
 
