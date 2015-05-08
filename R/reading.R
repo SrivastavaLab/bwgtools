@@ -15,6 +15,8 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(),
     localfile <-  paste0(dest, "/", basename(file))
   }
 
+  ## here add a test to see if the user has asked for a local file AND That the file exists
+
   sheet <-  match.arg(sheetname, c("leaf.waterdepths"))
   f <- switch(sheet,
                leaf.waterdepths = leaf.waterdepths_read)
@@ -33,6 +35,7 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(),
 #' this function reads one water depth sheet
 #'
 #' @param file_to_read Path to file to be read
+#' @export
 leaf.waterdepths_read <- function(file_to_read){
   readxl::read_excel(path = file_to_read,
                      sheet = "leaf.waterdepths",
