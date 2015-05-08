@@ -7,8 +7,10 @@ Authors@R : person("Andrew" "MacDonald", email = "aammacdonald@gmail.com", role 
 Description: This package combines data from the bwg rainfall experiment, validates and analyzes it.
 License: MIT + file LICENSE
 LazyData: TRUE
-Imports:
+Imports: 
     rdrop2,
     readxl,
     assertthat
-Suggests: testthat
+Suggests: testthat,
+    knitr
+VignetteBuilder: knitr
