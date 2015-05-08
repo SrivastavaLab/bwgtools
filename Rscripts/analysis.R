@@ -8,8 +8,23 @@ library(ggplot2)
 mac <- read_site_sheet("Macae", "leaf.waterdepths")
 cr <- read_site_sheet("CostaRica", "leaf.waterdepths")
 
+
+mac <- read_sheet("../../../Dropbox/BWG Drought Experiment/raw data/Drought_data_Macae.xlsx",
+                       "leaf.waterdepths", ondisk = TRUE)
+
+filelist <- list.files("../../../Dropbox/BWG Drought Experiment/raw data/", pattern = "^Drought*", full.names = TRUE)
+filelist <- filelist[-3]
+
+leaf_depth_list <- lapply(filelist, read_sheet, sheetname = "leaf.waterdepths", ondisk = TRUE)
+
+## or if internet
 leaf_depth_list <- get_all_sites(sheetname = "leaf.waterdepths")
 
+lapply(leaf_depth_list, check_names)
+
+check_names(leaf_depth_list[[1]])
+
+head(leaf_depth_list[[1]])
 
 all_leaf <- rbind_all(leaf_depth_list)
 ## write a function that combines the data and also checks it
