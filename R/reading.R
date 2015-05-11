@@ -17,9 +17,11 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(),
 
   ## here add a test to see if the user has asked for a local file AND That the file exists
 
-  sheet <-  match.arg(sheetname, c("leaf.waterdepths"))
+  sheet <-  match.arg(sheetname, c("leaf.waterdepths", "bromeliad.physical"))
   f <- switch(sheet,
-               leaf.waterdepths = leaf.waterdepths_read)
+              leaf.waterdepths = leaf.waterdepths_read,
+              bromeliad.physical = bromeliad.physical_read
+  )
   if (file.exists(localfile)) {
     message("you downloaded that file already! reading from disk")
     f(localfile, ...)
@@ -46,6 +48,30 @@ leaf.waterdepths_read <- function(file_to_read){
                                    "numeric")
   )
 }
+
+#' Read in the bromeliad.physical tab
+#'
+#' this function reads one water depth sheet
+#'
+#' @param file_to_read Path to file to be read
+#' @export
+bromeliad.physical_read <- function(file_to_read){
+  readxl::read_excel(path = file_to_read,
+                     sheet = "bromeliad.physical",
+                     na = "NA",
+                     col_types = c("text","text","numeric","numeric","numeric",
+                                   "numeric","text","text",
+                                   "numeric","numeric","numeric","numeric","numeric",
+                                   "numeric","numeric","numeric","numeric","numeric",
+                                   "numeric","numeric","numeric","numeric","numeric",
+                                   "numeric","numeric","numeric","numeric","numeric",
+                                   "numeric","numeric","numeric","numeric","numeric",
+                                   "numeric","numeric","numeric","numeric","numeric",
+                                   "numeric","numeric","numeric","numeric","numeric",
+                                   "numeric","numeric")
+  )
+}
+
 
 #' read in a sheet from all sites
 #'
