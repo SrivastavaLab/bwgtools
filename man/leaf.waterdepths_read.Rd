@@ -6,6 +6,9 @@
 \usage{
 leaf.waterdepths_read(file_to_read)
 }
+\arguments{
+\item{file_to_read}{Path to file to be read}
+}
 \description{
 this function reads one water depth sheet
 }

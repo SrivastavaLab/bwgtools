@@ -4,7 +4,7 @@
 \alias{read_site_sheet}
 \title{read in a sheet from all sites}
 \usage{
-read_site_sheet(sitename, sheetname = NULL)
+read_site_sheet(sitename, sheetname = NULL, ...)
 }
 \arguments{
 \item{sheetname}{the sheet name you want. must match exactly.}
