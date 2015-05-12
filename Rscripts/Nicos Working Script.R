@@ -33,7 +33,7 @@ longwater <- function(df) {
 }
 
 #add the day of the experiment plus the long format to the data
-calcs <- mac %>%
+wd_measures <- mac %>%
   group_by(trt.name) %>%
   mutate(nday = seq_along(date)) %>%
   longwater()
@@ -42,29 +42,31 @@ calcs <- mac %>%
 # start calculations ------------------------------------------------------
 
 #calculate the number of days the tanks dried out
-n.dry  <- calcs %>%
+dry_tanks <- wd_measures %>%
   group_by(trt.name, nday) %>%   #for each treatment, in each day
-  summarise(n.tanks = sum(depth == 0), #how many tanks were dry?
-            not.dry = sum(sum(depth == 0))==0,  #are there any tanks that were not dry?
-            one.tank = sum(sum(depth == 0))==1, #are there at least one tank that is dry?
-            two.tanks = sum(sum(depth == 0))==2) %>% #are there at least three tanks that are dry?
+  summarise(tanks_dry = sum(depth == 0), #how many tanks were dry?
+            no_tank_dry = sum(sum(depth == 0))==0,  #are there any tanks that were not dry?
+            one_tank_dry = sum(sum(depth == 0))==1, #are there at least one tank that is dry?
+            two_tanks_dry = sum(sum(depth == 0))==2) %>% #are there at least two tanks that are dry?
   group_by(trt.name) %>%  #for each treatment, tell me how many days...
-  summarise(no_tank_dry = sum(not.dry > 0), #no tank was dry?
-            one_tank_dry = sum(one.tank > 0), #at least one tank was dry?
-            two_tanks_dry = sum(two.tanks >0)) #at least two tanks were dry? #at least three tanks were dry?
-n.dry
+  summarise(total_times_dry = sum(tanks_dry),
+            no_tank_dry = sum(no_tank_dry > 0), #no tank was dry?
+            one_tank_dry = sum(one_tank_dry > 0), #at least one tank was dry?
+            two_tanks_dry = sum(two_tanks_dry >0)) #at least two tanks were dry? #at least three tanks were dry?
+dry_tanks
+
 
 #calculate the time available for colonization
-dried_when_leaf <- calcs %>% #take water depth
+dried_when_leaf <- wd_measures %>% #take water depth
   group_by(trt.name, leaf) %>% #for each leaf of each bromeliad
   mutate(minimum_depth = min(depth), #what was the minimum water depth for each tank
          length_exp = max(nday)) %>%  #what was the entire length of the experiment
   filter(depth == minimum_depth) %>% #show me only the data from the days where water depth was at its minimum
   mutate(times_minimum = length(nday), #how many times each tank got to its minimum?
-         when_last_day_minimum = max(nday), #when was the last time the bromeliad got to its minimum?
+         day_last_minimum = max(nday), #when was the last time the bromeliad got to its minimum?
          days_since_last_minimum = length_exp - max(nday)) %>% #how many days since it got to its min water depth?
   summarise(times_mininum = min(times_minimum),
-            when_last_day_minimum = min(when_last_day_minimum), #number of times any tank got to its minimum (doesn't need to be zero, but minimum)
+            day_last_minimum = min(day_last_minimum), #number of times any tank got to its minimum (doesn't need to be zero, but minimum)
             days_since_last_minimum = min(days_since_last_minimum)) #how long as it been since any tank got to its minimum?
 #in the 'summarise' that I just did, I used the 'min' command just to collapse the repeated values into one single value
 
