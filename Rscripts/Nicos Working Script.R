@@ -54,7 +54,7 @@ n.dry  <- calcs %>%
             two_tanks_dry = sum(two.tanks >0)) #at least two tanks were dry? #at least three tanks were dry?
 n.dry
 
-#calculate
+#calculate the time available for colonization
 dried_when_leaf <- calcs %>% #take water depth
   group_by(trt.name, leaf) %>% #for each leaf of each bromeliad
   mutate(minimum_depth = min(depth), #what was the minimum water depth for each tank
@@ -78,4 +78,47 @@ dried_when_brom <- dried_when_leaf %>%
             when_last_day_minimum = max(when_last_day_minimum), #most recent fall in water depth
             mean.days_since = round(mean(days_since_last_minimum)),
             days_since_last_minimum = max(days_since_last_minimum)) #how many days have ellapsed since the last major drop
+
+
+#calculate the variance in hydrological measures within a bromeliad
+tank_properties <- calcs %>%
+  group_by(trt.name, leaf) %>%
+  mutate(depth_diff = depth - lag(depth),
+         depth_diff_abs = abs(depth - lag(depth))) %>%
+  summarise(max.depth = max(depth),
+            min.depth = min(depth),
+            mean.depth = mean(depth),
+            amplitude = max(depth) - min(depth),
+            wetness = mean(depth)/max(depth),
+            var.depth = var(depth),
+            sd.depth = sd(depth),
+            cv.depth = (100*(sd(depth))/mean(depth)),
+            overflow.days = sum(depth == max(depth))-1,
+            days.dry = sum(depth == 0),
+            net_fluct = round(sum(depth_diff, na.rm = TRUE), digits = 2),
+            total_fluct = round(sum(depth_diff_abs, na.rm = TRUE), digits = 2))
+
+bromeliad_properties <- tank_properties %>%
+  group_by(trt.name) %>%
+  summarise(amplitude = max(max.depth)-min(min.depth), #total difference in amplitude among tanks of the same bromeliad
+            dry_days = max(days.dry), #maximum number of days any one tank was dry
+            wetness_mean = mean(wetness), #mean water depth in relation to the maximum
+            mean_variance_within_bromeliad = mean(var.depth), #mean variability of water depth within tanks from the same bromeliad
+            variance_in_mean_depth = var(mean.depth), #variability of water depth among tanks from the same bromeliad
+            mean.net_fluct = mean(net_fluct),
+            mean.total_fluct = mean(total_fluct))
+
+
+#standard metrics describing a distribution using the water depth, regardless of the tank
+hydrological_measures <- calcs %>%
+  group_by(trt.name) %>%
+  summarise(max.depth = max(depth),
+            min.depth = min(depth), mean.depth = mean(depth),
+            var.depth = var(depth), sd.depth = sd(depth),
+            cv.depth = (100*(sd(depth))/mean(depth)),
+            net_fluct = sum(depth - lag(depth), na.rm = TRUE),
+            total_fluct = sum(abs(depth - lag(depth)), na.rm = TRUE)) %>%
+  inner_join(bromeliad_properties) %>%
+  inner_join(n.dry) %>%
+  inner_join(dried_when_brom)
 
