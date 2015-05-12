@@ -55,3 +55,27 @@ n.dry  <- calcs %>%
 n.dry
 
 #calculate
+dried_when_leaf <- calcs %>% #take water depth
+  group_by(trt.name, leaf) %>% #for each leaf of each bromeliad
+  mutate(minimum_depth = min(depth), #what was the minimum water depth for each tank
+         length_exp = max(nday)) %>%  #what was the entire length of the experiment
+  filter(depth == minimum_depth) %>% #show me only the data from the days where water depth was at its minimum
+  mutate(times_minimum = length(nday), #how many times each tank got to its minimum?
+         when_last_day_minimum = max(nday), #when was the last time the bromeliad got to its minimum?
+         days_since_last_minimum = length_exp - max(nday)) %>% #how many days since it got to its min water depth?
+  summarise(times_mininum = min(times_minimum),
+            when_last_day_minimum = min(when_last_day_minimum), #number of times any tank got to its minimum (doesn't need to be zero, but minimum)
+            days_since_last_minimum = min(days_since_last_minimum)) #how long as it been since any tank got to its minimum?
+#in the 'summarise' that I just did, I used the 'min' command just to collapse the repeated values into one single value
+
+#from here I'll do the calculation for the bromeliad - THIS IS WHAT WE WANT
+dried_when_brom <- dried_when_leaf %>%
+  group_by(trt.name) %>%
+  summarise(mean.times_min = round(mean(times_mininum)),
+            when_times_minimum = max(times_mininum),
+            times_min = sum(times_mininum),
+            mean.last_min = round(mean(when_last_day_minimum)),
+            when_last_day_minimum = max(when_last_day_minimum), #most recent fall in water depth
+            mean.days_since = round(mean(days_since_last_minimum)),
+            days_since_last_minimum = max(days_since_last_minimum)) #how many days have ellapsed since the last major drop
+
