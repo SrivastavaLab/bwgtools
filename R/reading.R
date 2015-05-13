@@ -45,7 +45,6 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(),
 #' this function reads one water depth sheet
 #'
 #' @param file_to_read Path to file to be read
-#' @export
 leaf.waterdepths_read <- function(file_to_read){
   readxl::read_excel(path = file_to_read,
                      sheet = "leaf.waterdepths",
@@ -59,10 +58,9 @@ leaf.waterdepths_read <- function(file_to_read){
 
 #' Read in the bromeliad.physical tab
 #'
-#' this function reads one water depth sheet
+#' this function reads bromeliad.physical sheet
 #'
 #' @param file_to_read Path to file to be read
-#' @export
 bromeliad.physical_read <- function(file_to_read){
   readxl::read_excel(path = file_to_read,
                      sheet = "bromeliad.physical",
@@ -80,6 +78,11 @@ bromeliad.physical_read <- function(file_to_read){
   )
 }
 
+#' Read in the final.inverts tab
+#'
+#' this function reads one final.inverts sheet
+#'
+#' @param file_to_read Path to file to be read
 bromeliad.final.inverts_read <- function(file_to_read){
   readxl::read_excel(path = file_to_read,
                      sheet = "bromeliad.final.inverts",
@@ -88,6 +91,11 @@ bromeliad.final.inverts_read <- function(file_to_read){
   )
 }
 
+#' Read in the site.info tab
+#'
+#' this function reads one site.info sheet
+#'
+#' @param file_to_read Path to file to be read
 site.info_read <- function(file_to_read){
   rxl <-   readxl::read_excel
 
@@ -112,7 +120,11 @@ site.info_read <- function(file_to_read){
   )
 }
 
-
+#' Read in the site.info tab
+#'
+#' this function reads one site.info sheet
+#'
+#' @param file_to_read Path to file to be read
 site.weather_read <- function(file_to_read){
   readxl::read_excel(path = file_to_read,
                      sheet = "site.weather",
