@@ -89,10 +89,26 @@ bromeliad.final.inverts_read <- function(file_to_read){
 }
 
 site.info_read <- function(file_to_read){
-  readxl::read_excel(path = file_to_read,
-                     sheet = "site.info",
-                     na = "NA",
-                     col_types = c("text","numeric","numeric","numeric","text","numeric","numeric","numeric","numeric","numeric","numeric","numeric","text","text","text","text","date","date","text")
+  rxl <-   readxl::read_excel
+
+  first_pass <- rxl(path = file_to_read, sheet = "site.info", na = "NA",
+                    col_types = NULL)
+
+  total_cols <- ncol(first_pass)
+  true_cols <- c("text","numeric","numeric","numeric",
+                 "text","numeric","numeric","numeric",
+                 "numeric","numeric","numeric","numeric",
+                 "text","text","text","text","date","date","text")
+
+  n_blank_cols <- total_cols - length(true_cols)
+
+  blanks <- rep("blank", n_blank_cols)
+
+
+  rxl(path = file_to_read,
+      sheet = "site.info",
+      na = "NA",
+      col_types = c(true_cols, blanks)
   )
 }
 
