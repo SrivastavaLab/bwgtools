@@ -49,14 +49,29 @@ site_weather <- get_all_sites(sheetname = "site.weather")
 # bromeliad.physical ----------------------------------
 
 read_site_sheet("Argentina", "bromeliad.physical")
-read_site_sheet("Cardoso", "bromelaid.physical")
-read_site_sheet("Colombia", "bromelaid.physical")
-read_site_sheet("French_Guiana", "bromelaid.physical")
-read_site_sheet("Macae", "bromelaid.physical")
-read_site_sheet("PuertoRico", "bromelaid.physical")
-read_site_sheet("CostaRica", "bromelaid.physical")
+read_site_sheet("Cardoso", "bromeliad.physical")
+read_site_sheet("Colombia", "bromeliad.physical") ##
+read_site_sheet("French_Guiana", "bromeliad.physical")
+read_site_sheet("Macae", "bromeliad.physical")
+read_site_sheet("PuertoRico", "bromeliad.physical")
+read_site_sheet("CostaRica", "bromeliad.physical")
 
-site_weather <- get_all_sites(sheetname = "bromelaid.physical")
+site_weather <- get_all_sites(sheetname = "bromeliad.physical")
+
+
+
+# bromeliad.final.inverts ----------------------------------
+
+read_site_sheet("Argentina", "bromeliad.final.inverts")
+read_site_sheet("Cardoso", "bromeliad.final.inverts")
+read_site_sheet("Colombia", "bromeliad.final.inverts") ##
+read_site_sheet("French_Guiana", "bromeliad.final.inverts")
+read_site_sheet("Macae", "bromeliad.final.inverts")
+read_site_sheet("PuertoRico", "bromeliad.final.inverts")
+read_site_sheet("CostaRica", "bromeliad.final.inverts")
+
+site_weather <- get_all_sites(sheetname = "bromeliad.final.inverts")
+
 
 ## get just Macae --- See here @nacmarino
 mac <- read_site_sheet("Macae", "leaf.waterdepths")
