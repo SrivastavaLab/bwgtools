@@ -16,7 +16,7 @@ read_site_sheet("Cardoso", "site.info")
 read_site_sheet("Colombia", "site.info") ## warnings
 read_site_sheet("French_Guiana", "site.info")
 read_site_sheet("Macae", "site.info")
-read_site_sheet("PuertoRico", "site.info") ## warnings
+pr <- read_site_sheet("PuertoRico", "site.info")
 read_site_sheet("CostaRica", "site.info")
 
 
@@ -25,11 +25,11 @@ read_site_sheet("CostaRica", "site.info")
 combine_site.info()
 
 
-
+get_bwg_names()
 # site.weather ----------------------------------------
 
 
-read_site_sheet("Argentina", "bromelaid.physical")
+read_site_sheet("Argentina", "site.weather") ## extra column
 read_site_sheet("Cardoso", "site.weather")
 read_site_sheet("Colombia", "site.weather")
 read_site_sheet("French_Guiana", "site.weather")
@@ -37,9 +37,12 @@ read_site_sheet("Macae", "site.weather")
 read_site_sheet("PuertoRico", "site.weather")
 read_site_sheet("CostaRica", "site.weather")
 
-site_weather <- get_all_sites(sheetname = "site.weather")
+#site_weather <- get_all_sites(sheetname = "site.weather")
 
+combing_site.weather()
 
+# the_ncol <- lapply(site_weather, ncol)
+# sapply(the_ncol, function(x) assertthat::are_equal(x, 5))
 
 # bromeliad.physical ----------------------------------
 
@@ -51,8 +54,11 @@ read_site_sheet("Macae", "bromeliad.physical")
 read_site_sheet("PuertoRico", "bromeliad.physical")
 read_site_sheet("CostaRica", "bromeliad.physical")
 
-site_weather <- get_all_sites(sheetname = "bromeliad.physical")
 
+# get_all_sites(sheetname = "bromeliad.physical")
+
+# combine_bromeliad.physical()
+## Doesn't work!
 
 
 # bromeliad.final.inverts ----------------------------------
@@ -65,9 +71,20 @@ read_site_sheet("Macae", "bromeliad.final.inverts")
 read_site_sheet("PuertoRico", "bromeliad.final.inverts")
 read_site_sheet("CostaRica", "bromeliad.final.inverts")
 
-site_weather <- get_all_sites(sheetname = "bromeliad.final.inverts")
+site_final_insects <- get_all_sites(sheetname = "bromeliad.final.inverts")
+
+lapply(site_final_insects, names)
+lapply(site_final_insects, function(x) head(x)[1:7])
+
+## clean Argentina
+arg <- site_final_insects[[1]]
+names(arg)[which(names(arg)=="????")] <- "UNK"
+arg_bwg_name <- names(arg)
 
 
+arg2 <- read_site_sheet("Argentina", "bromeliad.final.inverts", skip = 1)
+
+names(arg2)[-4]
 ## get just Macae --- See here @nacmarino
 mac <- read_site_sheet("Macae", "leaf.waterdepths")
 cr <- read_site_sheet("CostaRica", "leaf.waterdepths")
