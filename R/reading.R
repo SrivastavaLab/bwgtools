@@ -17,10 +17,14 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(),
 
   ## here add a test to see if the user has asked for a local file AND That the file exists
 
-  sheet <-  match.arg(sheetname, c("leaf.waterdepths", "bromeliad.physical"))
+  sheet <-  match.arg(sheetname, c("leaf.waterdepths",
+                                   "bromeliad.physical",
+                                   "bromeliad.final.inverts",
+                                   ))
   f <- switch(sheet,
               leaf.waterdepths = leaf.waterdepths_read,
-              bromeliad.physical = bromeliad.physical_read
+              bromeliad.physical = bromeliad.physical_read,
+              bromeliad.final.inverts = bromeliad.final.inverts_read
   )
   if (file.exists(localfile)) {
     message("you downloaded that file already! reading from disk")
@@ -69,6 +73,14 @@ bromeliad.physical_read <- function(file_to_read){
                                    "numeric","numeric","numeric","numeric","numeric",
                                    "numeric","numeric","numeric","numeric","numeric",
                                    "numeric","numeric")
+  )
+}
+
+bromeliad.final.inverts_read <- function(file_to_read){
+  readxl::read_excel(path = file_to_read,
+                     sheet = "bromeliad.final.inverts",
+                     na = "NA",
+                     col_types = NULL
   )
 }
 
