@@ -30,11 +30,33 @@ allsite$last.day.sample
 
 
 
+# site.weather ----------------------------------------
+
+
+read_site_sheet("Argentina", "bromelaid.physical")
+
+read_site_sheet("Cardoso", "site.weather")
+read_site_sheet("Colombia", "site.weather")
+read_site_sheet("French_Guiana", "site.weather")
+read_site_sheet("Macae", "site.weather")
+read_site_sheet("PuertoRico", "site.weather")
+read_site_sheet("CostaRica", "site.weather")
+
+site_weather <- get_all_sites(sheetname = "site.weather")
 
 
 
+# bromeliad.physical ----------------------------------
 
+read_site_sheet("Argentina", "bromeliad.physical")
+read_site_sheet("Cardoso", "bromelaid.physical")
+read_site_sheet("Colombia", "bromelaid.physical")
+read_site_sheet("French_Guiana", "bromelaid.physical")
+read_site_sheet("Macae", "bromelaid.physical")
+read_site_sheet("PuertoRico", "bromelaid.physical")
+read_site_sheet("CostaRica", "bromelaid.physical")
 
+site_weather <- get_all_sites(sheetname = "bromelaid.physical")
 
 ## get just Macae --- See here @nacmarino
 mac <- read_site_sheet("Macae", "leaf.waterdepths")
