@@ -22,7 +22,7 @@ combine_site.info <- function() {
 #'
 #' @return data.frame of all site.weather tabs
 #' @export
-combing_site.weather <- function(){
+combine_site.weather <- function(){
   site_weather <- get_all_sites(sheetname = "site.weather")
 
   ## clean and message

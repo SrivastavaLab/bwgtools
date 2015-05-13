@@ -2,7 +2,7 @@
 
 export(check_names)
 export(combine_site.info)
-export(combing_site.weather)
+export(combine_site.weather)
 export(firstday)
 export(from_start)
 export(get_all_sites)
