@@ -21,8 +21,8 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(),
                                    "bromeliad.physical",
                                    "bromeliad.final.inverts",
                                    "site.info",
-                                 "site.weather"
-                                   ))
+                                   "site.weather"
+  ))
   f <- switch(sheet,
               leaf.waterdepths = leaf.waterdepths_read,
               bromeliad.physical = bromeliad.physical_read,
@@ -92,7 +92,7 @@ site.info_read <- function(file_to_read){
   readxl::read_excel(path = file_to_read,
                      sheet = "site.info",
                      na = "NA",
-                     col_types = NULL
+                     col_types = c("text","numeric","numeric","numeric","text","numeric","numeric","numeric","numeric","numeric","numeric","numeric","text","text","text","text","date","date","text")
   )
 }
 
