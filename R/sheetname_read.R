@@ -41,4 +41,25 @@ site.weather_read <- function(file_to_read){
   )
 }
 
+#' Read in the bromeliad.physical tab
+#'
+#' this function reads bromeliad.physical sheet
+#'
+#' @param file_to_read Path to file to be read
+bromeliad.physical_read <- function(file_to_read){
+  readxl::read_excel(path = file_to_read,
+                     sheet = "bromeliad.physical",
+                     na = "NA",
+                     col_types = c("text","text","numeric","numeric","numeric",
+                                   "numeric","text","text",
+                                   "numeric","numeric","numeric","numeric","numeric",
+                                   "numeric","numeric","numeric","numeric","numeric",
+                                   "numeric","numeric","numeric","numeric","numeric",
+                                   "numeric","numeric","numeric","numeric","numeric",
+                                   "numeric","numeric","numeric","numeric","numeric",
+                                   "numeric","numeric","numeric","numeric","numeric",
+                                   "numeric","numeric","numeric","numeric","numeric",
+                                   "numeric","numeric")
+  )
+}
 
