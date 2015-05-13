@@ -20,16 +20,9 @@ read_site_sheet("PuertoRico", "site.info") ## warnings
 read_site_sheet("CostaRica", "site.info")
 
 
-site_info <- get_all_sites(sheetname = "site.info")
+# site_weather <- get_all_sites(sheetname = "site.info")
 
-### this could be a nice function
-site_info[[4]] <- site_info[[4]][1, ] ## extra values from FG
-site_info[[3]] <- site_info[[3]][1, ] ## note that this is not good enough to fix this one.
-sapply(site_info, nrow) ## all 1
-
-allsite <- rbind_all(site_info)
-allsite$last.day.sample
-
+combine_site.info()
 
 
 
