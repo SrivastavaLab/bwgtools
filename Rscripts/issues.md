@@ -4,7 +4,6 @@
 ## site.info
 
 * *Colombia* format of this tab is incorrect -- too many rows
-* *PuertoRico* apostrophe in number column 2, 3 and 4
 * *FrenchGuiana* empty rows below data
 
 ## site.weather
@@ -20,3 +19,4 @@
 ## bromeliad.final.inverts
 
 * *Argentina* incorrect top of sheet - should be only one line
+
