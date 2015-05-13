@@ -10,7 +10,12 @@ cr <- read_site_sheet("CostaRica", "leaf.waterdepths")
 
 
 mac <- read_sheet("../../../Dropbox/BWG Drought Experiment/raw data/Drought_data_Macae.xlsx",
-                       "leaf.waterdepths", ondisk = TRUE)
+                       "bromeliad.final.inverts", ondisk = TRUE)
+
+str(mac)
+
+read_sheet("../../../Dropbox/BWG Drought Experiment/raw data/Drought_data_PuertoRico.xlsx",
+                  "site.info", ondisk = TRUE)
 
 filelist <- list.files("../../../Dropbox/BWG Drought Experiment/raw data/", pattern = "^Drought*", full.names = TRUE)
 filelist <- filelist[-3]
