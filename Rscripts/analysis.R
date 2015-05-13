@@ -16,13 +16,13 @@ read_site_sheet("Cardoso", "site.info")
 read_site_sheet("Colombia", "site.info") ## warnings
 read_site_sheet("French_Guiana", "site.info")
 read_site_sheet("Macae", "site.info")
-pr <- read_site_sheet("PuertoRico", "site.info")
+read_site_sheet("PuertoRico", "site.info")
 read_site_sheet("CostaRica", "site.info")
 
 
 # site_weather <- get_all_sites(sheetname = "site.info")
 
-combine_site.info()
+sites <- combine_site.info()
 
 
 get_bwg_names()
