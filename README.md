@@ -9,7 +9,7 @@ This is an R package for the bromeliad working group rainfall experiment. It use
 ```r
 install.packages("devtools") # if you don't have devtools
 library(devtools)
-install_github("SrivastavaLab/bwgtools")
+install_github("SrivastavaLab/bwgtools", dependencies = TRUE)
 ```
 
 ## First steps
