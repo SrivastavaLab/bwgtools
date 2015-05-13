@@ -131,11 +131,13 @@ bromeliad.final.inverts_read <- function(file_to_read){
 #' @return a function that reads that sheet with col_types = NULL
 #' @export
 neutral_read <- function(sheetname){
-  function(file_to_read){
+  function(file_to_read, ...){
+    message("reading with NULL coltypes!")
     readxl::read_excel(path = file_to_read,
                        sheet = sheetname,
                        na = "NA",
-                       col_types = NULL
+                       col_types = NULL,
+                       ...
     )
   }
 }
