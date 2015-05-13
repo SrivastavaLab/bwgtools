@@ -40,21 +40,6 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(),
   }
 }
 
-#' Read in the final.inverts tab
-#'
-#' this function reads one final.inverts sheet
-#'
-#' @param file_to_read Path to file to be read
-bromeliad.final.inverts_read <- function(file_to_read){
-  readxl::read_excel(path = file_to_read,
-                     sheet = "bromeliad.final.inverts",
-                     na = "NA",
-                     col_types = NULL
-  )
-}
-
-
-
 
 #' read in a sheet from all sites
 #'
