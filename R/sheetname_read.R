@@ -27,3 +27,18 @@ site.info_read <- function(file_to_read){
   )
 }
 
+#' Read in the site.info tab
+#'
+#' this function reads one site.info sheet
+#'
+#' @param file_to_read Path to file to be read
+site.weather_read <- function(file_to_read){
+  readxl::read_excel(path = file_to_read,
+                     sheet = "site.weather",
+                     na = "NA",
+                     col_types = c("text", "date",
+                                   "numeric", "numeric", "numeric")
+  )
+}
+
+
