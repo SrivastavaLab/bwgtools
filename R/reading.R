@@ -48,11 +48,9 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(),
 #' @param sheetname the sheet name you want. must match exactly.
 #' @export
 read_site_sheet <- function(sitename, sheetname = NULL, ...){
-  folders <- "BWG Drought Experiment/raw data/"
-  filename_start <- "Drought_data_"
-  file_ext <- ".xlsx"
 
-  file_wanted <- paste0(folders,filename_start,sitename,file_ext)
+  ## get default path
+  file_wanted <- make_default_path(sitename)
   read_sheet(file_wanted, sheetname = sheetname, ...)
 }
 
@@ -84,4 +82,19 @@ get_bwg_names <- function(chars = 21, nums = 54){
   the_data <- readr::read_tsv("https://raw.githubusercontent.com/SrivastavaLab/bwg_names/master/data/Distributions_organisms_full.tsv",col_types = our_col_types)
   if(nrow(readr:::problems(the_data)) != 0) stop("something is wrong")
   return(the_data)
+}
+
+
+#' Make default dropbox path
+#'
+#' @param .sitename quoted site name
+#'
+#' @return the default path to file from dropbox
+#' @export
+make_default_path <- function(.sitename){
+  folders <- "BWG Drought Experiment/raw data/"
+  filename_start <- "Drought_data_"
+  file_ext <- ".xlsx"
+
+  file_wanted <- paste0(folders,filename_start,.sitename,file_ext)
 }
