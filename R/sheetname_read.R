@@ -122,3 +122,20 @@ bromeliad.final.inverts_read <- function(file_to_read){
 
 
 #bwg.codes
+
+
+#' read in a neutral file
+#'
+#' @param sheetname name of the sheet you're reading
+#'
+#' @return a function that reads that sheet with col_types = NULL
+#' @export
+neutral_read <- function(sheetname){
+  function(file_to_read){
+    readxl::read_excel(path = file_to_read,
+                       sheet = sheetname,
+                       na = "NA",
+                       col_types = NULL
+    )
+  }
+}
