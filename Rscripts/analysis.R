@@ -5,11 +5,11 @@ library(dplyr)
 library(ggplot2)
 
 ## testing ground
-site_info <- get_all_sites(sheetname = "site.info")
 
-c("Argentina","Cardoso", "Colombia",
-  "French_Guiana", "Macae", "PuertoRico",
-  "CostaRica")
+
+# site.info -------------------------------------------
+
+
 
 read_site_sheet("Argentina", "site.info")
 read_site_sheet("Cardoso", "site.info")
@@ -19,8 +19,11 @@ read_site_sheet("Macae", "site.info")
 read_site_sheet("PuertoRico", "site.info") ## warnings
 read_site_sheet("CostaRica", "site.info")
 
+
+site_info <- get_all_sites(sheetname = "site.info")
+
 ### this could be a nice function
-site_info[[4]] <- site_info[[4]][1, ]
+site_info[[4]] <- site_info[[4]][1, ] ## extra values from FG
 site_info[[3]] <- site_info[[3]][1, ] ## note that this is not good enough to fix this one.
 sapply(site_info, nrow) ## all 1
 
@@ -34,7 +37,6 @@ allsite$last.day.sample
 
 
 read_site_sheet("Argentina", "bromelaid.physical")
-
 read_site_sheet("Cardoso", "site.weather")
 read_site_sheet("Colombia", "site.weather")
 read_site_sheet("French_Guiana", "site.weather")
