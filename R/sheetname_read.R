@@ -63,3 +63,21 @@ bromeliad.physical_read <- function(file_to_read){
   )
 }
 
+
+#' Read in the leaf.waterdepths tab
+#'
+#' this function reads one water depth sheet
+#'
+#' @param file_to_read Path to file to be read
+leaf.waterdepths_read <- function(file_to_read){
+  readxl::read_excel(path = file_to_read,
+                     sheet = "leaf.waterdepths",
+                     na = "NA",
+                     col_types = c("text","text","text",
+                                   "date","numeric","numeric",
+                                   "numeric","numeric","numeric",
+                                   "numeric")
+  )
+}
+
+
