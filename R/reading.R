@@ -20,11 +20,15 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(),
   sheet <-  match.arg(sheetname, c("leaf.waterdepths",
                                    "bromeliad.physical",
                                    "bromeliad.final.inverts",
+                                   "site.info",
+                                 "site.weather"
                                    ))
   f <- switch(sheet,
               leaf.waterdepths = leaf.waterdepths_read,
               bromeliad.physical = bromeliad.physical_read,
-              bromeliad.final.inverts = bromeliad.final.inverts_read
+              bromeliad.final.inverts = bromeliad.final.inverts_read,
+              site.info = site.info_read,
+              site.weather = site.weather_read
   )
   if (file.exists(localfile)) {
     message("you downloaded that file already! reading from disk")
@@ -84,6 +88,25 @@ bromeliad.final.inverts_read <- function(file_to_read){
   )
 }
 
+site.info_read <- function(file_to_read){
+  readxl::read_excel(path = file_to_read,
+                     sheet = "site.info",
+                     na = "NA",
+                     col_types = NULL
+  )
+}
+
+
+site.weather_read <- function(file_to_read){
+  readxl::read_excel(path = file_to_read,
+                     sheet = "site.weather",
+                     na = "NA",
+                     col_types = c("text", "date",
+                                   "numeric", "numeric", "numeric")
+  )
+}
+
+
 
 #' read in a sheet from all sites
 #'
@@ -112,3 +135,16 @@ get_all_sites <- function(sites = c("Argentina","Cardoso", "Colombia",
   lapply(sites, read_site_sheet, sheetname = sheetname)
 }
 
+
+#' obtain the full name data from github
+#'
+#' Gets the complete insect taxonomic data from github. This is good
+#' because it will always be accurate.
+#'
+get_bwg_names <- function(chars = 21, nums = 54){
+  msg <- sprintf("this function thinks there are %d character columns followed by %d numeric columns", 21, 54)
+  message(msg)
+  cols <- c(rep("c", chars), rep("n", chars))
+  col_types <- Reduce(f = paste0, cols)
+  col_types
+}
