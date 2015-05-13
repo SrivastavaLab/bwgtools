@@ -91,34 +91,6 @@ bromeliad.final.inverts_read <- function(file_to_read){
   )
 }
 
-#' Read in the site.info tab
-#'
-#' this function reads one site.info sheet
-#'
-#' @param file_to_read Path to file to be read
-site.info_read <- function(file_to_read){
-  rxl <-   readxl::read_excel
-
-  first_pass <- rxl(path = file_to_read, sheet = "site.info", na = "NA",
-                    col_types = NULL)
-
-  total_cols <- ncol(first_pass)
-  true_cols <- c("text","numeric","numeric","numeric",
-                 "text","numeric","numeric","numeric",
-                 "numeric","numeric","numeric","numeric",
-                 "text","text","text","text","date","date","text")
-
-  n_blank_cols <- total_cols - length(true_cols)
-
-  blanks <- rep("blank", n_blank_cols)
-
-
-  rxl(path = file_to_read,
-      sheet = "site.info",
-      na = "NA",
-      col_types = c(true_cols, blanks)
-  )
-}
 
 #' Read in the site.info tab
 #'

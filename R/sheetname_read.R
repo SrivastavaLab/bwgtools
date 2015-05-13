@@ -26,3 +26,4 @@ site.info_read <- function(file_to_read){
       col_types = c(true_cols, blanks)
   )
 }
+
