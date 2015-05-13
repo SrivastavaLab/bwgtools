@@ -25,8 +25,8 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(),
   ))
   f <- switch(sheet,
               leaf.waterdepths = leaf.waterdepths_read,
-              bromeliad.physical = bromeliad.physical_read,
-              bromeliad.final.inverts = bromeliad.final.inverts_read,
+              bromeliad.physical = neutral_read("bromeliad.physical"),
+              bromeliad.final.inverts = neutral_read("bromeliad.final.inverts"),
               site.info = site.info_read,
               site.weather = site.weather_read
   )
