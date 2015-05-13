@@ -1,29 +1,39 @@
+blankfinder <- function(.file_to_read, .sheetname, .truecols){
+
+  first_pass <- readxl::read_excel(path = .file_to_read, sheet = .sheetname, na = "NA",
+                    col_types = NULL)
+  total_cols <- ncol(first_pass)
+
+  n_blank_cols <- total_cols - length(.truecols)
+
+  blanks <- rep("blank", n_blank_cols)
+
+  c(.truecols, blanks)
+
+}
+
+
 #' Read in the site.info tab
 #'
 #' this function reads one site.info sheet
 #'
 #' @param file_to_read Path to file to be read
 site.info_read <- function(file_to_read){
-  rxl <-   readxl::read_excel
 
-  first_pass <- rxl(path = file_to_read, sheet = "site.info", na = "NA",
-                    col_types = NULL)
-
-  total_cols <- ncol(first_pass)
   true_cols <- c("text","numeric","numeric","numeric",
                  "text","numeric","numeric","numeric",
                  "numeric","numeric","numeric","numeric",
                  "text","text","text","text","date","date","text")
 
-  n_blank_cols <- total_cols - length(true_cols)
+  cts <- blankfinder(.file_to_read = file_to_read,
+                     .sheetname = "site.info",
+                     .truecols = true_cols)
 
-  blanks <- rep("blank", n_blank_cols)
 
-
-  rxl(path = file_to_read,
-      sheet = "site.info",
-      na = "NA",
-      col_types = c(true_cols, blanks)
+  readxl::read_excel(path = file_to_read,
+                     sheet = "site.info",
+                     na = "NA",
+                     col_types = cts
   )
 }
 
@@ -33,11 +43,18 @@ site.info_read <- function(file_to_read){
 #'
 #' @param file_to_read Path to file to be read
 site.weather_read <- function(file_to_read){
+
+#   true_cols <- c("text", "date",
+#                  "numeric", "numeric", "numeric")
+#
+#   cts <- blankfinder(.file_to_read = file_to_read,
+#                      .sheetname = "site.weather",
+#                      .truecols = true_cols)
+
   readxl::read_excel(path = file_to_read,
                      sheet = "site.weather",
                      na = "NA",
-                     col_types = c("text", "date",
-                                   "numeric", "numeric", "numeric")
+                     col_types = NULL
   )
 }
 
