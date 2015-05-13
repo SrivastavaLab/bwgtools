@@ -4,7 +4,6 @@
 ## site.info
 
 * *Colombia* format of this tab is incorrect -- too many rows
-* *FrenchGuiana* empty rows below data
 
 ## site.weather
 
