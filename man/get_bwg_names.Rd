@@ -4,9 +4,13 @@
 \alias{get_bwg_names}
 \title{obtain the full name data from github}
 \usage{
-get_bwg_names(chars = 21, nums = 54)
+
+  get_bwg_names(file = "https://raw.githubusercontent.com/SrivastavaLab/bwg_names/master/data/Distributions_organisms_full.tsv",
+  chars = 21, nums = 54)
 }
 \arguments{
+\item{file}{the location of the file. defaults to the internet}
+
 \item{chars}{the number of character columns. defaults to 21}
 
 \item{nums}{the number of numeric columns. defaults to 54}

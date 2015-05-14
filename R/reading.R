@@ -76,15 +76,16 @@ get_all_sites <- function(sites = c("Argentina","Cardoso", "Colombia",
 #'
 #' Gets the complete insect taxonomic data from github. This is good
 #' because it will always be accurate.
+#' @param file the location of the file. defaults to the internet
 #' @param chars the number of character columns. defaults to 21
 #' @param nums the number of numeric columns. defaults to 54
 #' @export
-get_bwg_names <- function(chars = 21, nums = 54){
+get_bwg_names <- function(file = "https://raw.githubusercontent.com/SrivastavaLab/bwg_names/master/data/Distributions_organisms_full.tsv", chars = 21, nums = 54){
   msg <- sprintf("this function thinks there are %d character columns followed by %d numeric columns", 21, 54)
   message(msg)
   cols <- c(rep("c", chars), rep("n", nums))
   our_col_types <- Reduce(f = paste0, cols)
-  the_data <- readr::read_tsv("https://raw.githubusercontent.com/SrivastavaLab/bwg_names/master/data/Distributions_organisms_full.tsv",col_types = our_col_types)
+  the_data <- readr::read_tsv(file,col_types = our_col_types)
   if(nrow(readr:::problems(the_data)) != 0) stop("something is wrong")
   return(the_data)
 }
