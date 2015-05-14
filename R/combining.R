@@ -110,10 +110,10 @@ merge_func <- function(insect_data, trait_data){
 
   message("i am creating the pred_prey column. Stop me when it is present in the dataset!")
   bnt <- trait_data %>%
-    select(nickname, func.group) %>%
-    mutate(pred_prey = ifelse(str_detect(func.group, "predator"), "predator", "prey"))
+    dplyr::select(nickname, func.group) %>%
+    dplyr::mutate(pred_prey = ifelse(str_detect(func.group, "predator"), "predator", "prey"))
 
-  merged <- left_join(insect_data, bnt, by = c("species" = "nickname"))
+  merged <- dplyr::left_join(insect_data, bnt, by = c("species" = "nickname"))
 
   return(merged)
 
@@ -128,8 +128,8 @@ merge_func <- function(insect_data, trait_data){
 #'
 sum_func_groups <- function(merged_data){
   merged_data %>%
-    group_by(bromeliad.id, pred_prey, func.group) %>%
-    summarize(total_abundance = sum(abundance),
+    dplyr::group_by(bromeliad.id, pred_prey, func.group) %>%
+    dplyr::summarize(total_abundance = sum(abundance),
               total_biomass = sum(biomass),
               total_taxa = n())
 }
