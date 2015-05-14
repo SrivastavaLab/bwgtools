@@ -30,7 +30,7 @@ combine_site.weather <- function(){
   site_weather[[1]] <- site_weather[[1]][,-6]
 
   ## done
-  allsite <- rbind_all(site_weather)
+  allsite <- dplyr::rbind_all(site_weather)
   return(allsite)
 }
 
