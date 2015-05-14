@@ -139,15 +139,12 @@ bwg_names <- get_bwg_names()
 long_mac_final <- invert_to_long(mac_final, category_vars = c("site", "trt.name", "bromeliad.id", "abundance.or.biomass"))
 
 #3 combine with trait data
+mac_traits <- merge_func(long_mac_final, bwg_names)
 
+#4 summarize this
+sum_grps <- sum_func_groups(mac_traits)
 
-
-
-sum_trophic <- function(func_sums){
-  group_sums %>%
-    summarise_each(funs(sum), matches("total"))
-}
-
+trophic_sums <- sum_trophic(sum_grps)
 
 
 trophic_sums %>%

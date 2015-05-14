@@ -134,3 +134,22 @@ sum_func_groups <- function(merged_data){
               total_taxa = n())
 }
 
+
+#' Summarize functional groups still farther into trophic ranks
+#'
+#' @param func_sums must be a grouped tbl.df, the groups must be bromeliad.id and pred_prey, in that order
+#'
+#' @return summarized data
+#' @export
+sum_trophic <- function(func_sums){
+
+  test_groups <- identical(groups(func_sums),
+                           lapply(list("bromeliad.id",
+                                       "pred_prey"),
+                                  as.name))
+
+  if(!test_groups) stop("the input must be grouped by bromeliad.id and pred_prey, in that order")
+
+  func_sums %>%
+    summarise_each(funs(sum), matches("total"))
+}
