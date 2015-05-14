@@ -12,7 +12,8 @@ Imports:
     readxl,
     assertthat,
     dplyr,
-    magrittr
+    magrittr,
+    ggplot2
 Suggests: testthat,
     knitr,
     httpuv
