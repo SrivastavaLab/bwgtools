@@ -160,6 +160,7 @@ sum_trophic <- function(func_sums){
 #' @param trait_data bwg_names data. output of \code{get_bwg_names}
 #'
 #' @return a ggplot
+#' @export
 plot_trophic <- function(invert_data, trait_data){
   #2 transform the data
   long_inverts <- invert_to_long(invert_data,
