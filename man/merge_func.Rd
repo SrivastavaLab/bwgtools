@@ -7,9 +7,9 @@
 merge_func(insect_data, trait_data)
 }
 \arguments{
-\item{insect_data}{data.frame of invert observations. must be long format (ie output of /code{invert.long})}
+\item{insect_data}{data.frame of invert observations. must be long format (ie output of \code{invert.long})}
 
-\item{trait_data}{bwg_names data. output of get_bwg_names}
+\item{trait_data}{bwg_names data. output of \code{get_bwg_names}}
 }
 \value{
 merged data
