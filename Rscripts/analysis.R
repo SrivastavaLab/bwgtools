@@ -13,7 +13,7 @@ offline <- . %>%
   make_default_path %>%
   paste0("../../../Dropbox/",.)
 
-read_site_sheet(offline("Argentina"), "site.info")
+read_site_sheet("Argentina", "site.info")
 read_site_sheet("Cardoso", "site.info")
 read_site_sheet("Colombia", "site.info") ## warnings
 read_site_sheet("French_Guiana", "site.info")
@@ -27,7 +27,6 @@ read_site_sheet("CostaRica", "site.info")
 sites <- combine_site.info()
 
 
-get_bwg_names()
 # site.weather ----------------------------------------
 
 
@@ -41,15 +40,15 @@ read_site_sheet("CostaRica", "site.weather")
 
 #site_weather <- get_all_sites(sheetname = "site.weather")
 
-combing_site.weather()
+combine_site.weather()
 
 # the_ncol <- lapply(site_weather, ncol)
 # sapply(the_ncol, function(x) assertthat::are_equal(x, 5))
 
 # bromeliad.physical ----------------------------------
 
-read_site_sheet(offline("Argentina"), "bromeliad.physical")
-read_site_sheet(offline("Cardoso"), "bromeliad.physical")
+read_site_sheet("Argentina", "bromeliad.physical")
+read_site_sheet("Cardoso", "bromeliad.physical")
 read_site_sheet("Colombia", "bromeliad.physical") ##
 read_site_sheet("French_Guiana", "bromeliad.physical")
 read_site_sheet("Macae", "bromeliad.physical")
@@ -59,7 +58,7 @@ read_site_sheet("CostaRica", "bromeliad.physical")
 
 # get_all_sites(sheetname = "bromeliad.physical")
 
-# combine_bromeliad.physical()
+combine_bromeliad.physical()
 ## Doesn't work!
 
 
@@ -133,6 +132,14 @@ cr <- read_site_sheet("CostaRica", "leaf.waterdepths")
 #1. obtain the data
 
 mac_final <- read_site_sheet(offline("Macae"), "bromeliad.final.inverts")
+
+## check for duplicate bromeliads
+mac_final %>%
+  group_by(bromeliad.id) %>%
+  tally %>%
+  filter(n > 2)
+
+
 bwg_names <- get_bwg_names(file = "../bwg_names/data/Distributions_organisms_full.tsv")
 
 #2 transform the data
@@ -144,6 +151,28 @@ mac_traits <- merge_func(long_mac_final, bwg_names)
 #4 summarize this
 sum_grps <- sum_func_groups(mac_traits)
 
+library(dplyr)
+library(tidyr)
+
+redone <- mac_traits %>%
+  gather("quantity", "value", abundance, biomass, convert = FALSE) %>%
+  ungroup %>%
+  mutate(func.group = gsub(" ",".", func.group))
+
+groups(redone)
+
+redone$newname <- paste0(redone$func.group, ".", redone$quantity)
+
+problem <- redone %>%
+  group_by(bromeliad.id,mu,k, newname) %>%
+  summarise(total_value = sum(value)) %>%
+  spread(newname, value = total_value, fill = 0)
+
+problem$bromeliad.id %>% unique
+
+
+sum_grps
+
 trophic_sums <- sum_trophic(sum_grps)
 
 
@@ -151,15 +180,15 @@ trophic_sums %>%
   dplyr::filter(!is.na(pred_prey)) %>%
   dplyr::select(-total_abundance, - total_taxa) %>%
   tidyr::spread(pred_prey, value = total_biomass) %>%
-  ggplot(aes(x = prey, y = predator)) + geom_point()
+  ggplot2::ggplot(ggplot2::aes(x = prey, y = predator)) + ggplot2::geom_point()
 
 
 
 ## ALL AT ONCE
-mac_final <- read_site_sheet(offline("Macae"), "bromeliad.final.inverts")
+invert_final <- read_site_sheet(offline("French_Guiana"), "bromeliad.final.inverts")
 bwg_names <- get_bwg_names(file = "../bwg_names/data/Distributions_organisms_full.tsv")
 
-plot_trophic(mac_final, bwg_names)
+plot_trophic(invert_final, bwg_names)
 
 mac_final <- read_site_sheet("Macae", "bromeliad.final.inverts")
 bwg_names <- get_bwg_names()
