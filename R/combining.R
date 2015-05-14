@@ -51,7 +51,7 @@ combine_bromeliad.physical <- function(){
 #' @param category_vars those variables which define groups (ie the names of every variable that is NOT the name of an invertebrate species). Must be a character vector.
 #'
 #' @return tbl.df containing invertebrate data in long format
-#' @importFrom magrittr `%>%`
+#' @importFrom magrittr "%>%"
 #' @export
 invert_to_long <- function(insect_data, category_vars){
 
