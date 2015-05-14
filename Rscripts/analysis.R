@@ -63,6 +63,42 @@ read_site_sheet("CostaRica", "bromeliad.physical")
 ## Doesn't work!
 
 
+# leaf.waterdepths ------------------------------------
+
+library(bwgtools)
+library(tidyr)
+library(stringr)
+library(zoo)
+
+ar <- read_site_sheet("Argentina", "leaf.waterdepths")
+
+fill_it <- function(df){
+  df["fill_depth"] <- na.locf(df["fill_depth"])
+  df
+}
+
+ar_full <- ar %>%
+  gather("measurement", "depth", starts_with("depth"), convert = FALSE) %>%
+  separate(measurement, into = c("depth_word", "leaf", "meas_water", "first")) %>%
+  mutate(after_water = str_detect(meas_water, ".*water.*")) %>%
+  group_by(bromeliad.id, date, leaf) %>%
+  arrange(after_water) %>%
+  mutate(fill_depth = depth) %>%
+  do(fill_it(.)) %>%
+  filter(!is.na(date))
+
+result <- ar_full %>%
+  ungroup %>%
+  rowwise %>%
+  mutate(colname = paste(depth_word, leaf, meas_water, first, sep = ".")) %>%
+  select(site, trt.name, bromeliad.id, date, colname, fill_depth) %>%
+  spread(colname, fill_depth)
+
+
+
+str_match("depth.centre.measure.first", ".*water.*")
+
+
 # bromeliad.final.inverts ----------------------------------
 
 read_site_sheet(offline("Argentina"), "bromeliad.final.inverts")
@@ -100,10 +136,31 @@ mac_final <- read_site_sheet(offline("Macae"), "bromeliad.final.inverts")
 bwg_names <- get_bwg_names()
 
 #2 transform the data
+long_mac_final <- invert_to_long(mac_final, category_vars = c("site", "trt.name", "bromeliad.id", "abundance.or.biomass"))
+
+## 2.5 check and clean
+head(long_mac_final)
+identical(which(long_mac_final$abundance==0), which(long_mac_final$biomass == 0))
+long_mac_final <- long_mac_final %>%
+  filter(abundance != 0)
+
+#3 combine with trait data
 
 
 
-invert_to_long(mac_final, category_vars = c("site", "trt.name", "bromeliad.id", "abundance.or.biomass"))
+bnt <- bwg_names %>%
+  select(nickname, func.group)
+
+merged <- left_join(long_mac_final, bnt, by = c("species" = "nickname"))
+
+merged %>%
+  group_by(bromeliad.id, func.group) %>%
+  summarize(total_abundance = sum(abundance),
+            total_biomass = sum(biomass),
+            n_taxa = n())
+
+
+
 
 mac <- read_sheet("../../../Dropbox/BWG Drought Experiment/raw data/Drought_data_Macae.xlsx",
                        "bromeliad.final.inverts", ondisk = TRUE)
