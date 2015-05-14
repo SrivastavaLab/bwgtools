@@ -101,7 +101,7 @@ invert_to_long <- function(insect_data, category_vars){
 
 #' Merge functional groups to invert data
 #'
-#' @param insect_data data.frame of invert observations. must be long format (ie output of \code{invert.long})
+#' @param insect_data data.frame of invert observations. must be long format (ie output of \code{invert_to_long})
 #' @param trait_data bwg_names data. output of \code{get_bwg_names}
 #'
 #' @return merged data
