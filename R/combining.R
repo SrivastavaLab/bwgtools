@@ -93,7 +93,7 @@ invert_to_long <- function(insect_data, category_vars){
 
   # remove the zeros
   long_final <- long_out %>%
-    filter(abundance != 0)
+    dplyr::filter(abundance != 0)
 
   return(long_final)
 }
