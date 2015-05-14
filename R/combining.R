@@ -61,7 +61,7 @@ combine_bromeliad.physical <- function(){
 
 
   ## done
-  allsite <- rbind_all(site_weather)
+  allsite <- dplyr::rbind_all(site_weather)
   return(allsite)
 }
 
