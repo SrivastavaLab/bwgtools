@@ -78,10 +78,22 @@ invert_to_long <- function(insect_data, category_vars){
   data_names <- names(insect_data)
   insect_names <- setdiff(data_names, category_vars)
 
-  insect_data %>%
-    ## could use quoted form here
+  # gather in all species names
+  # spread out the two kinds of measurements
+  # split the treatments into numbers
+  long_out <- insect_data %>%
     gather_("species", "quantity", insect_names)%>%
     spread(abundance.or.biomass, quantity)%>%
     separate(trt.name, c("mu", "k"), "k")%>%
     mutate(mu = extract_numeric(mu), k = extract_numeric(k))
+
+  where_zero <- identical(which(long_out$abundance==0), which(long_out$biomass == 0))
+
+  if(!where_zero) stop("there are inconsistencies between the abundance and biomass columns")
+
+  # remove the zeros
+  long_final <- long_out %>%
+    filter(abundance != 0)
+
+  return(long_final)
 }

@@ -132,17 +132,11 @@ cr <- read_site_sheet("CostaRica", "leaf.waterdepths")
 
 #1. obtain the data
 
-mac_final <- read_site_sheet(offline("Macae"), "bromeliad.final.inverts")
+mac_final <- read_site_sheet("Macae", "bromeliad.final.inverts")
 bwg_names <- get_bwg_names()
 
 #2 transform the data
 long_mac_final <- invert_to_long(mac_final, category_vars = c("site", "trt.name", "bromeliad.id", "abundance.or.biomass"))
-
-## 2.5 check and clean
-head(long_mac_final)
-identical(which(long_mac_final$abundance==0), which(long_mac_final$biomass == 0))
-long_mac_final <- long_mac_final %>%
-  filter(abundance != 0)
 
 #3 combine with trait data
 
