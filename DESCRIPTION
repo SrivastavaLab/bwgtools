@@ -17,5 +17,6 @@ Imports:
     stringr
 Suggests: testthat,
     knitr,
-    httpuv
+    httpuv,
+    zoo
 VignetteBuilder: knitr

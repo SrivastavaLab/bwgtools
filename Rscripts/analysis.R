@@ -82,28 +82,6 @@ library(zoo)
 
 ar <- read_site_sheet(offline("Argentina"), "leaf.waterdepths")
 
-fill_it <- function(df){
-  df["fill_depth"] <- na.locf(df["fill_depth"])
-  df
-}
-
-ar_full <- ar %>%
-  gather("measurement", "depth", starts_with("depth"), convert = FALSE) %>%
-  separate(measurement, into = c("depth_word", "leaf", "meas_water", "first")) %>%
-  mutate(after_water = str_detect(meas_water, ".*water.*")) %>%
-  group_by(bromeliad.id, date, leaf) %>%
-  arrange(after_water) %>%
-  mutate(fill_depth = depth) %>%
-  do(fill_it(.)) %>%
-  filter(!is.na(date))
-
-result <- ar_full %>%
-  ungroup %>%
-  rowwise %>%
-  mutate(colname = paste(depth_word, leaf, meas_water, first, sep = ".")) %>%
-  select(site, trt.name, bromeliad.id, date, colname, fill_depth) %>%
-  spread(colname, fill_depth)
-
 
 # bromeliad.final.inverts ----------------------------------
 
