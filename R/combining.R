@@ -97,3 +97,40 @@ invert_to_long <- function(insect_data, category_vars){
 
   return(long_final)
 }
+
+
+#' Merge functional groups to invert data
+#'
+#' @param insect_data data.frame of invert observations. must be long format (ie output of /code{invert.long})
+#' @param trait_data bwg_names data. output of get_bwg_names
+#'
+#' @return merged data
+#' @export
+merge_func <- function(insect_data, trait_data){
+
+  message("i am creating the pred_prey column. Stop me when it is present in the dataset!")
+  bnt <- trait_data %>%
+    select(nickname, func.group) %>%
+    mutate(pred_prey = ifelse(str_detect(func.group, "predator"), "predator", "prey"))
+
+  merged <- left_join(insect_data, bnt, by = c("species" = "nickname"))
+
+  return(merged)
+
+}
+
+#' summarize functional groups
+#'
+#' @param merged_data data formed by merging insect data to trait data
+#'
+#' @return summarized data. NOTE that this data will be grouped!
+#' @export
+#'
+sum_func_groups <- function(merged_data){
+  merged_data %>%
+    group_by(bromeliad.id, pred_prey, func.group) %>%
+    summarize(total_abundance = sum(abundance),
+              total_biomass = sum(biomass),
+              total_taxa = n())
+}
+

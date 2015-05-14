@@ -142,20 +142,13 @@ long_mac_final <- invert_to_long(mac_final, category_vars = c("site", "trt.name"
 
 
 
-bnt <- bwg_names %>%
-  select(nickname, func.group) %>%
-  mutate(pred_prey = ifelse(str_detect(func.group, "predator"), "predator", "prey"))
 
-merged <- left_join(long_mac_final, bnt, by = c("species" = "nickname"))
+sum_trophic <- function(func_sums){
+  group_sums %>%
+    summarise_each(funs(sum), matches("total"))
+}
 
-group_sums <- merged %>%
-  group_by(bromeliad.id, pred_prey, func.group) %>%
-  summarize(total_abundance = sum(abundance),
-            total_biomass = sum(biomass),
-            total_taxa = n())
 
-trophic_sums <- group_sums %>%
-  summarise_each(funs(sum), matches("total"))
 
 trophic_sums %>%
   filter(!is.na(pred_prey)) %>%
