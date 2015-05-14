@@ -143,7 +143,7 @@ sum_func_groups <- function(merged_data){
 #' @export
 sum_trophic <- function(func_sums){
 
-  test_groups <- identical(groups(func_sums),
+  test_groups <- identical(dplyr::groups(func_sums),
                            lapply(list("bromeliad.id",
                                        "pred_prey"),
                                   as.name))
@@ -151,7 +151,7 @@ sum_trophic <- function(func_sums){
   if(!test_groups) stop("the input must be grouped by bromeliad.id and pred_prey, in that order")
 
   func_sums %>%
-    summarise_each(funs(sum), matches("total"))
+    dplyr::summarise_each(dplyr::funs(sum), dplyr:::matches("total"))
 }
 
 #' Plot predator vs prey biomass
