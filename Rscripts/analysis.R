@@ -58,8 +58,20 @@ read_site_sheet("CostaRica", "bromeliad.physical")
 
 # get_all_sites(sheetname = "bromeliad.physical")
 
-combine_bromeliad.physical()
-## Doesn't work!
+phys <- combine_bromeliad.physical()
+
+## check ids
+## is there only one of each label in a site?
+phys %>%
+  select(site, bromeliad.id) %>%
+  group_by(site, bromeliad.id) %>%
+  tally %>%
+  .[["n"]] %>%
+  sapply(function(x) x == 1) %>%
+  all
+
+
+select(phys, starts_with("oxygen"))
 
 
 # leaf.waterdepths ------------------------------------
