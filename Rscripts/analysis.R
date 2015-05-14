@@ -154,6 +154,13 @@ trophic_sums %>%
   ggplot(aes(x = prey, y = predator)) + geom_point()
 
 
+
+
+mac_final <- read_site_sheet("Macae", "bromeliad.final.inverts")
+bwg_names <- get_bwg_names()
+plot_trophic(mac_final, bwg_names)
+
+
 mac <- read_sheet("../../../Dropbox/BWG Drought Experiment/raw data/Drought_data_Macae.xlsx",
                        "bromeliad.final.inverts", ondisk = TRUE)
 

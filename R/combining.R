@@ -101,8 +101,8 @@ invert_to_long <- function(insect_data, category_vars){
 
 #' Merge functional groups to invert data
 #'
-#' @param insect_data data.frame of invert observations. must be long format (ie output of /code{invert.long})
-#' @param trait_data bwg_names data. output of get_bwg_names
+#' @param insect_data data.frame of invert observations. must be long format (ie output of \code{invert.long})
+#' @param trait_data bwg_names data. output of \code{get_bwg_names}
 #'
 #' @return merged data
 #' @export
@@ -152,4 +152,34 @@ sum_trophic <- function(func_sums){
 
   func_sums %>%
     summarise_each(funs(sum), matches("total"))
+}
+
+#' Plot predator vs prey biomass
+#'
+#' @param insect_data data.frame of invert observations. must be long format (ie output of \code{invert.long})
+#' @param trait_data bwg_names data. output of \code{get_bwg_names}
+#'
+#' @return a ggplot
+plot_trophic <- function(invert_data, trait_data){
+  #2 transform the data
+  long_inverts <- invert_to_long(invert_data,
+                                 category_vars = c("site",
+                                                   "trt.name",
+                                                   "bromeliad.id",
+                                                   "abundance.or.biomass"))
+
+  #3 combine with trait data
+  inverts_traits <- merge_func(long_inverts, trait_data)
+
+  #4 summarize this
+  sum_grps <- sum_func_groups(inverts_traits)
+
+  trophic_sums <- sum_trophic(sum_grps)
+
+
+  trophic_sums %>%
+    filter(!is.na(pred_prey)) %>%
+    select(-total_abundance, - total_taxa) %>%
+    spread(pred_prey, value = total_biomass) %>%
+    ggplot(aes(x = prey, y = predator)) + geom_point()
 }
