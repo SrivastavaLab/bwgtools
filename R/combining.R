@@ -151,7 +151,7 @@ sum_trophic <- function(func_sums){
   if(!test_groups) stop("the input must be grouped by bromeliad.id and pred_prey, in that order")
 
   func_sums %>%
-    dplyr::summarise_each(dplyr::funs(sum), dplyr:::matches("total"))
+    dplyr::summarise_each(dplyr::funs(sum), total_abundance, total_biomass, total_taxa)
 }
 
 #' Plot predator vs prey biomass
