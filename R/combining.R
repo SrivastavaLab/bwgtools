@@ -90,6 +90,7 @@ invert_to_long <- function(insect_data, category_vars){
 #' @param trait_data bwg_names data. output of \code{get_bwg_names}
 #'
 #' @return merged data
+#' @importFrom magrittr "%>%"
 #' @export
 merge_func <- function(insect_data, trait_data){
 
@@ -109,6 +110,7 @@ merge_func <- function(insect_data, trait_data){
 #' @param merged_data data formed by merging insect data to trait data
 #'
 #' @return summarized data. NOTE that this data will be grouped!
+#' @importFrom magrittr "%>%"
 #' @export
 #'
 sum_func_groups <- function(merged_data){
@@ -124,6 +126,7 @@ sum_func_groups <- function(merged_data){
 #' @param merged_data data formed by merging insect data to trait data
 #'
 #' @return summarized data. NOTE that this data will be grouped!
+#' @importFrom magrittr "%>%"
 #' @export
 #'
 sum_func_groups_cols <- function(merged_data){
@@ -141,6 +144,7 @@ sum_func_groups_cols <- function(merged_data){
 #' @param func_sums must be a grouped tbl.df, the groups must be bromeliad.id and pred_prey, in that order
 #'
 #' @return summarized data
+#' @importFrom magrittr "%>%"
 #' @export
 sum_trophic <- function(func_sums){
 
@@ -161,6 +165,7 @@ sum_trophic <- function(func_sums){
 #' @param trait_data bwg_names data. output of \code{get_bwg_names}
 #'
 #' @return a ggplot
+#' @importFrom magrittr "%>%"
 #' @export
 plot_trophic <- function(invert_data, trait_data){
   #2 transform the data
