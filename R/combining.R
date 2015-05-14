@@ -34,12 +34,16 @@ combine_site.weather <- function(){
   return(allsite)
 }
 
-#' Obtain the bromeliad.physical data
+#' Obtain data for all sites
+#'
+#' This function reads data from the same tab for all the sites (via \code{get_all_sites()}) , then combines thme with \code{dplyr::rbind_all()}
+#'
+#' @param sheetname The name of the sheet you'd like to have
 #'
 #' @return data.frame of all bromeliad.physical tabs
 #' @export
-combine_bromeliad.physical <- function(){
-  site_weather <- get_all_sites(sheetname = "bromeliad.physical")
+combine_tab <- function(sheetname){
+  site_weather <- get_all_sites(sheetname = sheetname)
   ## done
   allsite <- dplyr::rbind_all(site_weather)
   return(allsite)
