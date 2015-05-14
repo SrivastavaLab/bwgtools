@@ -66,11 +66,11 @@ read_site_sheet("CostaRica", "bromeliad.physical")
 # bromeliad.final.inverts ----------------------------------
 
 read_site_sheet(offline("Argentina"), "bromeliad.final.inverts")
-read_site_sheet("Cardoso", "bromeliad.final.inverts")
+read_site_sheet(offline("Cardoso"), "bromeliad.final.inverts")
 read_site_sheet("Colombia", "bromeliad.final.inverts") ##
 read_site_sheet("French_Guiana", "bromeliad.final.inverts")
-read_site_sheet("Macae", "bromeliad.final.inverts")
-read_site_sheet("PuertoRico", "bromeliad.final.inverts")
+read_site_sheet(offline("Macae"), "bromeliad.final.inverts")
+read_site_sheet(offline("PuertoRico"), "bromeliad.final.inverts")
 read_site_sheet("CostaRica", "bromeliad.final.inverts")
 
 site_final_insects <- get_all_sites(sheetname = "bromeliad.final.inverts")
@@ -91,6 +91,28 @@ names(arg2)[-4]
 mac <- read_site_sheet("Macae", "leaf.waterdepths")
 cr <- read_site_sheet("CostaRica", "leaf.waterdepths")
 
+
+## how to process a correctly formatted excel sheet
+
+#1. obtain the data
+
+mac_final <- read_site_sheet(offline("Macae"), "bromeliad.final.inverts")
+bwg_names <- get_bwg_names()
+
+#2 transform the data
+invert_to_long <- function(insect_data){
+  insect_data %>%
+    ## could use quoted form here
+    gather(species, quantity,
+           -site, -trt.name,
+           -bromeliad.id, -abundance.or.biomass)%>%
+    spread(abundance.or.biomass, quantity)%>%
+    separate(trt.name, c("mu", "k"), "k")%>%
+    mutate(mu = extract_numeric(mu), k = extract_numeric(k))
+}
+
+
+invert_to_long(mac_final)
 
 mac <- read_sheet("../../../Dropbox/BWG Drought Experiment/raw data/Drought_data_Macae.xlsx",
                        "bromeliad.final.inverts", ondisk = TRUE)
