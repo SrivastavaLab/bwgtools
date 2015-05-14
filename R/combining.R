@@ -179,8 +179,8 @@ plot_trophic <- function(invert_data, trait_data){
 
 
   trophic_sums %>%
-    filter(!is.na(pred_prey)) %>%
-    select(-total_abundance, - total_taxa) %>%
-    spread(pred_prey, value = total_biomass) %>%
-    ggplot(aes(x = prey, y = predator)) + geom_point()
+    dplyr::filter(!is.na(pred_prey)) %>%
+    dplyr::select(-total_abundance, - total_taxa) %>%
+    tidyr::spread(pred_prey, value = total_biomass) %>%
+    ggplot2::ggplot(ggplot2::aes(x = prey, y = predator)) + ggplot2::geom_point()
 }
