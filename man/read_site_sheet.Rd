@@ -7,9 +7,11 @@
 read_site_sheet(sitename, sheetname = NULL, ...)
 }
 \arguments{
-\item{sheetname}{the sheet name you want. must match exactly.}
+\item{sheetname}{Either the name of the site you want to read data from, or a path to where the excel files are on your local computer (for offline work)}
 
 \item{file}{the file name to fetch}
+
+\item{OnDisk}{Are you reading from a local copy or Dropbox? defaults to FALSE}
 }
 \description{
 this function reads all the sheets in an excel book on dropbox
