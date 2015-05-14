@@ -85,7 +85,7 @@ invert_to_long <- function(insect_data, category_vars){
     tidyr::gather_("species", "quantity", insect_names)%>%
     tidyr::spread(abundance.or.biomass, quantity)%>%
     tidyr::separate(trt.name, c("mu", "k"), "k")%>%
-    dplyr::mutate(mu = extract_numeric(mu), k = extract_numeric(k))
+    dplyr::mutate(mu = tidyr::extract_numeric(mu), k = tidyr::extract_numeric(k))
 
   where_zero <- identical(which(long_out$abundance==0), which(long_out$biomass == 0))
 
