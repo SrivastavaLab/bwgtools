@@ -13,7 +13,8 @@ Imports:
     assertthat,
     dplyr,
     magrittr,
-    ggplot2
+    ggplot2,
+    stringr
 Suggests: testthat,
     knitr,
     httpuv
