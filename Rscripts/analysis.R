@@ -149,17 +149,25 @@ long_mac_final <- long_mac_final %>%
 
 
 bnt <- bwg_names %>%
-  select(nickname, func.group)
+  select(nickname, func.group) %>%
+  mutate(pred_prey = ifelse(str_detect(func.group, "predator"), "predator", "prey"))
 
 merged <- left_join(long_mac_final, bnt, by = c("species" = "nickname"))
 
-merged %>%
-  group_by(bromeliad.id, func.group) %>%
+group_sums <- merged %>%
+  group_by(bromeliad.id, pred_prey, func.group) %>%
   summarize(total_abundance = sum(abundance),
             total_biomass = sum(biomass),
-            n_taxa = n())
+            total_taxa = n())
 
+trophic_sums <- group_sums %>%
+  summarise_each(funs(sum), matches("total"))
 
+trophic_sums %>%
+  filter(!is.na(pred_prey)) %>%
+  select(-total_abundance, - total_taxa) %>%
+  spread(pred_prey, value = total_biomass) %>%
+  ggplot(aes(x = prey, y = predator)) + geom_point()
 
 
 mac <- read_sheet("../../../Dropbox/BWG Drought Experiment/raw data/Drought_data_Macae.xlsx",
