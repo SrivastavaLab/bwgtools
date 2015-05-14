@@ -45,13 +45,18 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(),
 #'
 #' this function reads all the sheets in an excel book on dropbox
 #' @param file the file name to fetch
-#' @param sheetname the sheet name you want. must match exactly.
+#' @param sheetname Either the name of the site you want to read data from, or a path to where the excel files are on your local computer (for offline work)
+#' @param OnDisk Are you reading from a local copy or Dropbox? defaults to FALSE
 #' @export
 read_site_sheet <- function(sitename, sheetname = NULL, ...){
-
-  ## get default path
-  file_wanted <- make_default_path(sitename)
-  read_sheet(file_wanted, sheetname = sheetname, ...)
+  is_path <- file.exists(sitename)
+  if (is_path) {
+    file_wanted <- sitename
+  } else {
+    ## get default path
+    file_wanted <- make_default_path(sitename)
+  }
+  read_sheet(file_wanted, sheetname = sheetname, ondisk = is_path, ...)
 }
 
 #' Get all that data
