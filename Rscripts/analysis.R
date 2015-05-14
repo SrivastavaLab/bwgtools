@@ -9,9 +9,6 @@ library(magrittr)
 
 # site.info -------------------------------------------
 
-offline <- . %>%
-  make_default_path %>%
-  paste0("../../../Dropbox/",.)
 
 read_site_sheet("Argentina", "site.info")
 read_site_sheet("Cardoso", "site.info")
@@ -25,6 +22,7 @@ read_site_sheet("CostaRica", "site.info")
 # site_weather <- get_all_sites(sheetname = "site.info")
 
 sites <- combine_site.info()
+combine_tab("site.info")
 
 
 # site.weather ----------------------------------------
@@ -41,6 +39,7 @@ read_site_sheet("CostaRica", "site.weather")
 #site_weather <- get_all_sites(sheetname = "site.weather")
 
 combine_site.weather()
+combine_tab("site.weather")
 
 # the_ncol <- lapply(site_weather, ncol)
 # sapply(the_ncol, function(x) assertthat::are_equal(x, 5))
@@ -58,7 +57,7 @@ read_site_sheet("CostaRica", "bromeliad.physical")
 
 # get_all_sites(sheetname = "bromeliad.physical")
 
-phys <- combine_bromeliad.physical()
+phys <- combine_tab("bromeliad.physical")
 
 ## check ids
 ## is there only one of each label in a site?
@@ -81,7 +80,7 @@ library(tidyr)
 library(stringr)
 library(zoo)
 
-ar <- read_site_sheet("Argentina", "leaf.waterdepths")
+ar <- read_site_sheet(offline("Argentina"), "leaf.waterdepths")
 
 fill_it <- function(df){
   df["fill_depth"] <- na.locf(df["fill_depth"])
@@ -104,10 +103,6 @@ result <- ar_full %>%
   mutate(colname = paste(depth_word, leaf, meas_water, first, sep = ".")) %>%
   select(site, trt.name, bromeliad.id, date, colname, fill_depth) %>%
   spread(colname, fill_depth)
-
-
-
-str_match("depth.centre.measure.first", ".*water.*")
 
 
 # bromeliad.final.inverts ----------------------------------
