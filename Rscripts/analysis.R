@@ -3,7 +3,7 @@ library(bwgtools)
 library("tidyr")
 library(dplyr)
 library(ggplot2)
-
+library(magrittr)
 ## testing ground
 
 
@@ -132,8 +132,8 @@ cr <- read_site_sheet("CostaRica", "leaf.waterdepths")
 
 #1. obtain the data
 
-mac_final <- read_site_sheet("Macae", "bromeliad.final.inverts")
-bwg_names <- get_bwg_names()
+mac_final <- read_site_sheet(offline("Macae"), "bromeliad.final.inverts")
+bwg_names <- get_bwg_names(file = "../bwg_names/data/Distributions_organisms_full.tsv")
 
 #2 transform the data
 long_mac_final <- invert_to_long(mac_final, category_vars = c("site", "trt.name", "bromeliad.id", "abundance.or.biomass"))
@@ -148,13 +148,18 @@ trophic_sums <- sum_trophic(sum_grps)
 
 
 trophic_sums %>%
-  filter(!is.na(pred_prey)) %>%
-  select(-total_abundance, - total_taxa) %>%
-  spread(pred_prey, value = total_biomass) %>%
+  dplyr::filter(!is.na(pred_prey)) %>%
+  dplyr::select(-total_abundance, - total_taxa) %>%
+  tidyr::spread(pred_prey, value = total_biomass) %>%
   ggplot(aes(x = prey, y = predator)) + geom_point()
 
 
 
+## ALL AT ONCE
+mac_final <- read_site_sheet(offline("Macae"), "bromeliad.final.inverts")
+bwg_names <- get_bwg_names(file = "../bwg_names/data/Distributions_organisms_full.tsv")
+
+plot_trophic(mac_final, bwg_names)
 
 mac_final <- read_site_sheet("Macae", "bromeliad.final.inverts")
 bwg_names <- get_bwg_names()
