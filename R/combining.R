@@ -65,3 +65,23 @@ combine_bromeliad.physical <- function(){
   return(allsite)
 }
 
+#' Tidy wide invert data into long format
+#'
+#' @param insect_data the dataset to tidy. In the same shape as the bromeliad.inverts.final tab
+#' @param category_vars those variables which define groups (ie the names of every variable that is NOT the name of an invertebrate species). Must be a character vector.
+#'
+#' @return tbl.df containing invertebrate data in long format
+#' @export
+invert_to_long <- function(insect_data, category_vars){
+
+  # what names are *not* the categorical vars?
+  data_names <- names(insect_data)
+  insect_names <- setdiff(data_names, category_vars)
+
+  insect_data %>%
+    ## could use quoted form here
+    gather_("species", "quantity", insect_names)%>%
+    spread(abundance.or.biomass, quantity)%>%
+    separate(trt.name, c("mu", "k"), "k")%>%
+    mutate(mu = extract_numeric(mu), k = extract_numeric(k))
+}

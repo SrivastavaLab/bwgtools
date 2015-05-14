@@ -100,19 +100,7 @@ mac_final <- read_site_sheet(offline("Macae"), "bromeliad.final.inverts")
 bwg_names <- get_bwg_names()
 
 #2 transform the data
-invert_to_long <- function(insect_data, category_vars){
 
-  # what names are *not* the categorical vars?
-  data_names <- names(insect_data)
-  insect_names <- setdiff(data_names, category_vars)
-
-  insect_data %>%
-    ## could use quoted form here
-    gather_("species", "quantity", insect_names)%>%
-    spread(abundance.or.biomass, quantity)%>%
-    separate(trt.name, c("mu", "k"), "k")%>%
-    mutate(mu = extract_numeric(mu), k = extract_numeric(k))
-}
 
 
 invert_to_long(mac_final, category_vars = c("site", "trt.name", "bromeliad.id", "abundance.or.biomass"))
