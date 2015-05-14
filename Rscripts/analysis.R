@@ -9,9 +9,11 @@ library(ggplot2)
 
 # site.info -------------------------------------------
 
+offline <- . %>%
+  make_default_path %>%
+  paste0("../../../Dropbox/",.)
 
-
-read_site_sheet("Argentina", "site.info")
+read_site_sheet(offline("Argentina"), "site.info")
 read_site_sheet("Cardoso", "site.info")
 read_site_sheet("Colombia", "site.info") ## warnings
 read_site_sheet("French_Guiana", "site.info")
@@ -46,8 +48,8 @@ combing_site.weather()
 
 # bromeliad.physical ----------------------------------
 
-read_site_sheet("Argentina", "bromeliad.physical")
-read_site_sheet("Cardoso", "bromeliad.physical")
+read_site_sheet(offline("Argentina"), "bromeliad.physical")
+read_site_sheet(offline("Cardoso"), "bromeliad.physical")
 read_site_sheet("Colombia", "bromeliad.physical") ##
 read_site_sheet("French_Guiana", "bromeliad.physical")
 read_site_sheet("Macae", "bromeliad.physical")
@@ -63,7 +65,7 @@ read_site_sheet("CostaRica", "bromeliad.physical")
 
 # bromeliad.final.inverts ----------------------------------
 
-read_site_sheet("Argentina", "bromeliad.final.inverts")
+read_site_sheet(offline("Argentina"), "bromeliad.final.inverts")
 read_site_sheet("Cardoso", "bromeliad.final.inverts")
 read_site_sheet("Colombia", "bromeliad.final.inverts") ##
 read_site_sheet("French_Guiana", "bromeliad.final.inverts")
