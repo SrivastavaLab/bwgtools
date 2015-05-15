@@ -108,14 +108,15 @@ merge_func <- function(insect_data, trait_data){
 #' summarize functional groups
 #'
 #' @param merged_data data formed by merging insect data to trait data
+#' @param grps using the formula, indicate the grouping factors required
 #'
 #' @return summarized data. NOTE that this data will be grouped!
 #' @importFrom magrittr "%>%"
 #' @export
 #'
-sum_func_groups <- function(merged_data){
+sum_func_groups <- function(merged_data, grps = list(~bromeliad.id, ~pred_prey, ~func.group)){
   merged_data %>%
-    dplyr::group_by(bromeliad.id, pred_prey, func.group) %>%
+    dplyr::group_by_(.dots = grps) %>%
     dplyr::summarize(total_abundance = sum(abundance),
               total_biomass = sum(biomass),
               total_taxa = n())
