@@ -31,3 +31,34 @@ from_start <- function(depthdata){
   ## checks and warnings here
   return(with_firstday)
 }
+
+
+
+#' Make physical data long
+#'
+#' Rearranges the contents of the bromeliad.physical tab into a long format
+#'
+#' @param physical_data physical data, as produced by \code{combine_tab()}
+#'
+#' @return data.frame
+#' @export
+#' @importFrom magrittr "%>%"
+physical_long <- function(physical_data){
+  long_phys <- physical_data %>%
+    dplyr::select(site, trt.name, bromeliad.id, contains("leafpack")) %>%
+    tidyr::gather("leafpackvar", "mass", contains("leafpack")) %>%
+    tidyr::separate(leafpackvar, c("rep","species","word_mass","time"))
+}
+
+#' calculate loss for each sample
+#'
+#' @param long_phys_data physical data in long format
+#'
+#' @return adds column "loss"
+#' @importFrom magrittr "%>%"
+#' @export
+leaf_loss_sample <- function(long_phys_data){
+  long_phys %>%
+    tidyr::spread(time, mass) %>%
+    dplyr::mutate(loss = (initial - final)/initial)
+}
