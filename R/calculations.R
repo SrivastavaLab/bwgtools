@@ -69,6 +69,7 @@ leaf_loss_sample <- function(long_phys_data){
 #' @param leaf_loss_sample_data the sample loss data
 #'
 #' @return means and sample sizes for each species
+#' @importFrom magrittr "%>%"
 #' @export
 leaf_loss_mean <- function(leaf_loss_sample_data){
   leaf_loss_sample_data %>%
@@ -76,4 +77,31 @@ leaf_loss_mean <- function(leaf_loss_sample_data){
     dplyr::summarise(mean_loss = mean(loss, na.rm = TRUE),
                      sample_size = sum(!is.na(loss))) %>%
     dplyr::filter(!is.na(mean_loss))
+}
+
+
+#' Species decomp and total decomp
+#'
+#' @param leaf_loss_species the data to combine. must be the output of \code{leaf_loss_mean()}
+#'
+#' @return a data.frame, one row per bromeliad
+#' @importFrom magrittr "%>%"
+#' @export
+decomp_responses <- function(leaf_loss_species){
+  ## spread the species into columns
+  sp_cols <- leaf_loss_species %>% # only samples with no values are NA because na.rm = TRUE
+    dplyr::select(-sample_size) %>%
+    tidyr::spread(species, mean_loss)
+
+  # sp_cols$site %>% table #should all be 30
+
+  ## summarize across all species of leaves
+  leaf_loss_overall <- leaf_loss_species %>%
+    dplyr::group_by(site, trt.name, bromeliad.id) %>%
+    dplyr::summarise(decomp = mean(mean_loss, na.rm = TRUE),
+                     sample_size_species = n())
+
+  ## CHECK
+
+  dplyr::left_join(sp_cols, leaf_loss_overall, by = c("site", "trt.name", "bromeliad.id"))
 }

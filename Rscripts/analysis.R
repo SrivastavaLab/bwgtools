@@ -75,7 +75,6 @@ select(phys, starts_with("oxygen"))
 
 long_phys <- physical_long(phys)
 
-
 ## because mass is long, containing two replicates for each site and species, we get 1 when people recorded the first sample but lost the second (1 but not 2) and 2 when both are missing
 long_phys %>%
   dplyr::group_by(site, bromeliad.id, species) %>%
@@ -90,42 +89,11 @@ long_phys %>%
 ## calculate loss for each sample
 leaf_loss <- leaf_loss_sample(long_phys)
 
+means_loss <- leaf_loss_mean(leaf_loss)
 
-### FUNCTION
-## calculate per species means, removing NA
-## count non NA to find sample size
-leaf_loss_species <- leaf_loss_sample %>%
-  dplyr::group_by(site, trt.name, bromeliad.id, species)%>%
-  dplyr::summarise(mean_loss = mean(loss, na.rm = TRUE),
-                   sample_size = sum(!is.na(loss))) %>%
-  dplyr::filter(!is.na(mean_loss))
+decomp_responses(means_loss)
 
 
-
-### FUNCTION
-## spread the species into columns
-sp_cols <- leaf_loss_species %>% # only samples with no values are NA because na.rm = TRUE
-  dplyr::select(-sample_size) %>%
-  tidyr::spread(species, mean_loss)
-
-sp_cols$site %>% table
-
-## summarize across all species of leaves
-leaf_loss_overall <- leaf_loss_species %>%
-  dplyr::group_by(site, trt.name, bromeliad.id) %>%
-  dplyr::summarise(decomp = mean(mean_loss, na.rm = TRUE),
-                   sample_size_species = n())
-
-#### to here and merge
-## now these should be joined back together.
-
-
-leaf_loss_overall %>%
-  dplyr::tally(.) %>%
-  dplyr::tally(.) %>% View
-
-sites %>%
-  dplyr::select(contains("leafpack"))
 
 ### check that sites
 
