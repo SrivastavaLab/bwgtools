@@ -62,3 +62,18 @@ leaf_loss_sample <- function(long_phys_data){
     tidyr::spread(time, mass) %>%
     dplyr::mutate(loss = (initial - final)/initial)
 }
+
+
+#' Calculate average decomposition for each species
+#'
+#' @param leaf_loss_sample_data the sample loss data
+#'
+#' @return means and sample sizes for each species
+#' @export
+leaf_loss_mean <- function(leaf_loss_sample_data){
+  leaf_loss_sample_data %>%
+    dplyr::group_by(site, trt.name, bromeliad.id, species)%>%
+    dplyr::summarise(mean_loss = mean(loss, na.rm = TRUE),
+                     sample_size = sum(!is.na(loss))) %>%
+    dplyr::filter(!is.na(mean_loss))
+}

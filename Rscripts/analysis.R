@@ -87,12 +87,8 @@ long_phys %>%
   dplyr::summarize(range = max(mass) - min(mass))
 
 
-### FUNCTION
 ## calculate loss for each sample
-leaf_loss_sample <- long_phys %>%
-    tidyr::spread(time, mass) %>%
-    dplyr::mutate(loss = (initial - final)/initial)
-
+leaf_loss <- leaf_loss_sample(long_phys)
 
 
 ### FUNCTION
