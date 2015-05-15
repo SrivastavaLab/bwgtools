@@ -48,24 +48,16 @@ phys %>%
 
 ## get and combine all sites
 
-get_all_insects <- function(site_names = c("Macae","PuertoRico", "French_Guiana")){
-
-  get_insects <- .%>%
-    read_site_sheet("bromeliad.final.inverts") %>%
-    invert_to_long(category_vars = c("site", "trt.name",
-                                     "bromeliad.id",
-                                     "abundance.or.biomass")) %>%
-    mutate(bromeliad.id = as.character(bromeliad.id))
-
-  ## get all sites, rbind them
-  lapply(site_names, get_insects) %>%
-    rbind_all
-
-}
-
-get_all_insects() %>%
+## F
+insects_functional <- get_all_insects() %>%
   merge_func(bwg_names) %>%
-  sum_func_groups(grps = list(~site, ~bromeliad.id, ~pred_prey, ~func.group)) %>%
+  # here we include site in the grouping to make bromeliad.id unique
+  ## if it were omitted, bromeliads with the name number woiuld be combined
+  ## even if they are from different sites
+  sum_func_groups(grps = list(~site, ~bromeliad.id, ~pred_prey, ~func.group))
+
+## group by predator or prey, not functional group
+insects_functional %>%
   select(-func.group) %>%
   group_by(site, bromeliad.id, pred_prey) %>%
   summarize(biomass = sum(total_biomass)) %>%
@@ -73,6 +65,35 @@ get_all_insects() %>%
   ungroup %>%
   spread(key = pred_prey, value = biomass)
 
+## group by functional group
+insects_functional %>%
+  gather("quantity", "value", total_abundance, total_biomass, total_taxa, convert = FALSE) %>%
+  ungroup %>%
+  mutate(func.group = gsub(" ","_", func.group)) %>%
+  unite(func_quant, func.group, quantity) %>%
+  group_by(site, bromeliad.id, func_quant) %>%
+  summarise(total_value = sum(value)) %>%
+  spread(func_quant, value = total_value, fill = 0)
+
+
+## create and merge
+
+
+groups(redone)
+
+redone$newname <- paste0(redone$func.group, ".", redone$quantity)
+
+problem <- redone %>%
+  group_by(bromeliad.id,mu,k, newname) %>%
+  summarise(total_value = sum(value)) %>%
+  spread(newname, value = total_value, fill = 0)
+
+problem$bromeliad.id %>% unique
+
+
+
 
 merged_insect_data <-  %>%
   merge_func(bwg_names)
+
+
