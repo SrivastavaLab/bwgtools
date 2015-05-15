@@ -44,7 +44,7 @@ from_start <- function(depthdata){
 #' @export
 #' @importFrom magrittr "%>%"
 physical_long <- function(physical_data){
-  long_phys <- physical_data %>%
+  physical_data %>%
     dplyr::select(site, trt.name, bromeliad.id, contains("leafpack")) %>%
     tidyr::gather("leafpackvar", "mass", contains("leafpack")) %>%
     tidyr::separate(leafpackvar, c("rep","species","word_mass","time"))
@@ -58,7 +58,7 @@ physical_long <- function(physical_data){
 #' @importFrom magrittr "%>%"
 #' @export
 leaf_loss_sample <- function(long_phys_data){
-  long_phys %>%
+  long_phys_data %>%
     tidyr::spread(time, mass) %>%
     dplyr::mutate(loss = (initial - final)/initial)
 }
