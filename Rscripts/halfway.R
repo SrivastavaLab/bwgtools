@@ -63,13 +63,11 @@ get_all_insects <- function(site_names = c("Macae","PuertoRico", "French_Guiana"
 
 }
 
-
-
 get_all_insects() %>%
   merge_func(bwg_names) %>%
-  sum_func_groups %>%
+  sum_func_groups(grps = list(~site, ~bromeliad.id, ~pred_prey, ~func.group)) %>%
   select(-func.group) %>%
-  group_by(bromeliad.id, pred_prey) %>%
+  group_by(site, bromeliad.id, pred_prey) %>%
   summarize(biomass = sum(total_biomass)) %>%
   mutate(pred_prey = ifelse(is.na(pred_prey), "unknown", pred_prey)) %>%
   ungroup %>%
