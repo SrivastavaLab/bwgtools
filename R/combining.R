@@ -121,22 +121,6 @@ sum_func_groups <- function(merged_data){
               total_taxa = n())
 }
 
-#' summarize functional groups as columns
-#'
-#' @param merged_data data formed by merging insect data to trait data
-#'
-#' @return summarized data. NOTE that this data will be grouped!
-#' @importFrom magrittr "%>%"
-#' @export
-#'
-sum_func_groups_cols <- function(merged_data){
-  merged_data %>%
-    dplyr::group_by(bromeliad.id, pred_prey, func.group) %>%
-
-    dplyr::summarize(total_abundance = sum(abundance),
-                     total_biomass = sum(biomass),
-                     total_taxa = n())
-}
 
 
 #' Summarize functional groups still farther into trophic ranks
