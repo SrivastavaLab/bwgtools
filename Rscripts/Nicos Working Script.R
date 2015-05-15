@@ -8,11 +8,12 @@ rm(list=ls(all=TRUE))
 library(tidyr)
 library(dplyr)
 library(bwgtools)
+library(readxl)
 
 
 # loading data file -------------------------------------------------------
 
-mac <- read_site_sheet("Macae", "leaf.waterdepths")
+mac <- read_site_sheet("PuertoRico", "leaf.waterdepths")
 
 # check the file ----------------------------------------------------------
 
@@ -21,7 +22,11 @@ str(mac)
 
 # start working with it ---------------------------------------------------
 
+
+# fix day of the experiment -----------------------------------------------
+
 #function to turn the table into long format
+#MUST RUN
 longwater <- function(df) {
   measures  <- df %>%
     gather("data_name", "depth", starts_with("depth")) %>%
@@ -32,12 +37,32 @@ longwater <- function(df) {
   return(measures)
 }
 
+#USE NEXT FOR MACAE DATA ONLY!!!
 #add the day of the experiment plus the long format to the data
-wd_measures <- mac %>%
-  group_by(trt.name) %>%
-  mutate(nday = seq_along(date)) %>%
-  longwater()
+wd_measures <- mac %>% #MACAE DATA ONLY
+  group_by(trt.name) %>% #MACAE DATA ONLY
+  mutate(nday = seq_along(date)) %>% #MACAE DATA ONLY
+  longwater() #MACAE DATA ONLY
 
+#I created a support excel spreadsheet containing the day of the start and end of the
+#experiment for each treatment according to its temporal block...the excel file with
+#the support file is on the folder and should be used until we create a function to
+#do it automatically
+#load data from the support excel spreadsheet
+#sheet 1 - costa rica
+#sheet 2 - french guiana
+#sheet 3 - puerto rico
+support <- read_excel("./Support File.xlsx", sheet = 3)
+
+#for any other site, run this for the wd_measures
+wd_measures <- mac %>%
+  left_join(support) %>%
+  mutate(julian_measure = strptime(date, "%Y-%m-%d")$yday+1,
+         julian_block_start = strptime(start_block, "%Y-%m-%d")$yday+1) %>%
+  mutate(day_of_expt = (julian_measure - julian_block_start+1)) %>%
+  rename(nday = day_of_expt) %>%
+  select(- finish_block, -julian_measure, -julian_block_start) %>%
+  longwater()
 
 # start calculations ------------------------------------------------------
 
@@ -109,3 +134,5 @@ hydrological_measures <- wd_measures %>%
   left_join(bromeliad_properties) %>%
   left_join(dry_tanks) %>%
   left_join(when_brom_dried)
+
+write.table(hydrological_measures, "hydrological_costarica.tsv", sep = "\t", row.names = FALSE)
