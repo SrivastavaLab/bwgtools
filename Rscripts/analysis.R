@@ -73,7 +73,7 @@ phys %>%
 ## there are missing values!! I knwo there are.
 select(phys, starts_with("oxygen"))
 
-
+long_phys <- physical_long(phys)
 
 
 ## because mass is long, containing two replicates for each site and species, we get 1 when people recorded the first sample but lost the second (1 but not 2) and 2 when both are missing
