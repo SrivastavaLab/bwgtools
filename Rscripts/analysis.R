@@ -22,7 +22,8 @@ read_site_sheet("CostaRica", "site.info")
 # site_weather <- get_all_sites(sheetname = "site.info")
 
 sites <- combine_site.info()
-combine_tab("site.info")
+sites <- combine_tab("site.info")
+
 
 
 # site.weather ----------------------------------------
@@ -69,9 +70,61 @@ phys %>%
   sapply(function(x) x == 1) %>%
   all
 
-
+## there are missing values!! I knwo there are.
 select(phys, starts_with("oxygen"))
 
+long_phys <- phys %>%
+  dplyr::select(site, trt.name, bromeliad.id, contains("leafpack")) %>%
+  tidyr::gather("leafpackvar", "mass", contains("leafpack")) %>%
+  tidyr::separate(leafpackvar, c("rep","species","word_mass","time"))
+
+## because mass is long, containing two replicates for each site and species, we get 1 when people recorded the first sample but lost the second (1 but not 2) and 2 when both are missing
+long_phys %>%
+  dplyr::group_by(site, bromeliad.id, species) %>%
+  dplyr::summarise(meanmass = mean(mass, na.rm = TRUE), sumna = sum(is.na(mass))) %>%
+  dplyr::filter(!is.na(meanmass), sumna >0)
+
+long_phys %>%
+  dplyr::group_by(site, species, rep, time) %>%
+  dplyr::summarize(range = max(mass) - min(mass))
+
+## calculate loss for each sample
+leaf_loss_sample <- long_phys %>%
+    tidyr::spread(time, mass) %>%
+    dplyr::mutate(loss = (initial - final)/initial)
+
+## calculate per species means, removing NA
+## count non NA to find sample size
+leaf_loss_species <- leaf_loss_sample %>%
+  dplyr::group_by(site, trt.name, bromeliad.id, species)%>%
+  dplyr::summarise(mean_loss = mean(loss, na.rm = TRUE),
+                   sample_size = sum(!is.na(loss))) %>%
+  dplyr::filter(!is.na(mean_loss))
+
+
+
+## spread the species into columns
+sp_cols <- leaf_loss_species %>% # only samples with no values are NA because na.rm = TRUE
+  dplyr::select(-sample_size) %>%
+  tidyr::spread(species, mean_loss)
+
+sp_cols$site %>% table
+
+## summarize across all species of leaves
+leaf_loss_overall <- leaf_loss_species %>%
+  dplyr::group_by(site, trt.name, bromeliad.id) %>%
+  dplyr::summarise(decomp = mean(mean_loss, na.rm = TRUE),
+                   sample_size_species = n())
+
+
+leaf_loss_overall %>%
+  dplyr::tally(.) %>%
+  dplyr::tally(.) %>% View
+
+sites %>%
+  dplyr::select(contains("leafpack"))
+
+### check that sites
 
 # leaf.waterdepths ------------------------------------
 
@@ -82,7 +135,7 @@ library(zoo)
 
 ar <- read_site_sheet(offline("Argentina"), "leaf.waterdepths")
 
-
+## check that the two match OK:
 # bromeliad.final.inverts ----------------------------------
 
 read_site_sheet(offline("Argentina"), "bromeliad.final.inverts")
