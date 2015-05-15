@@ -105,3 +105,16 @@ decomp_responses <- function(leaf_loss_species){
 
   dplyr::left_join(sp_cols, leaf_loss_overall, by = c("site", "trt.name", "bromeliad.id"))
 }
+
+#' obtain decomposition data
+#'
+#' @return data frame with 7 columns: site, trt.name, bromeliad.id, species1 decomposition, species2 decomposition, mean decomposition, and the number of species contained in that mean
+#' @export
+#' @importFrom magrittr "%>%"
+get_decomp <- function(){
+  combine_tab("bromeliad.physical") %>%
+    physical_long %>%
+    leaf_loss_sample %>%
+    leaf_loss_mean %>%
+    decomp_responses
+}

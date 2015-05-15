@@ -92,8 +92,11 @@ leaf_loss <- leaf_loss_sample(long_phys)
 means_loss <- leaf_loss_mean(leaf_loss)
 
 decomp_responses(means_loss)
-
-
+combine_tab("bromeliad.physical") %>%
+  physical_long %>%
+  leaf_loss_sample %>%
+  leaf_loss_mean %>%
+  decomp_responses
 
 ### check that sites
 
