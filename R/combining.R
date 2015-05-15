@@ -67,7 +67,7 @@ invert_to_long <- function(insect_data, category_vars){
   # spread out the two kinds of measurements
   # split the treatments into numbers
   long_out <- insect_data %>%
-    tidyr::gather_("species", "quantity", insect_names)%>%
+    tidyr::gather_("species", "quantity", insect_names, convert = TRUE)%>%
     tidyr::spread(abundance.or.biomass, quantity)%>%
     tidyr::separate(trt.name, c("mu", "k"), "k")%>%
     dplyr::mutate(mu = tidyr::extract_numeric(mu), k = tidyr::extract_numeric(k))
@@ -108,35 +108,20 @@ merge_func <- function(insect_data, trait_data){
 #' summarize functional groups
 #'
 #' @param merged_data data formed by merging insect data to trait data
+#' @param grps using the formula, indicate the grouping factors required
 #'
 #' @return summarized data. NOTE that this data will be grouped!
 #' @importFrom magrittr "%>%"
 #' @export
 #'
-sum_func_groups <- function(merged_data){
+sum_func_groups <- function(merged_data, grps = list(~bromeliad.id, ~pred_prey, ~func.group)){
   merged_data %>%
-    dplyr::group_by(bromeliad.id, pred_prey, func.group) %>%
+    dplyr::group_by_(.dots = grps) %>%
     dplyr::summarize(total_abundance = sum(abundance),
               total_biomass = sum(biomass),
               total_taxa = n())
 }
 
-#' summarize functional groups as columns
-#'
-#' @param merged_data data formed by merging insect data to trait data
-#'
-#' @return summarized data. NOTE that this data will be grouped!
-#' @importFrom magrittr "%>%"
-#' @export
-#'
-sum_func_groups_cols <- function(merged_data){
-  merged_data %>%
-    dplyr::group_by(bromeliad.id, pred_prey, func.group) %>%
-
-    dplyr::summarize(total_abundance = sum(abundance),
-                     total_biomass = sum(biomass),
-                     total_taxa = n())
-}
 
 
 #' Summarize functional groups still farther into trophic ranks

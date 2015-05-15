@@ -4,10 +4,13 @@
 \alias{sum_func_groups}
 \title{summarize functional groups}
 \usage{
-sum_func_groups(merged_data)
+sum_func_groups(merged_data, grps = list(~bromeliad.id, ~pred_prey,
+  ~func.group))
 }
 \arguments{
 \item{merged_data}{data formed by merging insect data to trait data}
+
+\item{grps}{using the formula, indicate the grouping factors required}
 }
 \value{
 summarized data. NOTE that this data will be grouped!
