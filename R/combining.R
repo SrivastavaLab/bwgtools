@@ -196,6 +196,6 @@ get_all_insects <- function(site_names = c("Macae","PuertoRico", "French_Guiana"
 
   ## get all sites, rbind them
   lapply(site_names, get_insects) %>%
-    dplyr::rbind_all
+    dplyr::rbind_all(.)
 
 }
