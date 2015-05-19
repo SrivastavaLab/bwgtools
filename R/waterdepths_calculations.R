@@ -3,13 +3,15 @@
 #' @param df the water data to make long
 #'
 #' @return long water data
+#' @importFrom magrittr "%>%"
 #' @export
 longwater <- function(df) {
   measures  <- df %>%
-    gather("data_name", "depth", starts_with("depth")) %>%
-    separate(data_name, into = c("depth_word", "leaf", "first_or_second","first")) %>%
-    select(-depth_word, -first) %>%
-    filter(!is.na(depth))
+    tidyr::gather("data_name", "depth", starts_with("depth")) %>%
+    tidyr::separate(data_name, into = c("depth_word", "leaf",
+                                        "first_or_second","first")) %>%
+    dplyr::select(-depth_word, -first) %>%
+    dplyr::filter(!is.na(depth))
 
   return(measures)
 }
