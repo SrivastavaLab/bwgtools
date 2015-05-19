@@ -4,7 +4,7 @@ library(tidyr)
 library(dplyr)
 library(bwgtools)
 
-cr1 <- read_excel("C:/Users/Nick/Desktop/Costa Rica.xlsx", sheet = 1)
+cr1 <- read_excel("Rscripts/Support File.xlsx", sheet = 1)
 
 cr <- read_site_sheet("CostaRica", "leaf.waterdepths")
 
