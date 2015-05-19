@@ -178,3 +178,52 @@ hydrological_measures <- wd_measures %>%
 
 setwd("C:/Users/Nick/Desktop")
 write.table(hydrological_measures, "hydrological_costarica.tsv", sep = "\t", row.names = FALSE)
+
+
+# NEW CALCULATIONS ACCOUNTING FOR SPATIAL VARIANCE ------------------------
+
+when_bromeliad_dried <- wd_measures %>%
+  mutate(length_exp = max(nday)) %>%
+  filter(depth <= 5) %>%
+  group_by(trt.name, leaf) %>%
+  mutate(times_minimum = length(nday),
+         day_last_minimum = max(nday),
+         days_since_last_minimum = length_exp - max(nday)) %>%
+  summarise(times_minimum = min(times_minimum),
+            day_last_minimum = min(day_last_minimum),
+            days_since_last_minimum = min(days_since_last_minimum)) %>%
+  group_by(trt.name) %>%
+  summarise(mean.times_minimum = round(mean(times_minimum)),
+            max.times_minimum = max(times_minimum),
+            times_minimum = sum(times_minimum), #dry+minimum
+            when_last_day_minimum = max(day_last_minimum), #most recent fall in water depth
+            days_since_last_minimum = min(days_since_last_minimum)) #how many days have ellapsed since the last major drop
+
+brom_properties <- wd_measures %>%
+  group_by(trt.name, leaf) %>%
+  summarise(amplitude = max(depth) - min(depth),
+            wetness = mean(depth)/max(depth),
+            overflow.days = sum(depth == max(depth))-1) %>%
+  group_by(trt.name) %>%
+  summarise(amplitude = mean(amplitude),
+            wetness_mean = mean(wetness),
+            overflow.days = max(overflow.days))
+
+hydrological_measures <- wd_measures %>%
+  group_by(trt.name, nday) %>%
+  mutate(mean_depth = mean(depth, na.rm=TRUE)) %>%
+  filter(leaf == "leafa") %>%
+  group_by(trt.name) %>%
+  summarise(max.depth = max(mean_depth),
+            min.depth = min(mean_depth),
+            mean.depth = mean(mean_depth),
+            var.depth = var(mean_depth),
+            sd.depth = sd(mean_depth),
+            cv.depth = (100*(sd(mean_depth))/mean(mean_depth)),
+            net_fluct = sum(mean_depth - lag(mean_depth), na.rm = TRUE),
+            total_fluct = sum(abs(mean_depth - lag(mean_depth)), na.rm = TRUE)) %>%
+  left_join(brom_properties) %>%
+  left_join(when_bromeliad_dried)
+
+setwd("C:/Users/Nick/Desktop")
+write.table(hydrological_measures, "hydrological_costarica.tsv", sep = "\t", row.names = FALSE)
