@@ -15,6 +15,8 @@ library(readxl)
 
 mac <- read_site_sheet("PuertoRico", "leaf.waterdepths")
 
+
+
 # check the file ----------------------------------------------------------
 
 head(mac)
@@ -44,7 +46,14 @@ wd_measures <- mac %>% #MACAE DATA ONLY
 #sheet 1 - costa rica
 #sheet 2 - french guiana
 #sheet 3 - puerto rico
-support <- read_excel("./Support File.xlsx", sheet = 3)
+support <- make_support_file()
+
+## SITE NAMES ARE DIFFERENT
+
+support %>% .[["site"]] %>% unique
+  left_join(support) %>% str
+  mutate(dday = )
+
 
 #for any other site, run this for the wd_measures
 wd_measures <- mac %>%
