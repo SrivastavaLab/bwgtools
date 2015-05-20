@@ -35,8 +35,8 @@ n_max_zero(testvec)
 
 #pipe the function to get the total number and duration of chunks of zero rain
 
-seq_no_rain <- rainfall %>% 
-  group_by(trt.name) %>% 
+seq_no_rain <- rainfall %>%
+  group_by(trt.name) %>%
   filter(day > 12) %>%
   do(nzero = n_max_zero(.$rain)) %>%
   mutate(maximum_length_cdd = max(nzero),
@@ -76,9 +76,9 @@ rains <- rainfall %>%
             event.75 = sum(rain > rain_control$quantile50 & rain <= rain_control$quantile75),
             event.90 = sum(rain > rain_control$quantile75 & rain <= rain_control$quantile90),
             big.event = sum(rain >= rain_control$quantile99),
-            total.rainfall = sum(rain), 
+            total.rainfall = sum(rain),
             mean_event_size = mean(rain),
-            max_event_size = max(rain), 
+            max_event_size = max(rain),
             min_event_size = min(rain),
             q10 = mean(quantile(rain, 0.1)),
             q25 = mean(quantile(rain, 0.25)),
