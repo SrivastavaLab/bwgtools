@@ -4,6 +4,7 @@ rm(list=ls(all=TRUE))
 
 # load data frame ---------------------------------------------------------
 
+rainfall<-read.table("./precipitacao.txt", header=TRUE)
 
 # load packages -----------------------------------------------------------
 
@@ -96,4 +97,3 @@ raindist <- rainfall %>%
   left_join(rains)
 
 write.table(raindist, "raindist.xls", sep="\t", row.names = FALSE)
-
