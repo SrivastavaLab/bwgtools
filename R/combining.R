@@ -1,15 +1,3 @@
-
-#' Obtain the site.weather data
-#'
-#' @return data.frame of all site.weather tabs
-#' @export
-combine_site.weather <- function(){
-  site_weather <- get_all_sites(sheetname = "site.weather")
-
-
-  return(allsite)
-}
-
 #' Obtain data for all sites
 #'
 #' This function reads data from the same tab for all the sites (via \code{get_all_sites()}) , then combines thme with \code{dplyr::rbind_all()}
