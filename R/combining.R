@@ -24,20 +24,21 @@ combine_site.weather <- function(){
 #' @return data.frame of all bromeliad.physical tabs
 #' @export
 combine_tab <- function(sheetname){
-  site_weather <- get_all_sites(sheetname = sheetname)
+  site_data <- get_all_sites(sheetname = sheetname)
   ## done
 
+  ### site.info Cleaning -- Colombia
   if (sheetname == "site.info") {
     message("CLEANING: I'm taking only the first row of Colombia.
           is that still necessary?")
-    site_weather[[3]] <- site_weather[[3]][1, ]
+    site_data[[3]] <- site_data[[3]][1, ]
 
-    if(unique(site_weather[[3]][[1]]) != "colombia") {
+    if(unique(site_data[[3]][[1]]) != "colombia") {
       stop("wait. Where *IS* Colombia!?")
     }
   }
 
-  allsite <- dplyr::rbind_all(site_weather)
+  allsite <- dplyr::rbind_all(site_data)
   return(allsite)
 }
 
