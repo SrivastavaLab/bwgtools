@@ -8,11 +8,15 @@
 #' This function reads data from the same tab for all the sites (via \code{get_all_sites()}) , then combines thme with \code{dplyr::rbind_all()}
 #'
 #' @param sheetname The name of the sheet you'd like to have
+#' @param .sites the sites you want. defaults to all of them
 #'
 #' @return data.frame of all bromeliad.physical tabs
 #' @export
-combine_tab <- function(sheetname){
-  site_data <- get_all_sites(sheetname = sheetname)
+combine_tab <- function(sheetname,
+                        .sites =  c("Argentina","Cardoso", "Colombia",
+                                    "French_Guiana", "Macae", "PuertoRico",
+                                    "CostaRica")){
+  site_data <- get_all_sites(sheetname = sheetname, sites = .sites)
   ### site.info Cleaning -- Colombia
   if (sheetname == "site.info")
   {

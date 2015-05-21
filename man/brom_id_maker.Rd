@@ -11,7 +11,7 @@ brom_id_maker(df)
   bromelaid.id columns}
 }
 \value{
-the data frame, plus a new column for the id
+the data frame, plus a new column for the id (and minus the original)
 }
 \description{
 This joins the \code{site} and the \code{bromeliad.id}
