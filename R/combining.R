@@ -39,6 +39,12 @@ combine_tab <- function(sheetname){
     site_data[[1]] <- site_data[[1]][,-6]
   }
 
+  if (sheetname == "bromeliad.final.inverts") {
+    browser()
+    site_data <- lapply(site_data, invert_to_long, category_vars = c("site", "trt.name", "bromeliad.id", "abundance.or.biomass"))
+  }
+
+
   allsite <- dplyr::rbind_all(site_data)
   return(allsite)
 }
@@ -73,9 +79,12 @@ invert_to_long <- function(insect_data, category_vars){
     tidyr::separate(trt.name, c("mu", "k"), "k")%>%
     dplyr::mutate(mu = tidyr::extract_numeric(mu), k = tidyr::extract_numeric(k))
 
-  where_zero <- identical(which(long_out$abundance==0), which(long_out$biomass == 0))
+  zeros_same <- identical(which(long_out$abundance==0), which(long_out$biomass == 0))
 
-  if(!where_zero) stop("there are inconsistencies between the abundance and biomass columns")
+  ## is there even biomass measurements?
+  biomass_absent <- all(is.na(long_out$biomass))
+
+  if(!zeros_same & !biomass_absent) stop("there are inconsistencies between the abundance and biomass columns")
 
   # remove the zeros
   long_final <- long_out %>%
