@@ -53,8 +53,15 @@ combine_tab <- function(sheetname){
 #' @export
 invert_to_long <- function(insect_data, category_vars){
 
-  # what names are *not* the categorical vars?
   data_names <- names(insect_data)
+
+  # are all categories present?
+  if (sum(category_vars %in% data_names) != 4) {
+    stop("missing a category")
+  }
+
+  # what names are *not* the categorical vars?
+
   insect_names <- setdiff(data_names, category_vars)
 
   # gather in all species names
