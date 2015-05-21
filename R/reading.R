@@ -136,14 +136,15 @@ offline <- function(sitename, default.path = "../../../Dropbox/"){
 #' @param df the data.frame. must contain site and
 #'   bromelaid.id columns
 #'
-#' @return the data frame, plus a new column for the id
+#' @return the data frame, plus a new column for the id (and minus the original)
 #' @export
 brom_id_maker <- function(df){
   ## first check to see if both needed columns are there
   two_names <- assertthat::has_name(df, c("site", "bromeliad.id"))
 
-  if(!all(two_names)) stop("site or bromeliad.id missing")
+  if (!all(two_names)) stop("site or bromeliad.id missing")
   ## then unite them
   df %>%
-    tidyr::unite(site, bromeliad.id, remove = FALSE)
+    tidyr::unite(site_brom.id, site, bromeliad.id, remove = FALSE) %>%
+    dplyr::select(-bromeliad.id)
 }
