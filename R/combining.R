@@ -6,12 +6,7 @@
 combine_site.weather <- function(){
   site_weather <- get_all_sites(sheetname = "site.weather")
 
-  ## clean and message
-  message("CLEANING: I'm dropping the 6th column from Argentina. is that still necessary?")
-  site_weather[[1]] <- site_weather[[1]][,-6]
 
-  ## done
-  allsite <- dplyr::rbind_all(site_weather)
   return(allsite)
 }
 
@@ -25,17 +20,30 @@ combine_site.weather <- function(){
 #' @export
 combine_tab <- function(sheetname){
   site_data <- get_all_sites(sheetname = sheetname)
-  ## done
-
   ### site.info Cleaning -- Colombia
-  if (sheetname == "site.info") {
+  if (sheetname == "site.info")
+  {
+
+    if (unique(site_data[[3]][[1]]) != "colombia")
+    {
+      stop("wait. Where *IS* Colombia!?")
+    }
+
     message("CLEANING: I'm taking only the first row of Colombia.
           is that still necessary?")
     site_data[[3]] <- site_data[[3]][1, ]
 
-    if(unique(site_data[[3]][[1]]) != "colombia") {
-      stop("wait. Where *IS* Colombia!?")
+  } else if (sheetname == "site.weather")
+  {
+    if (unique(site_data[[1]][[1]]) != "argentina")
+    {
+      stop("wait. Where *IS* Argentina!?")
     }
+
+    ## clean and message
+    message("CLEANING: I'm dropping the 6th column from Argentina.
+            is that still necessary?")
+    site_data[[1]] <- site_data[[1]][,-6]
   }
 
   allsite <- dplyr::rbind_all(site_data)
