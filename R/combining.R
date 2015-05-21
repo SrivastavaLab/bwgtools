@@ -1,23 +1,4 @@
 
-#' Combines all site.info tabs
-#'
-#' @return data.frame containing all the site information
-#' @export
-combine_site.info <- function() {
-
-  site_info <- get_all_sites(sheetname = "site.info")
-
-  ### clean and message
-#   message("CLEANING: I'm taking only the first row of French Guiana. is that still necessary?")
-#   site_info[[4]] <- site_info[[4]][1, ] ## extra values from FG
-  message("CLEANING: I'm taking only the first row of Columbia. is that still necessary?")
-  site_info[[3]] <- site_info[[3]][1, ] ## note that this is not good enough to fix this one.
-
-
-  allsite <- dplyr::rbind_all(site_info)
-  return(allsite)
-}
-
 #' Obtain the site.weather data
 #'
 #' @return data.frame of all site.weather tabs
@@ -45,6 +26,17 @@ combine_site.weather <- function(){
 combine_tab <- function(sheetname){
   site_weather <- get_all_sites(sheetname = sheetname)
   ## done
+
+  if (sheetname == "site.info") {
+    message("CLEANING: I'm taking only the first row of Colombia.
+          is that still necessary?")
+    site_weather[[3]] <- site_weather[[3]][1, ]
+
+    if(unique(site_weather[[3]][[1]]) != "colombia") {
+      stop("wait. Where *IS* Colombia!?")
+    }
+  }
+
   allsite <- dplyr::rbind_all(site_weather)
   return(allsite)
 }
