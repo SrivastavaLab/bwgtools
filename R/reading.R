@@ -126,3 +126,24 @@ offline <- function(sitename, default.path = "../../../Dropbox/"){
     make_default_path %>%
     paste0(default.path,.)
 }
+
+
+#' Make id column
+#'
+#' This joins the \code{site} and the \code{bromeliad.id}
+#' columns. to make a unique identifier.
+#'
+#' @param df the data.frame. must contain site and
+#'   bromelaid.id columns
+#'
+#' @return the data frame, plus a new column for the id
+#' @export
+brom_id_maker <- function(df){
+  ## first check to see if both needed columns are there
+  two_names <- assertthat::has_name(df, c("site", "bromeliad.id"))
+
+  if(!all(two_names)) stop("site or bromeliad.id missing")
+  ## then unite them
+  df %>%
+    tidyr::unite(site, bromeliad.id, remove = FALSE)
+}
