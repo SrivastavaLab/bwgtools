@@ -147,4 +147,5 @@ brom_id_maker <- function(df){
   df %>%
     tidyr::unite(site_brom.id, site, bromeliad.id, remove = FALSE) %>%
     dplyr::select(-bromeliad.id)
+  ## select only works if the column names are not duplicates
 }
