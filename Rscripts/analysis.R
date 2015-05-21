@@ -21,8 +21,7 @@ read_site_sheet("CostaRica", "site.info")
 
 # site_weather <- get_all_sites(sheetname = "site.info")
 
-sites <- combine_site.info()
-sites <- combine_tab("site.info")
+sites2 <- combine_tab("site.info")
 
 
 
@@ -39,8 +38,7 @@ read_site_sheet("CostaRica", "site.weather")
 
 #site_weather <- get_all_sites(sheetname = "site.weather")
 
-combine_site.weather()
-combine_tab("site.weather")
+sites2 <- combine_tab("site.weather")
 
 # the_ncol <- lapply(site_weather, ncol)
 # sapply(the_ncol, function(x) assertthat::are_equal(x, 5))
@@ -79,7 +77,7 @@ long_phys <- physical_long(phys)
 long_phys %>%
   dplyr::group_by(site, bromeliad.id, species) %>%
   dplyr::summarise(meanmass = mean(mass, na.rm = TRUE), sumna = sum(is.na(mass))) %>%
-  dplyr::filter(!is.na(meanmass), sumna >0)
+  dplyr::filter(!is.na(meanmass), sumna > 0)
 
 long_phys %>%
   dplyr::group_by(site, species, rep, time) %>%
@@ -230,7 +228,7 @@ check_names(leaf_depth_list[[1]])
 
 head(leaf_depth_list[[1]])
 
-all_leaf <- rbind_all(leaf_depth_list)
+all_leaf <- dplyr::rbind_all(leaf_depth_list)
 ## write a function that combines the data and also checks it
 ## not in that order
 
@@ -239,6 +237,9 @@ all_leaf <- rbind_all(leaf_depth_list)
 ## the first day of the experiment is the first non-NA
 
 ## proof of concept for macae
+
+head(all_leaf)
+
 
 ## make this into a function
 longwater <- . %>%
@@ -290,3 +291,10 @@ toplot %>%
              colour = leaf, group = leaf)) + geom_line() + geom_point() +
   facet_grid(site + mu~k)
 
+
+library(magrittr)
+library(tidyr)
+library(dplyr)
+
+read_site_sheet("Macae", "leaf.waterdepths") %>%
+  longwater
