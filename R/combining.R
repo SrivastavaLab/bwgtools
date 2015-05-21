@@ -1,3 +1,8 @@
+## these are all the functions which combine data, where
+## reshaping functions are required prior to combining they
+## are found here as well
+
+
 #' Obtain data for all sites
 #'
 #' This function reads data from the same tab for all the sites (via \code{get_all_sites()}) , then combines thme with \code{dplyr::rbind_all()}
