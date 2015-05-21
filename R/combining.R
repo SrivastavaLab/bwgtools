@@ -39,9 +39,15 @@ combine_tab <- function(sheetname){
     site_data[[1]] <- site_data[[1]][,-6]
   }
 
+  if (sheetname %in% c("bromeliad.final.inverts")) {
+    site_data <- lapply(site_data, brom_id_maker)
+  }
+
   if (sheetname == "bromeliad.final.inverts") {
-    browser()
-    site_data <- lapply(site_data, invert_to_long, category_vars = c("site", "trt.name", "bromeliad.id", "abundance.or.biomass"))
+    site_data <- lapply(site_data, invert_to_long,
+                        category_vars = c("site", "trt.name",
+                                          "bromeliad.id", "abundance.or.biomass",
+                                          "site_brom.id"))
   }
 
 
@@ -62,7 +68,7 @@ invert_to_long <- function(insect_data, category_vars){
   data_names <- names(insect_data)
 
   # are all categories present?
-  if (sum(category_vars %in% data_names) != 4) {
+  if (!all(sum(category_vars %in% data_names))) {
     stop("missing a category")
   }
 
