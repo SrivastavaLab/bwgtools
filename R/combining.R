@@ -195,27 +195,3 @@ plot_trophic <- function(invert_data, trait_data){
     tidyr::spread(pred_prey, value = total_biomass) %>%
     ggplot2::ggplot(ggplot2::aes(x = prey, y = predator)) + ggplot2::geom_point()
 }
-
-
-
-#' Get all the final insect data from Dropbox
-#'
-#' @param site_names Character vector of sites with (correctly formatted!) column names
-#'
-#' @importFrom magrittr "%>%"
-#' @return data.frame with a column for "site"
-#' @export
-get_all_insects <- function(site_names = c("Macae","PuertoRico", "French_Guiana")){
-
-  get_insects <- .%>%
-    read_site_sheet("bromeliad.final.inverts") %>%
-    invert_to_long(category_vars = c("site", "trt.name",
-                                     "bromeliad.id",
-                                     "abundance.or.biomass")) %>%
-    dplyr::mutate(bromeliad.id = as.character(bromeliad.id))
-
-  ## get all sites, rbind them
-  lapply(site_names, get_insects) %>%
-    dplyr::rbind_all(.)
-
-}
