@@ -35,4 +35,9 @@ test_that("helper functions work correctly", {
 
   expect_equal(make_default_path("foo"),
                "BWG Drought Experiment/raw data/Drought_data_foo.xlsx")
+
+  expect_error(offline("foo"),
+               "'arg' should be one of “Argentina”, “Cardoso”, “Colombia”, “French_Guiana”, “Macae”, “PuertoRico”, “CostaRica”")
+
+  expect_equal(offline("Macae"), "../../../Dropbox/BWG Drought Experiment/raw data/Drought_data_Macae.xlsx")
 })
