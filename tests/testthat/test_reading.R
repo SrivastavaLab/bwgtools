@@ -2,13 +2,16 @@ library(bwgtools)
 context("reading data")
 
 test_that("data is read correctly", {
-  data <- system.file("extdata","test_file.xlsx", package = "bwgtools")
-  expect_message(read_site_sheet("Macae", "leaf.waterdepths", ondisk = TRUE, file = data),
+  data <- system.file("extdata","Drought_data_PuertoRico.xlsx",
+                      package = "bwgtools")
+  expect_message(read_sheet(file = data, "leaf.waterdepths",
+                            ondisk = TRUE),
                  "you downloaded that file already! reading from disk")
-  expect_error(read_site_sheet("Macae", ondisk = TRUE, file = data),
+  expect_error(read_sheet(file = data, ondisk = TRUE),
                "c'mon give me a sheet name")
-  testdat <- read_site_sheet("Macae", "leaf.waterdepths", ondisk = TRUE, file = data)
-  expect_equal(nrow(testdat), 2)
+  testdat <- read_sheet(file = data, "leaf.waterdepths", ondisk = TRUE)
+
+
   stereotype <- dplyr::data_frame(a=1)
   expect_equal(class(testdat), class(stereotype))
 
