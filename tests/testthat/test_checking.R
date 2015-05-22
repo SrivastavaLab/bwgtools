@@ -18,6 +18,16 @@ test_that("data is checked correctly",{
                 dplyr::data_frame(a = 1, c = 2))
 
   expect_equal(names_all_same(dlist), FALSE)
+
+
+  testdf <- dplyr::data_frame(site = 1, bromeliad.id = 2)
+  expect_equal(find_site_brom(testdf), TRUE)
+  testdf <- dplyr::data_frame(site = 1, bromeliad = 2)
+  expect_equal(find_site_brom(testdf), FALSE)
+  testdf <- dplyr::data_frame(STIE = 1, bromeliad.id = 2)
+  expect_equal(find_site_brom(testdf), FALSE)
+
+
 })
 
 
