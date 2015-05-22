@@ -31,7 +31,7 @@ site.weather_read <- function(file_to_read){
   readxl::read_excel(path = file_to_read,
                      sheet = "site.weather",
                      na = "NA",
-                     col_types = NULL
+                     col_types = true_cols
   )
 }
 
