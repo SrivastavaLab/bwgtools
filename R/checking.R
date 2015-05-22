@@ -76,9 +76,17 @@ names_all_same <- function(datalist){
 }
 
 
+#' Are the columns site an bromeliad.id found in this data.frame?
+#'
+#' @param df data frame to check for
+#'
+#' @return are those column names present? TRUE or FALSE
 find_site_brom <- function(df){
   has_site <- assertthat::has_name(df, "site")
   has_brom <- assertthat::has_name(df, "bromeliad.id")
 
   has_site & has_brom
 }
+
+
+
