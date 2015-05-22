@@ -59,3 +59,26 @@ fill_in_argentina <- function(argentina_data){
     tidyr::spread(colname, fill_depth)
   return(result)
 }
+
+
+#' Check that names are all identical
+#'
+#' @param datalist list of dataframes whose names must all be identical
+#'
+#' @return are the names identical? TRUE or FALSE
+#' @export
+names_all_same <- function(datalist){
+  intersectnames <- datalist %>%
+    lapply(names) %>%
+    Reduce(intersect, .)
+
+  identical(intersectnames, names(datalist[[1]]))
+}
+
+
+find_site_brom <- function(df){
+  has_site <- assertthat::has_name(df, "site")
+  has_brom <- assertthat::has_name(df, "bromeliad.id")
+
+  has_site & has_brom
+}
