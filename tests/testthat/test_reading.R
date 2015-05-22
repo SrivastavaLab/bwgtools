@@ -15,10 +15,16 @@ test_that("data is read correctly", {
 
   ## return value: a tbl_df
   ## with correct columns
-  stereotype <- dplyr::data_frame(a=1)
+  stereotype <- dplyr::data_frame(a = 1)
 
+  ## LEAF.WATERDEPTHS
   testdat <- suppressMessages(read_sheet(file = data, "leaf.waterdepths", ondisk = TRUE))
   expect_equal(class(testdat), class(stereotype))
+  testdat_classes <- unlist(lapply(testdat, class))
+  names(testdat_classes) <- NULL
+  expect_equal(testdat_classes, c("character", "character", "character", "POSIXct", "POSIXt",
+                                  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"
+  ))
 
   ## BROMELIAD.PHYSICAL
   testdat <- suppressMessages(read_sheet(file = data, "bromeliad.physical", ondisk = TRUE))
