@@ -39,10 +39,12 @@ combine_tab <- function(sheetname,
   if(!names_all_same(site_data)) stop("names are different!")
   #### ending the cleaning
 
+  ## if there are site and bromeliad columns, fuse them.
   if (find_site_brom(site_data[[1]])) {
     site_data <- lapply(site_data, brom_id_maker)
   }
 
+  ## if this is invertebrates, gather them.
   if (sheetname == "bromeliad.final.inverts") {
     site_data <- lapply(site_data, invert_to_long,
                         category_vars = c("site", "trt.name",
@@ -51,6 +53,7 @@ combine_tab <- function(sheetname,
   }
 
 
+  ## finally, rbind all
   allsite <- dplyr::rbind_all(site_data)
   return(allsite)
 }
