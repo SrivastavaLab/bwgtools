@@ -1,4 +1,5 @@
 library(bwgtools)
+
 context("reading data")
 
 test_that("data is read correctly", {
@@ -33,11 +34,32 @@ test_that("data is read correctly", {
 
 test_that("helper functions work correctly", {
 
+  ## default path assembles correctly
   expect_equal(make_default_path("foo"),
                "BWG Drought Experiment/raw data/Drought_data_foo.xlsx")
 
+  ## offline accepts only a site name
   expect_error(offline("foo"),
                "'arg' should be one of “Argentina”, “Cardoso”, “Colombia”, “French_Guiana”, “Macae”, “PuertoRico”, “CostaRica”")
 
+  ## offline creates a correct path
   expect_equal(offline("Macae"), "../../../Dropbox/BWG Drought Experiment/raw data/Drought_data_Macae.xlsx")
+
+  ## brom_id_maker errors
+  testdf <- dplyr::data_frame(site = c("a", "a"), bromeliad.id = 1:2)
+
+  names(testdf) <- c("foo", "bromeliad.id")
+  expect_error(brom_id_maker(testdf), "site or bromeliad.id missing")
+  names(testdf) <- c("site", "bar")
+  expect_error(brom_id_maker(testdf), "site or bromeliad.id missing")
+
+  names(testdf) <- c("site", "bromeliad.id")
+
+  with_ids <- brom_id_maker(testdf)
+
+  stereotype <- dplyr::data_frame(a = 1)
+  expect_equal(class(with_ids), class(stereotype))
+  expect_equal(dim(with_ids), c(2,2))
+  expect_equal(names(with_ids), c("site_brom.id", "site"))
+  expect_equal(with_ids$site_brom.id, c("a_1", "a_2"))
 })
