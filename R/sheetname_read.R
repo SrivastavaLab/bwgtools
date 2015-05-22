@@ -82,25 +82,6 @@ leaf.waterdepths_read <- function(file_to_read){
 
 # bromeliad.initial.inverts
 
-
-#' Read in the final.inverts tab
-#'
-#' this function reads one final.inverts sheet
-#'
-#' @param file_to_read Path to file to be read
-bromeliad.final.inverts_read <- function(file_to_read){
-  readxl::read_excel(path = file_to_read,
-                     sheet = "bromeliad.final.inverts",
-                     na = "NA",
-                     col_types = NULL
-  )
-}
-
-
-
-#bwg.codes
-
-
 #' read in a neutral file
 #'
 #' @param sheetname name of the sheet you're reading
