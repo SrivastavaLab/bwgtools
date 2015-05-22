@@ -36,6 +36,7 @@ combine_tab <- function(sheetname,
 
   }
 
+  if(!names_all_same(site_data)) stop("names are different!")
   #### ending the cleaning
 
   if (sheetname %in% c("bromeliad.final.inverts")) {
