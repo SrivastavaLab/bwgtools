@@ -71,7 +71,7 @@ invert_to_long <- function(insect_data, category_vars){
   data_names <- names(insect_data)
 
   # are all categories present?
-  if (!all(sum(category_vars %in% data_names))) {
+  if (!all(category_vars %in% data_names)) {
     stop("missing a category")
   }
 
