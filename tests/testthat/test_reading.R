@@ -35,8 +35,13 @@ test_that("data is read correctly", {
                  "numeric", "character", "character", "character", "character",
                  "POSIXct", "POSIXt", "POSIXct", "POSIXt", "character"))
 
-#   testdat <- suppressMessages(read_sheet(file = data, "site.weather", ondisk = TRUE))
-#   expect_equal(class(testdat), class(stereotype))
+  testdat <- suppressMessages(read_sheet(file = data, "site.weather", ondisk = TRUE))
+  expect_equal(class(testdat), class(stereotype))
+  testdat_classes <- unlist(lapply(testdat, class))
+  names(testdat_classes) <- NULL
+  expect_equal(testdat_classes,
+               c("character", "POSIXct", "POSIXt", "numeric", "numeric", "numeric"
+  ))
 })
 
 test_that("helper functions work correctly", {
