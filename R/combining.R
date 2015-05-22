@@ -36,11 +36,11 @@ combine_tab <- function(sheetname,
 
   }
 
-  if(!names_all_same(site_data)) stop("names are different!")
   #### ending the cleaning
-
+  ## does the first dataset downloaded have the names "site" and "bromeliad.id"?
+  is_site_brom_pres <- find_site_brom(site_data[[1]])
   ## if there are site and bromeliad columns, fuse them.
-  if (find_site_brom(site_data[[1]])) {
+  if (is_site_brom_pres) {
     site_data <- lapply(site_data, brom_id_maker)
   }
 
@@ -48,10 +48,11 @@ combine_tab <- function(sheetname,
   if (sheetname == "bromeliad.final.inverts") {
     site_data <- lapply(site_data, invert_to_long,
                         category_vars = c("site", "trt.name",
-                                          "bromeliad.id", "abundance.or.biomass",
+                                          "abundance.or.biomass",
                                           "site_brom.id"))
   }
 
+  if(!names_all_same(site_data)) stop("names are different!")
 
   ## finally, rbind all
   allsite <- dplyr::rbind_all(site_data)
