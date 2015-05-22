@@ -9,4 +9,15 @@ test_that("data is checked correctly",{
   names(testdat)[2] <- "foo"
   expect_warning(check_names(testdat), "trt.name is misnamed")
 
+  dlist <- list(dplyr::data_frame(a = 1, b = 2),
+                dplyr::data_frame(a = 1, b = 2))
+
+  expect_equal(names_all_same(dlist), TRUE)
+
+  dlist <- list(dplyr::data_frame(a = 1, b = 2),
+                dplyr::data_frame(a = 1, c = 2))
+
+  expect_equal(names_all_same(dlist), FALSE)
 })
+
+
