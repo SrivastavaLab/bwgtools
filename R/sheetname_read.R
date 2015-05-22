@@ -1,18 +1,3 @@
-blankfinder <- function(.file_to_read, .sheetname, .truecols){
-
-  first_pass <- readxl::read_excel(path = .file_to_read, sheet = .sheetname, na = "NA",
-                    col_types = NULL)
-  total_cols <- ncol(first_pass)
-
-  n_blank_cols <- total_cols - length(.truecols)
-
-  blanks <- rep("blank", n_blank_cols)
-
-  c(.truecols, blanks)
-
-}
-
-
 #' Read in the site.info tab
 #'
 #' this function reads one site.info sheet
