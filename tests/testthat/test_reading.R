@@ -15,7 +15,24 @@ test_that("data is read correctly", {
   ## return value: a tbl_df
   stereotype <- dplyr::data_frame(a=1)
 
-  testdat <- read_sheet(file = data, "leaf.waterdepths", ondisk = TRUE)
+  testdat <- suppressMessages(read_sheet(file = data, "leaf.waterdepths", ondisk = TRUE))
   expect_equal(class(testdat), class(stereotype))
 
+  testdat <- suppressMessages(read_sheet(file = data, "bromeliad.physical", ondisk = TRUE))
+  expect_equal(class(testdat), class(stereotype))
+
+  testdat <- suppressMessages(read_sheet(file = data, "bromeliad.final.inverts", ondisk = TRUE))
+  expect_equal(class(testdat), class(stereotype))
+
+  testdat <- suppressMessages(read_sheet(file = data, "site.info", ondisk = TRUE))
+  expect_equal(class(testdat), class(stereotype))
+
+#   testdat <- suppressMessages(read_sheet(file = data, "site.weather", ondisk = TRUE))
+#   expect_equal(class(testdat), class(stereotype))
+})
+
+test_that("helper functions work correctly", {
+
+  expect_equal(make_default_path("foo"),
+               "BWG Drought Experiment/raw data/Drought_data_foo.xlsx")
 })
