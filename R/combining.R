@@ -16,7 +16,11 @@ combine_tab <- function(sheetname,
                         .sites =  c("Argentina","Cardoso", "Colombia",
                                     "French_Guiana", "Macae", "PuertoRico",
                                     "CostaRica")){
+
+  ## get all the site data
   site_data <- get_all_sites(sheetname = sheetname, sites = .sites)
+  ########
+  #### START CLEANING STUFF should be temporart
   ### site.info Cleaning -- Colombia
   if (sheetname == "site.info")
   {
@@ -30,18 +34,9 @@ combine_tab <- function(sheetname,
           is that still necessary?")
     site_data[[3]] <- site_data[[3]][1, ]
 
-  } else if (sheetname == "site.weather")
-  {
-    if (unique(site_data[[1]][[1]]) != "argentina")
-    {
-      stop("wait. Where *IS* Argentina!?")
-    }
-
-    ## clean and message
-    message("CLEANING: I'm dropping the 6th column from Argentina.
-            is that still necessary?")
-    site_data[[1]] <- site_data[[1]][,-6]
   }
+
+  #### ending the cleaning
 
   if (sheetname %in% c("bromeliad.final.inverts")) {
     site_data <- lapply(site_data, brom_id_maker)
