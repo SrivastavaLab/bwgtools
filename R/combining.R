@@ -39,7 +39,7 @@ combine_tab <- function(sheetname,
   if(!names_all_same(site_data)) stop("names are different!")
   #### ending the cleaning
 
-  if (sheetname %in% c("bromeliad.final.inverts")) {
+  if (find_site_brom(site_data[[1]])) {
     site_data <- lapply(site_data, brom_id_maker)
   }
 
