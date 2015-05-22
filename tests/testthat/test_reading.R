@@ -42,6 +42,7 @@ test_that("data is read correctly", {
 
   testdat <- suppressMessages(read_sheet(file = data, "bromeliad.final.inverts", ondisk = TRUE))
   expect_equal(class(testdat), class(stereotype))
+  expect_message(read_sheet(file = data, "bromeliad.final.inverts", ondisk = TRUE), "reading with NULL coltypes!")
 
   ## SITE.INFO
   testdat <- suppressMessages(read_sheet(file = data, "site.info", ondisk = TRUE))
