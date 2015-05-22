@@ -25,12 +25,8 @@ site.info_read <- function(file_to_read){
 #' @param file_to_read Path to file to be read
 site.weather_read <- function(file_to_read){
 
-#   true_cols <- c("text", "date",
-#                  "numeric", "numeric", "numeric")
-#
-#   cts <- blankfinder(.file_to_read = file_to_read,
-#                      .sheetname = "site.weather",
-#                      .truecols = true_cols)
+   true_cols <- c("text", "date",
+                  "numeric", "numeric", "numeric")
 
   readxl::read_excel(path = file_to_read,
                      sheet = "site.weather",
