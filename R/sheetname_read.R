@@ -10,15 +10,11 @@ site.info_read <- function(file_to_read){
                  "numeric","numeric","numeric","numeric",
                  "text","text","text","text","date","date","text")
 
-  cts <- blankfinder(.file_to_read = file_to_read,
-                     .sheetname = "site.info",
-                     .truecols = true_cols)
-
 
   readxl::read_excel(path = file_to_read,
                      sheet = "site.info",
                      na = "NA",
-                     col_types = cts
+                     col_types = true_cols
   )
 }
 
