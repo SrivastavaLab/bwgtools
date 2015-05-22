@@ -17,7 +17,7 @@ test_that("data is read correctly", {
   ## with correct columns
   stereotype <- dplyr::data_frame(a = 1)
 
-  ## LEAF.WATERDEPTHS
+  ## LEAF.WATERDEPTHS --------
   testdat <- suppressMessages(read_sheet(file = data, "leaf.waterdepths", ondisk = TRUE))
   expect_equal(class(testdat), class(stereotype))
   testdat_classes <- unlist(lapply(testdat, class))
@@ -26,7 +26,7 @@ test_that("data is read correctly", {
                                   "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"
   ))
 
-  ## BROMELIAD.PHYSICAL
+  ## BROMELIAD.PHYSICAL --------
   testdat <- suppressMessages(read_sheet(file = data, "bromeliad.physical", ondisk = TRUE))
   expect_equal(class(testdat), class(stereotype))
   testdat_classes <- unlist(lapply(testdat, class))
@@ -40,11 +40,12 @@ test_that("data is read correctly", {
                                   "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",
                                   "numeric", "numeric", "numeric", "numeric"))
 
+  # BROMELIAD.FINAL.INVERTS -----------------------------
   testdat <- suppressMessages(read_sheet(file = data, "bromeliad.final.inverts", ondisk = TRUE))
   expect_equal(class(testdat), class(stereotype))
   expect_message(read_sheet(file = data, "bromeliad.final.inverts", ondisk = TRUE), "reading with NULL coltypes!")
 
-  ## SITE.INFO
+  ## SITE.INFO -----------------
   testdat <- suppressMessages(read_sheet(file = data, "site.info", ondisk = TRUE))
   expect_equal(class(testdat), class(stereotype))
   testdat_classes <- unlist(lapply(testdat, class))
@@ -56,7 +57,7 @@ test_that("data is read correctly", {
                  "POSIXct", "POSIXt", "POSIXct", "POSIXt", "character"))
 
 
-  ## SITE.WEATHER
+  ## SITE.WEATHER ----------
   testdat <- suppressMessages(read_sheet(file = data, "site.weather", ondisk = TRUE))
   expect_equal(class(testdat), class(stereotype))
   testdat_classes <- unlist(lapply(testdat, class))
