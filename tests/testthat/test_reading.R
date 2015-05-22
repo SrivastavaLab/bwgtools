@@ -23,6 +23,16 @@ test_that("data is read correctly", {
   ## BROMELIAD.PHYSICAL
   testdat <- suppressMessages(read_sheet(file = data, "bromeliad.physical", ondisk = TRUE))
   expect_equal(class(testdat), class(stereotype))
+  testdat_classes <- unlist(lapply(testdat, class))
+  names(testdat_classes) <- NULL
+  expect_equal(testdat_classes, c("character", "character", "numeric", "numeric", "numeric",
+                                  "numeric", "character", "character", "numeric", "numeric", "numeric",
+                                  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",
+                                  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",
+                                  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",
+                                  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",
+                                  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",
+                                  "numeric", "numeric", "numeric", "numeric"))
 
   testdat <- suppressMessages(read_sheet(file = data, "bromeliad.final.inverts", ondisk = TRUE))
   expect_equal(class(testdat), class(stereotype))
