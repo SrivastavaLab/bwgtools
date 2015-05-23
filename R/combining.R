@@ -104,6 +104,33 @@ invert_to_long <- function(insect_data, category_vars){
 }
 
 
+#' Find and edit duplicate names in dataset
+#'
+#' @param df data frame which might have duplicate names
+#'
+#' @return data.frame with unique names. if the names were already unique, it is the same. otherwise the names are passed through \code{make.names} and a message is given
+#' @export
+which_names_doubled <- function(df){
+  df_names <- df %>%
+    names
+
+  dup_names <- df_names %>%
+    table %>%
+    Filter(function(x) x > 1, .) %>%
+    names
+
+  if (length(dup_names) > 0) {
+    dup_names %>%
+      paste0(collapse = ", ") %>%
+      sprintf("these names were duplicates: %s", .) %>%
+      message
+  }
+
+  names(df) <- make.names(names(df), unique = TRUE)
+  df
+}
+
+
 #' Merge functional groups to invert data
 #'
 #' @param insect_data data.frame of invert observations. must be long format (ie output of \code{invert_to_long})
