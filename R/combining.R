@@ -36,6 +36,9 @@ combine_tab <- function(sheetname,
 
   }
 
+  ## make names unique
+  site_data <- lapply(site_data, which_names_doubled)
+
   #### ending the cleaning
   ## does the first dataset downloaded have the names "site" and "bromeliad.id"?
   is_site_brom_pres <- find_site_brom(site_data[[1]])
