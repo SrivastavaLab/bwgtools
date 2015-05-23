@@ -97,4 +97,18 @@ test_that("helper functions work correctly", {
   expect_equal(dim(with_ids), c(2,2))
   expect_equal(names(with_ids), c("site_brom.id", "site"))
   expect_equal(with_ids$site_brom.id, c("a_1", "a_2"))
+
+
+  ## names
+  testdf <- data.frame(a = 1, b = 2, c = 3, d = 4)
+  expect_equal(which_names_doubled(testdf), testdf)
+
+  names(testdf) <- c("a","a", "b", "b")
+  expect_message(which_names_doubled(testdf), "these names were duplicates: a, b")
+
+  newdf <- suppressMessages(which_names_doubled(testdf))
+  expect_equal(newdf, c("a", "a.1", "b", "b.1"))
+
+
+
 })
