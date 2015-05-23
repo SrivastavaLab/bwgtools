@@ -107,7 +107,7 @@ test_that("helper functions work correctly", {
   expect_message(which_names_doubled(testdf), "these names were duplicates: a, b")
 
   newdf <- suppressMessages(which_names_doubled(testdf))
-  expect_equal(newdf, c("a", "a.1", "b", "b.1"))
+  expect_equal(names(newdf), c("a", "a.1", "b", "b.1"))
 
 
 
