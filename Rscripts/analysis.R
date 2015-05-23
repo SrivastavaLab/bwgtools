@@ -10,12 +10,12 @@ library(magrittr)
 # site.info -------------------------------------------
 
 
-read_site_sheet("Argentina", "site.info")
+read_site_sheet(offline("Argentina"), "site.info")
 read_site_sheet("Cardoso", "site.info")
 read_site_sheet("Colombia", "site.info") ## warnings
 read_site_sheet("French_Guiana", "site.info")
 read_site_sheet("Macae", "site.info")
-read_site_sheet("PuertoRico", "site.info")
+pr <- read_site_sheet(offline("PuertoRico"), "site.info")
 read_site_sheet("CostaRica", "site.info")
 
 
@@ -115,12 +115,13 @@ read_site_sheet(offline("Cardoso"), "bromeliad.final.inverts")
 read_site_sheet("Colombia", "bromeliad.final.inverts")
 read_site_sheet("French_Guiana", "bromeliad.final.inverts")
 read_site_sheet(offline("Macae"), "bromeliad.final.inverts")
-read_site_sheet(offline("PuertoRico"), "bromeliad.final.inverts")
+pr <- read_site_sheet("PuertoRico", "bromeliad.final.inverts")
 crinv <- read_site_sheet("CostaRica", "bromeliad.final.inverts")
 
 ## argentina and costa rica have a duplicate species
 ## colombia is missing biomass
-inverts <- combine_tab("bromeliad.final.inverts", .sites = c("Cardoso", "Macae", "PuertoRico","French_Guiana"))
+
+inverts <- combine_tab("bromeliad.final.inverts")
 
 
 
