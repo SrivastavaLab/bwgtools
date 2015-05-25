@@ -43,12 +43,14 @@ seq_no_rain <- rainfall %>%
          times_max_cdd_occur = sum(nzero == max(nzero))) %>%
   select(-nzero)
 
+# cdd = continuous dry days
+
 no_rain_days <- rainfall %>%
   group_by(trt.name) %>%
   do(nzero = n_max_zero(.$rain)) %>%
   mutate(rainless_days =  sum(nzero),
          mean_length_cdd = mean(nzero),
-         sd_length_cdd = sd(nzero, na.rm=TRUE),
+         sd_length_cdd = sd(nzero, na.rm = TRUE),
          number_events_cdd_initial = length(nzero),
          number_events_cdd = length(nzero) - 1) %>%
   select(-nzero) %>%
