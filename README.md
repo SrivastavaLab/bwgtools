@@ -340,6 +340,9 @@ combine the same tab across all sites, with a single function:
 </tbody>
 </table>
 
+Validating the data
+===================
+
 We can also do some basic checking
 
     check_names(macae)

@@ -74,6 +74,7 @@ c("Argentina", "French_Guiana", "Colombia",
   kable
 ```
 
+# Validating the data
 We can also do some basic checking 
 
 ```r
