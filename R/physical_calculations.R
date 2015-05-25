@@ -77,7 +77,7 @@ decomp_responses <- function(leaf_loss_species){
 #' @export
 #' @importFrom magrittr "%>%"
 get_decomp <- function(){
-  combine_tab("bromeliad.physical") %>%
+  combine_tab(sheetname = "bromeliad.physical") %>%
     physical_long %>%
     leaf_loss_sample %>%
     leaf_loss_mean %>%
