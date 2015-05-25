@@ -13,7 +13,7 @@ library(readxl)
 
 # loading data file -------------------------------------------------------
 
-mac <- read_site_sheet("CostaRica", "leaf.waterdepths")
+mac <- read_site_sheet("Macae", "leaf.waterdepths")
 
 # check the file ----------------------------------------------------------
 
@@ -27,7 +27,8 @@ str(mac)
 
 #function to turn the table into long format
 #MUST RUN
-
+allwater <- combine_tab(sheetname = "leaf.waterdepths")
+long_all <- longwater(allwater)
 
 #USE NEXT FOR MACAE DATA ONLY!!!
 #add the day of the experiment plus the long format to the data
@@ -150,8 +151,35 @@ when_bromeliad_dried <- wd_measures %>%
             when_last_day_minimum = max(day_last_minimum), #most recent fall in water depth
             days_since_last_minimum = min(days_since_last_minimum)) #how many days have ellapsed since the last major drop
 
-brom_properties <- wd_measures %>%
+
+## abstract these into a single function
+
+water_summary_calc <- function(mean_depth){
+  data_frame(
+    max.depth = max(mean_depth),
+    min.depth = min(mean_depth),
+    mean.depth = mean(mean_depth),
+    var.depth = var(mean_depth),
+    sd.depth = sd(mean_depth),
+    cv.depth = (100*(sd(mean_depth))/mean(mean_depth)),
+    net_fluct = sum(diff(mean_depth), na.rm = TRUE),
+    total_fluct = sum(abs(diff(mean_depth)), na.rm = TRUE),
+    amplitude = max.depth - min.depth,
+    wetness = mean.depth / max.depth
+  )
+}
+
+
+
+### calculate leaf values
+leaf_responses <- wd_measures %>%
   group_by(trt.name, leaf) %>%
+  do(water_summary_calc(.$depth))
+
+
+
+%>%
+
   summarise(amplitude = max(depth) - min(depth),
             wetness = mean(depth)/max(depth),
             overflow.days = sum(depth == max(depth))-1) %>%
@@ -160,21 +188,63 @@ brom_properties <- wd_measures %>%
             wetness_mean = mean(wetness),
             overflow.days = max(overflow.days))
 
-hydrological_measures <- wd_measures %>%
+## average depths across all leaves
+brom_averages <- wd_measures %>%
   group_by(trt.name, nday) %>%
-  mutate(mean_depth = mean(depth, na.rm=TRUE)) %>%
-  filter(leaf == "leafa") %>%
+  summarise(mean_depth = mean(depth, na.rm=TRUE),
+            n_depth = sum(!is.na(depth)))
+
+## calculate water variables
+## for different subsets and full data
+fulldat <- brom_averages %>%
   group_by(trt.name) %>%
-  summarise(max.depth = max(mean_depth),
-            min.depth = min(mean_depth),
-            mean.depth = mean(mean_depth),
-            var.depth = var(mean_depth),
-            sd.depth = sd(mean_depth),
-            cv.depth = (100*(sd(mean_depth))/mean(mean_depth)),
-            net_fluct = sum(mean_depth - lag(mean_depth), na.rm = TRUE),
-            total_fluct = sum(abs(mean_depth - lag(mean_depth)), na.rm = TRUE)) %>%
-  left_join(brom_properties) %>%
-  left_join(when_bromeliad_dried)
+  do(water_summary_calc(.$mean_depth)) %>%
+  gather("resp", "value", -trt.name)
+
+subdat <- brom_averages %>%
+  group_by(trt.name) %>%
+  filter((nday %% 2) == 0) %>%
+  do(water_summary_calc(.$mean_depth)) %>%
+  gather("resp", "value", -trt.name)
+
+subdat2 <- brom_averages %>%
+  group_by(trt.name) %>%
+  filter((nday %% 2) == 1) %>%
+  do(water_summary_calc(.$mean_depth)) %>%
+  gather("resp", "value", -trt.name)
+
+
+
+ggplot(fulldat, aes(x = value)) +
+  geom_density() +
+  geom_density(data = subdat, colour = "blue") +
+  geom_density(data = subdat2, colour = "orange") +
+  facet_wrap(~resp, scales = "free")
+
+
+fulldat %>%
+  filter(resp == "max.depth") %>%
+  .[["value"]] %>%
+  max
+
+subdat %>%
+  filter(resp == "max.depth") %>%
+  .[["value"]] %>%
+  max
+
+subdat2 %>%
+  filter(resp == "max.depth") %>%
+  .[["value"]] %>%
+  max
+
+fulldat %>%
+  left_join(rename(subdat, value_sub = value)) %>%
+  ggplot(aes(x = value, y = value_sub, colour = trt.name)) + geom_point() + facet_wrap(~resp, scales = "free") + geom_abline(intercept = 0, slope = 1)
+
+
+
+
+water_summary_calc(rnorm(60, mean = 50))
 
 setwd("C:/Users/Nick/Desktop")
 write.table(hydrological_measures, "hydrological_costarica.tsv", sep = "\t", row.names = FALSE)
