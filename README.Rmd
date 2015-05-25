@@ -29,23 +29,49 @@ library(devtools)
 install_github("SrivastavaLab/bwgtools", dependencies = TRUE)
 ```
 
-## Loading data into R
+# Loading data into R
+## Accessing Dropbox
 
 `bwgtools` uses [rdrop2](https://github.com/karthik/rdrop2) to access your Dropbox account, then uses [readxl](https://github.com/hadley/readxl) to download the data and read it directly into R. When you first run `library(bwgtools)` you will see the following message:
 
-> Welcome to the bwg R package! in order to obtain data from the BWG dropbox folder, you need to authorize R to access your dropbox. run the following commands: 
+```
+Welcome to the bwg R package! in order to obtain data from the BWG dropbox folder, you need to authorize R to access your dropbox. run the following commands: 
   library(rdrop2) 
   drop_acc() 
  then enter your username and password. This should only need to be done once per directory.
+```
 
 This will create a file called `.httr-oauth` in your directory, which will contain your login credentials for Dropbox. **Remember to add this file to your .gitignore if you are using git**. For more information, see `?rdrop2::drop_auth`.
 
-## First steps
+## Obtaining data
 
-You can read data directly into R . For example:
+Once you have authenticated with Dropbox, you can read data directly into R . For example, the function `read_sheet_site` will get a single tab from a single excel file (ie, a single site):
 
 ```r
 macae <- read_site_sheet("Macae", "leaf.waterdepths")
+```
+
+The first argument to this function can either be the name of a site (`"Macae"`, in the example above), **or** a path to the location of the file on your hard drive. In this README we are going to use the latter approach. This has two advantages: slightly faster (nothing needs to download) and it will work non-interactively (for example when using knitr).
+
+the major _disadvantage_ is that your local version of the data may be behind the official version on the Dropbox website. To be safe, use the online version whenever you can.
+
+```{r results='asis'}
+library(bwgtools)
+macae <- read_site_sheet(offline("Macae"), "leaf.waterdepths")
+knitr::kable(head(macae))
+```
+
+This approach works for loading a single tab; we can also load and combine the same tab across all sites, with a single function:
+
+```{r, warning=FALSE, message=FALSE, results='asis'}
+library(dplyr)
+library(knitr)
+c("Argentina", "French_Guiana", "Colombia",
+  "Macae", "PuertoRico","CostaRica") %>%
+  sapply(offline) %>%
+  combine_tab("site.info") %>% 
+  head %>% 
+  kable
 ```
 
 We can also do some basic checking 
