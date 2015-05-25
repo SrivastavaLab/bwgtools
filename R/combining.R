@@ -12,10 +12,10 @@
 #'
 #' @return data.frame of all bromeliad.physical tabs
 #' @export
-combine_tab <- function(sheetname,
-                        .sites =  c("Argentina","Cardoso", "Colombia",
+combine_tab <- function(.sites =  c("Argentina","Cardoso", "Colombia",
                                     "French_Guiana", "Macae", "PuertoRico",
-                                    "CostaRica")){
+                                    "CostaRica"),
+                        sheetname){
 
   ## get all the site data
   site_data <- get_all_sites(sheetname = sheetname, sites = .sites)
