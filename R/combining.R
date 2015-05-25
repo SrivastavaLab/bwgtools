@@ -145,12 +145,7 @@ which_names_doubled <- function(df){
 #' @export
 merge_func <- function(insect_data, trait_data){
 
-  message("i am creating the pred_prey column. Stop me when it is present in the dataset!")
-  bnt <- trait_data %>%
-    dplyr::select(nickname, func.group) %>%
-    dplyr::mutate(pred_prey = ifelse(stringr::str_detect(func.group, "predator"), "predator", "prey"))
-
-  merged <- dplyr::left_join(insect_data, bnt, by = c("species" = "nickname"))
+  merged <- dplyr::left_join(insect_data, trait_data, by = c("species" = "nickname"))
 
   return(merged)
 
