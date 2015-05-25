@@ -4,7 +4,7 @@
 \alias{sum_func_groups}
 \title{summarize functional groups}
 \usage{
-sum_func_groups(merged_data, grps = list(~bromeliad.id, ~pred_prey,
+sum_func_groups(merged_data, grps = list(~site, ~site_brom.id, ~pred_prey,
   ~func.group))
 }
 \arguments{

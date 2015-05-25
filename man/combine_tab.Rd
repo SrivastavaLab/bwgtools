@@ -4,13 +4,13 @@
 \alias{combine_tab}
 \title{Obtain data for all sites}
 \usage{
-combine_tab(sheetname, .sites = c("Argentina", "Cardoso", "Colombia",
-  "French_Guiana", "Macae", "PuertoRico", "CostaRica"))
+combine_tab(.sites = c("Argentina", "Cardoso", "Colombia", "French_Guiana",
+  "Macae", "PuertoRico", "CostaRica"), sheetname)
 }
 \arguments{
-\item{sheetname}{The name of the sheet you'd like to have}
-
 \item{.sites}{the sites you want. defaults to all of them}
+
+\item{sheetname}{The name of the sheet you'd like to have}
 }
 \value{
 data.frame of all bromeliad.physical tabs

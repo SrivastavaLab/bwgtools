@@ -4,7 +4,7 @@
 \alias{plot_trophic}
 \title{Plot predator vs prey biomass}
 \usage{
-plot_trophic(invert_data, trait_data)
+plot_trophic(long_inverts, trait_data)
 }
 \arguments{
 \item{trait_data}{bwg_names data. output of \code{get_bwg_names}}
