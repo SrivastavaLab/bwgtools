@@ -48,7 +48,8 @@ combine_tab <- function(sheetname,
   }
 
   ## if this is invertebrates, gather them.
-  if (sheetname == "bromeliad.final.inverts") {
+  if (sheetname %in% c("bromeliad.final.inverts",
+                       "bromeliad.initial.inverts")) {
     site_data <- lapply(site_data, invert_to_long,
                         category_vars = c("site", "trt.name",
                                           "abundance.or.biomass",

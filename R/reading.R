@@ -9,6 +9,8 @@
 read_sheet <- function(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(), ...) {
   if (is.null(sheetname)) stop("c'mon give me a sheet name")
 
+  ## where is the data read from? if user has said that data is ondisk
+  ## use the path provided. else read from tempdir
   if(ondisk){
     localfile <- file
   } else {
@@ -21,14 +23,16 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(),
                                    "bromeliad.physical",
                                    "bromeliad.final.inverts",
                                    "site.info",
-                                   "site.weather"
+                                   "site.weather",
+                                   "bromeliad.initial.inverts"
   ))
   f <- switch(sheet,
               leaf.waterdepths = leaf.waterdepths_read,
               bromeliad.physical = bromeliad.physical_read,
               bromeliad.final.inverts = neutral_read("bromeliad.final.inverts"),
               site.info = site.info_read,
-              site.weather = site.weather_read
+              site.weather = site.weather_read,
+              bromeliad.initial.inverts = neutral_read("bromeliad.initial.inverts")
   )
   if (file.exists(localfile)) {
     message("you downloaded that file already! reading from disk")
@@ -53,7 +57,7 @@ read_site_sheet <- function(sitename, sheetname = NULL, ...){
   if (is_path) {
     file_wanted <- sitename
   } else {
-    ## get default path
+    ## get default path from Dropbox/ to our data
     file_wanted <- make_default_path(sitename)
   }
   read_sheet(file_wanted, sheetname = sheetname, ondisk = is_path, ...)
