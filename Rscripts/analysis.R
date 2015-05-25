@@ -7,28 +7,46 @@ library(magrittr)
 ## testing ground
 
 
+# combine_tab -----------------------------------------
+
 ## We can read data in from all the sites and combine them. for example:
+c("Argentina", "French_Guiana", "Colombia",
+  "Macae", "PuertoRico","CostaRica") %>%
+  sapply(offline) %>%
+  combine_tab("site.info")
 
-info <- combine_tab("site.info", .sites = c("Argentina", "French_Guiana", "Colombia",                                            "Macae", "PuertoRico",
-                                            "CostaRica"))
-
-weather <- combine_tab("site.weather")
+weather <- c("Argentina", "French_Guiana", "Colombia",
+             "Macae", "PuertoRico","CostaRica") %>%
+  sapply(offline) %>%
+  combine_tab("site.weather")
 ## seem to be empty rows in:
 # Cardoso
 # Costa Rica
 
-phys <- combine_tab("bromeliad.physical")
+phys <- c("Argentina", "French_Guiana", "Colombia",
+          "Macae", "PuertoRico","CostaRica") %>%
+  sapply(offline) %>%
+  combine_tab("bromeliad.physical")
 # something is wrong with Cardoso site.info. too many columns?
 ## need to make the Colombia stopping rule more robust
 
 
-leafwater <- combine_tab("leaf.waterdepths")
+leafwater <- c("Argentina", "French_Guiana", "Colombia",
+               "Macae", "PuertoRico","CostaRica") %>%
+  sapply(offline) %>%
+  combine_tab("leaf.waterdepths")
 
-invert <- combine_tab("bromeliad.final.inverts")
+invert <- c("Argentina", "French_Guiana", "Colombia",
+            "Macae", "PuertoRico","CostaRica") %>%
+  sapply(offline) %>%
+  combine_tab("bromeliad.final.inverts")
 
 
-
-invertI <- combine_tab("bromeliad.initial.inverts")
+## doesn't quite work for all sites; argentina still causing problems
+invertI <- c("Argentina", "French_Guiana", "Colombia",
+             "Macae", "PuertoRico","CostaRica") %>%
+  sapply(offline) %>%
+  combine_tab("bromeliad.initial.inverts")
 
 # site.info -------------------------------------------
 
