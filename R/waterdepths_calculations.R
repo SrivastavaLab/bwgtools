@@ -42,3 +42,39 @@ make_support_file <- function(){
            finish_block = finish_block - lubridate::days(block_days_finish[temporal.block]))
 
 }
+
+
+
+#' Calculate water depth measurements
+#'
+#' @param depth depth measurements
+#' @details text describing parameter inputs in more detail.
+#' \itemize{
+#'  \item{"max.depth"}{ the maximum depth}
+#'  \item{"min.depth"}{ the minimum depth}
+#'  \item{"mean.depth"}{ mean depth}
+#'  \item{"var.depth"}{ variance in depth}
+#'  \item{"sd.depth"}{ standard deviation in depth}
+#'  \item{"cv.depth"}{ coefficient of variation in depth}
+#'  \item{"net_fluct"}{ net fluctuation in depth}
+#'  \item{"total_fluct"}{ total fluctuation in depth}
+#'  \item{"amplitude"}{ max.depth - mean.depth}
+#'  \item{"wetness"}{mean.depth / max.depth}
+#' }
+#'
+#' @return a 1 x n row \code{tbl_df}
+#' @export
+water_summary_calc <- function(depth){
+  data_frame(
+    max.depth = max(depth),
+    min.depth = min(depth),
+    mean.depth = mean(depth),
+    var.depth = var(depth),
+    sd.depth = sd(depth),
+    cv.depth = (100*(sd.depth/mean.depth)),
+    net_fluct = sum(diff(depth), na.rm = TRUE),
+    total_fluct = sum(abs(diff(depth)), na.rm = TRUE),
+    amplitude = max.depth - min.depth,
+    wetness = mean.depth / max.depth
+  )
+}
