@@ -10,7 +10,7 @@
 #' @importFrom magrittr "%>%"
 physical_long <- function(physical_data){
   physical_data %>%
-    dplyr::select(site, trt.name, bromeliad.id, contains("leafpack")) %>%
+    dplyr::select(site, trt.name, site_brom.id, contains("leafpack")) %>%
     tidyr::gather("leafpackvar", "mass", contains("leafpack")) %>%
     tidyr::separate(leafpackvar, c("rep","species","word_mass","time"))
 }
@@ -38,7 +38,7 @@ leaf_loss_sample <- function(long_phys_data){
 #' @export
 leaf_loss_mean <- function(leaf_loss_sample_data){
   leaf_loss_sample_data %>%
-    dplyr::group_by(site, trt.name, bromeliad.id, species)%>%
+    dplyr::group_by(site, trt.name, site_brom.id, species)%>%
     dplyr::summarise(mean_loss = mean(loss, na.rm = TRUE),
                      sample_size = sum(!is.na(loss))) %>%
     dplyr::filter(!is.na(mean_loss))
@@ -62,13 +62,13 @@ decomp_responses <- function(leaf_loss_species){
 
   ## summarize across all species of leaves
   leaf_loss_overall <- leaf_loss_species %>%
-    dplyr::group_by(site, trt.name, bromeliad.id) %>%
+    dplyr::group_by(site, trt.name, site_brom.id) %>%
     dplyr::summarise(decomp = mean(mean_loss, na.rm = TRUE),
                      sample_size_species = n())
 
   ## CHECK
 
-  dplyr::left_join(sp_cols, leaf_loss_overall, by = c("site", "trt.name", "bromeliad.id"))
+  dplyr::left_join(sp_cols, leaf_loss_overall, by = c("site", "trt.name", "site_brom.id"))
 }
 
 #' obtain decomposition data
