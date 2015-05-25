@@ -4,6 +4,8 @@ context("checking data")
 
 test_that("data is checked correctly",{
 
+  data <- system.file("extdata","Drought_data_PuertoRico.xlsx",
+                      package = "bwgtools")
   testdat <- suppressMessages(read_sheet(file = data, "leaf.waterdepths", ondisk = TRUE))
 
   names(testdat)[2] <- "foo"
