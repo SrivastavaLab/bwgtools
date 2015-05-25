@@ -48,71 +48,25 @@ invertI <- c("Argentina", "French_Guiana", "Colombia",
   sapply(offline) %>%
   combine_tab("bromeliad.initial.inverts")
 
-# site.info -------------------------------------------
+
+# decomposition ---------------------------------------
 
 
-read_site_sheet(offline("Argentina"), "site.info")
-read_site_sheet("Cardoso", "site.info")
-read_site_sheet("Colombia", "site.info") ## warnings
-read_site_sheet("French_Guiana", "site.info")
-read_site_sheet("Macae", "site.info")
-pr <- read_site_sheet(offline("PuertoRico"), "site.info")
-read_site_sheet("CostaRica", "site.info")
-
-
-# site_weather <- get_all_sites(sheetname = "site.info")
-
-sites2 <- combine_tab("site.info")
-
-
-
-# site.weather ----------------------------------------
-
-
-read_site_sheet("Argentina", "site.weather") ## extra column
-read_site_sheet("Cardoso", "site.weather")
-read_site_sheet("Colombia", "site.weather")
-read_site_sheet("French_Guiana", "site.weather")
-read_site_sheet("Macae", "site.weather")
-read_site_sheet("PuertoRico", "site.weather")
-read_site_sheet("CostaRica", "site.weather")
-
-#site_weather <- get_all_sites(sheetname = "site.weather")
-
-sites2 <- combine_tab("site.weather")
-
-# the_ncol <- lapply(site_weather, ncol)
-# sapply(the_ncol, function(x) assertthat::are_equal(x, 5))
-
-# bromeliad.physical ----------------------------------
-
-read_site_sheet("Argentina", "bromeliad.physical")
-read_site_sheet("Cardoso", "bromeliad.physical")
-read_site_sheet("Colombia", "bromeliad.physical") ##
-read_site_sheet("French_Guiana", "bromeliad.physical")
-read_site_sheet("Macae", "bromeliad.physical")
-read_site_sheet("PuertoRico", "bromeliad.physical")
-read_site_sheet("CostaRica", "bromeliad.physical")
-
-
-# get_all_sites(sheetname = "bromeliad.physical")
-
-phys <- combine_tab("bromeliad.physical")
+phys <- combine_tab(sheetname = "bromeliad.physical")
 
 ## check ids
 ## is there only one of each label in a site?
 phys %>%
-  select(site, bromeliad.id) %>%
-  group_by(site, bromeliad.id) %>%
+  group_by(site_brom.id) %>%
   tally %>%
   .[["n"]] %>%
   sapply(function(x) x == 1) %>%
   all
 
-## there are missing values!! I knwo there are.
-select(phys, starts_with("oxygen"))
-
 long_phys <- physical_long(phys)
+
+get_decomp
+
 
 ## because mass is long, containing two replicates for each site and species, we get 1 when people recorded the first sample but lost the second (1 but not 2) and 2 when both are missing
 long_phys %>%
@@ -137,67 +91,10 @@ combine_tab("bromeliad.physical") %>%
   leaf_loss_mean %>%
   decomp_responses
 
-### check that sites
 
-# leaf.waterdepths ------------------------------------
+## we also have a quick shortcut for this process
+decomp_data <- get_decomp()
 
-library(bwgtools)
-library(tidyr)
-library(stringr)
-library(zoo)
-
-ar <- read_site_sheet(offline("Argentina"), "leaf.waterdepths")
-
-## check that the two match OK:
-# bromeliad.final.inverts ----------------------------------
-
-read_site_sheet(offline("Argentina"), "bromeliad.final.inverts")
-read_site_sheet(offline("Cardoso"), "bromeliad.final.inverts")
-read_site_sheet("Colombia", "bromeliad.final.inverts")
-read_site_sheet("French_Guiana", "bromeliad.final.inverts")
-read_site_sheet(offline("Macae"), "bromeliad.final.inverts")
-pr <- read_site_sheet("PuertoRico", "bromeliad.final.inverts")
-crinv <- read_site_sheet("CostaRica", "bromeliad.final.inverts")
-
-## argentina and costa rica have a duplicate species
-## colombia is missing biomass
-
-inverts <- combine_tab("bromeliad.final.inverts")
-
-
-
-
-site_final_insects <- get_all_sites(sheetname = "bromeliad.final.inverts")
-
-
-lapply(site_final_insects, names)
-lapply(site_final_insects, function(x) head(x)[1:7])
-
-## clean Argentina
-arg <- site_final_insects[[1]]
-names(arg)[which(names(arg)=="????")] <- "UNK"
-arg_bwg_name <- names(arg)
-
-
-arg2 <- read_site_sheet("Argentina", "bromeliad.final.inverts", skip = 1)
-
-names(arg2)[-4]
-## get just Macae --- See here @nacmarino
-mac <- read_site_sheet("Macae", "leaf.waterdepths")
-cr <- read_site_sheet("CostaRica", "leaf.waterdepths")
-
-
-## how to process a correctly formatted excel sheet
-
-#1. obtain the data
-
-mac_final <- read_site_sheet(offline("Macae"), "bromeliad.final.inverts")
-
-## check for duplicate bromeliads
-mac_final %>%
-  group_by(bromeliad.id) %>%
-  tally %>%
-  filter(n > 2)
 
 
 bwg_names <- get_bwg_names(file = "../bwg_names/data/Distributions_organisms_full.tsv")
