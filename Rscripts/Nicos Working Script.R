@@ -30,12 +30,20 @@ str(mac)
 allwater <- combine_tab(sheetname = "leaf.waterdepths")
 long_all <- longwater(allwater)
 
+all_water_vars <- long_all %>%
+  group_by(site, trt.name, leaf) %>%
+  do(water_summary_calc(.$depth))
+
+
 #USE NEXT FOR MACAE DATA ONLY!!!
 #add the day of the experiment plus the long format to the data
 wd_measures <- mac %>% #MACAE DATA ONLY
   group_by(trt.name) %>% #MACAE DATA ONLY
   mutate(nday = seq_along(date)) %>% #MACAE DATA ONLY
   longwater() #MACAE DATA ONLY
+
+
+
 
 #I created a support excel spreadsheet containing the day of the start and end of the
 #experiment for each treatment according to its temporal block...the excel file with
@@ -151,24 +159,16 @@ when_bromeliad_dried <- wd_measures %>%
             when_last_day_minimum = max(day_last_minimum), #most recent fall in water depth
             days_since_last_minimum = min(days_since_last_minimum)) #how many days have ellapsed since the last major drop
 
-
+summarise(amplitude = max(depth) - min(depth),
+          wetness = mean(depth)/max(depth),
+          overflow.days = sum(depth == max(depth))-1) %>%
+  group_by(trt.name) %>%
+  summarise(amplitude = mean(amplitude),
+            wetness_mean = mean(wetness),
+            overflow.days = max(overflow.days))
 ## abstract these into a single function
 
-water_summary_calc <- function(mean_depth){
-  data_frame(
-    max.depth = max(mean_depth),
-    min.depth = min(mean_depth),
-    mean.depth = mean(mean_depth),
-    var.depth = var(mean_depth),
-    sd.depth = sd(mean_depth),
-    cv.depth = (100*(sd(mean_depth))/mean(mean_depth)),
-    net_fluct = sum(diff(mean_depth), na.rm = TRUE),
-    total_fluct = sum(abs(diff(mean_depth)), na.rm = TRUE),
-    amplitude = max.depth - min.depth,
-    wetness = mean.depth / max.depth
-  )
-}
-
+water_summary_calc(1:4)
 
 
 ### calculate leaf values
@@ -176,18 +176,13 @@ leaf_responses <- wd_measures %>%
   group_by(trt.name, leaf) %>%
   do(water_summary_calc(.$depth))
 
-
-
-%>%
-
-  summarise(amplitude = max(depth) - min(depth),
-            wetness = mean(depth)/max(depth),
-            overflow.days = sum(depth == max(depth))-1) %>%
+brom_leaf_avg <- leaf_responses %>%
   group_by(trt.name) %>%
-  summarise(amplitude = mean(amplitude),
-            wetness_mean = mean(wetness),
-            overflow.days = max(overflow.days))
+  select(-leaf) %>%
+  summarise_each(funs(mean))
 
+
+### COMPARING SUBSAMPLING ----------------------------------
 ## average depths across all leaves
 brom_averages <- wd_measures %>%
   group_by(trt.name, nday) %>%
@@ -240,6 +235,40 @@ subdat2 %>%
 fulldat %>%
   left_join(rename(subdat, value_sub = value)) %>%
   ggplot(aes(x = value, y = value_sub, colour = trt.name)) + geom_point() + facet_wrap(~resp, scales = "free") + geom_abline(intercept = 0, slope = 1)
+
+
+
+## checking the order of calculations ----------------
+
+### calculate leaf values
+
+brom_leaf_avg <- wd_measures %>%
+  filter(leaf != "centre") %>%
+  group_by(trt.name, leaf) %>%
+  do(water_summary_calc(.$depth)) %>%
+  group_by(trt.name) %>%
+  select(-leaf) %>%
+  summarise_each(funs(mean))
+
+brom_leaf_avg %>%
+  ggplot(aes(x = ))
+
+## at the level of the bromeliad
+
+fulldat <- wd_measures %>%
+  filter(leaf != "centre") %>%
+  group_by(trt.name, nday) %>%
+  summarise(mean_depth = mean(depth, na.rm=TRUE),
+            n_depth = sum(!is.na(depth))) %>%
+  group_by(trt.name) %>%
+  do(water_summary_calc(.$mean_depth)) %>%
+  gather("resp", "value", -trt.name)
+
+
+brom_leaf_avg %>%
+  gather("resp", "value_leaf_first", -trt.name) %>%
+  left_join(fulldat) %>%
+  ggplot(aes(x = value, y = value_leaf_first, colour = trt.name)) +  geom_point() + facet_wrap(~resp, scales = "free") + geom_abline(intercept = 0, slope = 1)
 
 
 
