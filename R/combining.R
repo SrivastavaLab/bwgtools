@@ -160,7 +160,7 @@ merge_func <- function(insect_data, trait_data){
 #' @importFrom magrittr "%>%"
 #' @export
 #'
-sum_func_groups <- function(merged_data, grps = list(~bromeliad.id, ~pred_prey, ~func.group)){
+sum_func_groups <- function(merged_data, grps = list(~site, ~site_brom.id, ~pred_prey, ~func.group)){
   merged_data %>%
     dplyr::group_by_(.dots = grps) %>%
     dplyr::summarize(total_abundance = sum(abundance),
@@ -180,7 +180,7 @@ sum_func_groups <- function(merged_data, grps = list(~bromeliad.id, ~pred_prey, 
 sum_trophic <- function(func_sums){
 
   test_groups <- identical(dplyr::groups(func_sums),
-                           lapply(list("bromeliad.id",
+                           lapply(list("site","site_brom.id",
                                        "pred_prey"),
                                   as.name))
 
@@ -198,13 +198,8 @@ sum_trophic <- function(func_sums){
 #' @return a ggplot
 #' @importFrom magrittr "%>%"
 #' @export
-plot_trophic <- function(invert_data, trait_data){
+plot_trophic <- function(long_inverts, trait_data){
   #2 transform the data
-  long_inverts <- invert_to_long(invert_data,
-                                 category_vars = c("site",
-                                                   "trt.name",
-                                                   "bromeliad.id",
-                                                   "abundance.or.biomass"))
 
   #3 combine with trait data
   inverts_traits <- merge_func(long_inverts, trait_data)
