@@ -9,9 +9,9 @@ longwater <- function(df) {
   measures  <- df %>%
     tidyr::gather("data_name", "depth", starts_with("depth")) %>%
     tidyr::separate(data_name, into = c("depth_word", "leaf",
-                                        "first_or_second","first")) %>%
+                                        "watered_first","first")) %>%
     dplyr::select(-depth_word, -first) %>%
-    dplyr::filter(!is.na(depth))
+    mutate(watered_first = ifelse(watered_first == "water", "yes", "no"))
 
   return(measures)
 }
@@ -65,7 +65,10 @@ make_support_file <- function(){
 #' @return a 1 x n row \code{tbl_df}
 #' @export
 water_summary_calc <- function(depth){
-  data_frame(
+  ## check that it looks like mm
+  ## must be sorted by date
+  ## merge with support file -- must be 63 long
+  dplyr::data_frame(
     max.depth = max(depth),
     min.depth = min(depth),
     mean.depth = mean(depth),
@@ -75,6 +78,10 @@ water_summary_calc <- function(depth){
     net_fluct = sum(diff(depth), na.rm = TRUE),
     total_fluct = sum(abs(diff(depth)), na.rm = TRUE),
     amplitude = max.depth - min.depth,
-    wetness = mean.depth / max.depth
+    wetness = mean.depth / max.depth,
+    prop.overflow.days = (sum(depth > (max.depth - 10) - 1))/length(depth),
+    prop.driedout.days = (sum(depth < 5))/length(depth),
+    time.since.minimum = length(depth) - max(which(depth < 5)),
+    time.since.minimum = ifelse(is.finite(time.since.minimum), time.since.minimum, NA)
   )
 }
