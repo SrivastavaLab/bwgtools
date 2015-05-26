@@ -156,6 +156,12 @@ leaf_responses <- wd_measures %>%
   group_by(trt.name, leaf) %>%
   do(water_summary_calc(.$depth))
 
+
+wd_measures %>%
+  filter(trt.name == "mu1k1") %>%
+  select(depth) %>%
+  range
+
 brom_leaf_avg <- leaf_responses %>%
   group_by(trt.name) %>%
   select(-leaf) %>%
