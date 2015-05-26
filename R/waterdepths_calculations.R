@@ -69,19 +69,22 @@ water_summary_calc <- function(depth){
   ## must be sorted by date
   ## merge with support file -- must be 63 long
   dplyr::data_frame(
-    max.depth = max(depth),
-    min.depth = min(depth),
-    mean.depth = mean(depth),
-    var.depth = var(depth),
-    sd.depth = sd(depth),
-    cv.depth = (100*(sd.depth/mean.depth)),
+    n.depth = sum(!is.na(depth)),
+    max.depth = max(depth, na.rm = TRUE),
+    min.depth = min(depth, na.rm = TRUE),
+    mean.depth = mean(depth, na.rm = TRUE),
+    var.depth = var(depth, na.rm = TRUE),
+    sd.depth = sd(depth, na.rm = TRUE),
     net_fluct = sum(diff(depth), na.rm = TRUE),
     total_fluct = sum(abs(diff(depth)), na.rm = TRUE),
+    cv.depth = (100*(sd.depth/mean.depth)),
     amplitude = max.depth - min.depth,
     wetness = mean.depth / max.depth,
-    prop.overflow.days = (sum(depth > (max.depth - 10) - 1))/length(depth),
-    prop.driedout.days = (sum(depth < 5))/length(depth),
-    time.since.minimum = length(depth) - max(which(depth < 5)),
-    time.since.minimum = ifelse(is.finite(time.since.minimum), time.since.minimum, NA)
+    prop.overflow.days = sum(depth > (max.depth - 10))/length(depth),
+    prop.driedout.days = sum(depth < 5)/length(depth),
+    time.since.minimum =
+      if (any(depth < 5) & all(!is.na(depth))) {
+      length(depth) - max(which(depth < 5))
+      } else NA
   )
 }
