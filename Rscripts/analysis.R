@@ -133,7 +133,7 @@ mac_water <- mac %>%
 
 group_or_summarize <- function(data, aggregate_leaves = FALSE){
   all_names_pres <- all(c("site", "watered_first",
-        "trt.name", "bromeliad.id",
+        "trt.name",
         "leaf") %in% names(data))
 
   if (!all_names_pres) stop("some names are missing")
@@ -144,7 +144,7 @@ group_or_summarize <- function(data, aggregate_leaves = FALSE){
       summarise(depth = mean(depth, na.rm = TRUE))
   } else {
     data %>%
-      group_by(site, watered_first, trt.name, bromeliad.id, leaf)
+      group_by(site, watered_first, trt.name, leaf)
   }
 }
 
@@ -174,7 +174,19 @@ testwater <- mac_water %>%
 
 
 
+calcwater <- . %>%
+  ## filter out centre
+  filter_centre_leaf() %>% ## add argument here
+  ## filter out NA groups
+  group_or_summarize(aggregate_leaves = FALSE) %>% ## add argument here
+  filter_naonly_groups %>%
+  arrange(date) %>%
+  do(water_summary_calc(.$depth))
 
+
+test_all_water <- leafwater %>%
+  longwater %>%
+  calcwater
 
 
 filter_naonly_groups(group_by(na_lvls, x))
