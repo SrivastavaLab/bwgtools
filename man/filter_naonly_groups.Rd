@@ -4,7 +4,7 @@
 \alias{filter_naonly_groups}
 \title{Filter out any groups where depth is all NA}
 \usage{
-filter_naonly_groups(data)
+filter_naonly_groups(data, respvar = "depth")
 }
 \arguments{
 \item{data}{a grouped data.frame}
