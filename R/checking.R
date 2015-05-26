@@ -89,4 +89,22 @@ find_site_brom <- function(df){
 }
 
 
+#' Filter out any groups where depth is all NA
+#'
+#' @param data a grouped data.frame
+#'
+#' @return a data.frame with all NA groups gone
+#' @export
+filter_naonly_groups <- function(data){
+  groups(data) %>%
+    paste(collapse = ", ") %>%
+    sprintf("data is grouped by %s", .) %>%
+    message
+
+  data %>%
+    summarize(all_na = all(is.na(depth))) %>%
+    filter(!all_na) %>%
+    semi_join(data, .)
+}
+
 

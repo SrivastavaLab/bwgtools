@@ -29,6 +29,15 @@ test_that("data is checked correctly",{
   testdf <- dplyr::data_frame(STIE = 1, bromeliad.id = 2)
   expect_equal(find_site_brom(testdf), FALSE)
 
+  na_lvls <- data_frame(x = c("a","a","a","b","b","b"),
+                        depth = c(NA, NA, NA, 3, NA, 2))
+
+  expect_message(filter_naonly_groups(group_by(na_lvls, x)),
+                 "data is grouped by x")
+
+  test <- suppressMessages(filter_naonly_groups(group_by(na_lvls, x)))
+  expect_equal(test,
+               filter(group_by(na_lvls, x), x == "b"))
 
 })
 
