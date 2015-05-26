@@ -12,12 +12,12 @@ library(magrittr)
 ## We can read data in from all the sites and combine them. for example:
 c("Argentina", "French_Guiana", "Colombia",
   "Macae", "PuertoRico","CostaRica") %>%
-  sapply(offline) %>%
+ # sapply(offline) %>%
   combine_tab("site.info")
 
 weather <- c("Argentina", "French_Guiana", "Colombia",
-             "Macae", "PuertoRico","CostaRica") %>%
-  sapply(offline) %>%
+             "Macae", "PuertoRico") %>% ## no such data for CR yet
+ # sapply(offline) %>%
   combine_tab("site.weather")
 ## seem to be empty rows in:
 # Cardoso
@@ -25,7 +25,7 @@ weather <- c("Argentina", "French_Guiana", "Colombia",
 
 phys <- c("Argentina", "French_Guiana", "Colombia",
           "Macae", "PuertoRico","CostaRica") %>%
-  sapply(offline) %>%
+ # sapply(offline) %>%
   combine_tab("bromeliad.physical")
 # something is wrong with Cardoso site.info. too many columns?
 ## need to make the Colombia stopping rule more robust
@@ -148,26 +148,33 @@ group_or_summarize <- function(data, aggregate_leaves = FALSE){
   }
 }
 
-test_gr_sum <- structure(list(
-  site = c("macae", "macae", "macae", "macae", "macae"),
-  trt.name = c("mu3k0.5", "mu0.1k2", "mu1.5k0.5", "mu0.8k0.5", "mu0.1k1"),
-  bromeliad.id = c("B5", "B29", "B34", "B8", "B22"),
-  date = structure(c(1365206400, 1367452800, 1364688000, 1368230400,1368403200), class = c("POSIXct", "POSIXt"), tzone = "UTC"),
-  leaf = c("leafb", "centre", "leafa", "leafb", "leafb"),
-  watered_first = c("yes", "no", "no", "yes", "no"),
-  depth = c(74.8, NA, NA, 46.6, NA)),
-  .Names = c("site", "trt.name", "bromeliad.id", "date", "leaf", "watered_first", "depth"),
-  class = c("tbl_df", "data.frame"), row.names = c(NA, -5L))
+test_gr <- data_frame(site = c("macae", "macae", "macae", "macae", "macae"),
+                      trt.name = c("mu3k0.5", "mu0.1k2",
+                                   "mu1.5k0.5", "mu0.8k0.5", "mu0.1k2"),
+                      bromeliad.id = c("B5", "B29", "B34", "B8", "B29"),
+                      date = structure(c(1365206400, 1367452800, 1364688000, 1368230400,1368403200), class = c("POSIXct", "POSIXt"), tzone = "UTC"),
+                      leaf = c("leafb", "centre",
+                               "leafa", "leafb", "leafb"),
+                      watered_first = c("yes", "yes", "yes", "yes", "yes"),
+                      depth = c(74.8, 37, 56, 46.6, 10))
 
-group_or_summarize(test_gr_sum, TRUE)
+
+
+
+group_or_summarize(test_gr, TRUE)
+group_or_summarize(test_gr, FALSE)
+
+
 
 ## does grouped filter work the way i expect?
 testwater <- mac_water %>%
   ## filter out centre
   filter_centre_leaf() %>% ## add argument here
+  group_by(site, watered_first) %>%
+  filter_naonly_groups %>%
+  ungroup %>% sample_n(10)
   ## filter out NA groups
   group_or_summarize(aggregate_leaves = FALSE) %>% ## add argument here
-  filter_naonly_groups %>%
   arrange(date) %>%
   do(water_summary_calc(.$depth))
 
@@ -187,6 +194,8 @@ calcwater <- . %>%
 test_all_water <- leafwater %>%
   longwater %>%
   calcwater
+
+readr::write_csv(test_all_water, "Rscripts/test_water_calc.csv")
 
 
 filter_naonly_groups(group_by(na_lvls, x))
