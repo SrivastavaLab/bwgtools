@@ -131,12 +131,42 @@ mac <- read_site_sheet(offline("Macae"), "leaf.waterdepths")
 mac_water <- mac %>%
   longwater
 
+group_or_summarize <- function(data, aggregate_leaves = FALSE){
+  all_names_pres <- all(c("site", "watered_first",
+        "trt.name", "bromeliad.id",
+        "leaf") %in% names(data))
+
+  if (!all_names_pres) stop("some names are missing")
+
+  if (aggregate_leaves) {
+    data %>%
+      group_by(site, watered_first, trt.name, bromeliad.id, date) %>%
+      summarise(depth = mean(depth, na.rm = TRUE))
+  } else {
+    data %>%
+      group_by(site, watered_first, trt.name, bromeliad.id, leaf)
+  }
+}
+
+test_gr_sum <- structure(list(
+  site = c("macae", "macae", "macae", "macae", "macae"),
+  trt.name = c("mu3k0.5", "mu0.1k2", "mu1.5k0.5", "mu0.8k0.5", "mu0.1k1"),
+  bromeliad.id = c("B5", "B29", "B34", "B8", "B22"),
+  date = structure(c(1365206400, 1367452800, 1364688000, 1368230400,1368403200), class = c("POSIXct", "POSIXt"), tzone = "UTC"),
+  leaf = c("leafb", "centre", "leafa", "leafb", "leafb"),
+  watered_first = c("yes", "no", "no", "yes", "no"),
+  depth = c(74.8, NA, NA, 46.6, NA)),
+  .Names = c("site", "trt.name", "bromeliad.id", "date", "leaf", "watered_first", "depth"),
+  class = c("tbl_df", "data.frame"), row.names = c(NA, -5L))
+
+group_or_summarize(test_gr_sum, TRUE)
+
 ## does grouped filter work the way i expect?
 testwater <- mac_water %>%
   ## filter out centre
   filter_centre_leaf() %>% ## add argument here
   ## filter out NA groups
-  group_by(site, watered_first, trt.name, bromeliad.id, leaf) %>%
+  group_or_summarize(aggregate_leaves = FALSE) %>% ## add argument here
   filter_naonly_groups %>%
   arrange(date) %>%
   do(water_summary_calc(.$depth))
