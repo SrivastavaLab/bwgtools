@@ -13,7 +13,7 @@ library(readxl)
 
 # loading data file -------------------------------------------------------
 
-mac <- read_site_sheet("Macae", "leaf.waterdepths")
+mac <- read_site_sheet(offline("Macae"), "leaf.waterdepths")
 
 # check the file ----------------------------------------------------------
 
@@ -27,19 +27,10 @@ str(mac)
 
 #function to turn the table into long format
 #MUST RUN
-allwater <- combine_tab(sheetname = "leaf.waterdepths")
-long_all <- longwater(allwater)
-
-all_water_vars <- long_all %>%
-  group_by(site, trt.name, leaf) %>%
-  do(water_summary_calc(.$depth))
-
 
 #USE NEXT FOR MACAE DATA ONLY!!!
 #add the day of the experiment plus the long format to the data
 wd_measures <- mac %>% #MACAE DATA ONLY
-  group_by(trt.name) %>% #MACAE DATA ONLY
-  mutate(nday = seq_along(date)) %>% #MACAE DATA ONLY
   longwater() #MACAE DATA ONLY
 
 
@@ -53,17 +44,17 @@ wd_measures <- mac %>% #MACAE DATA ONLY
 #sheet 1 - costa rica
 #sheet 2 - french guiana
 #sheet 3 - puerto rico
-support <- read_excel("../Documents/Documentos/Projetos/BWG/bwg/Rscripts/Support File.xlsx", sheet = 1)
-
+# support <- read_excel("../Documents/Documentos/Projetos/BWG/bwg/Rscripts/Support File.xlsx", sheet = 1)
+#
 #for any other site, run this for the wd_measures
-wd_measures <- mac %>%
-  left_join(support) %>%
-  mutate(julian_measure = strptime(date, "%Y-%m-%d")$yday+1,
-         julian_block_start = strptime(start_block, "%Y-%m-%d")$yday+1) %>%
-  mutate(day_of_expt = (julian_measure - julian_block_start+1)) %>%
-  rename(nday = day_of_expt) %>%
-  select(- finish_block, -julian_measure, -julian_block_start) %>%
-  longwater()
+# wd_measures <- mac %>%
+#   left_join(support) %>%
+#   mutate(julian_measure = strptime(date, "%Y-%m-%d")$yday+1,
+#          julian_block_start = strptime(start_block, "%Y-%m-%d")$yday+1) %>%
+#   mutate(day_of_expt = (julian_measure - julian_block_start+1)) %>%
+#   rename(nday = day_of_expt) %>%
+#   select(- finish_block, -julian_measure, -julian_block_start) %>%
+#   longwater()
 
 # start calculations ------------------------------------------------------
 
@@ -159,17 +150,6 @@ when_bromeliad_dried <- wd_measures %>%
             when_last_day_minimum = max(day_last_minimum), #most recent fall in water depth
             days_since_last_minimum = min(days_since_last_minimum)) #how many days have ellapsed since the last major drop
 
-summarise(amplitude = max(depth) - min(depth),
-          wetness = mean(depth)/max(depth),
-          overflow.days = sum(depth == max(depth))-1) %>%
-  group_by(trt.name) %>%
-  summarise(amplitude = mean(amplitude),
-            wetness_mean = mean(wetness),
-            overflow.days = max(overflow.days))
-## abstract these into a single function
-
-water_summary_calc(1:4)
-
 
 ### calculate leaf values
 leaf_responses <- wd_measures %>%
@@ -193,7 +173,7 @@ brom_averages <- wd_measures %>%
 ## for different subsets and full data
 fulldat <- brom_averages %>%
   group_by(trt.name) %>%
-  do(water_summary_calc(.$mean_depth)) %>%
+  do(failwith(NA,water_summary_calc)(.$mean_depth)) %>%
   gather("resp", "value", -trt.name)
 
 subdat <- brom_averages %>%
