@@ -131,6 +131,25 @@ mac <- read_site_sheet(offline("Macae"), "leaf.waterdepths")
 mac_water <- mac %>%
   longwater
 
+## does grouped filter work the way i expect?
+testwater <- mac_water %>%
+  ## filter out centre
+  filter_centre_leaf() %>% ## add argument here
+  ## filter out NA groups
+  group_by(site, watered_first, trt.name, bromeliad.id, leaf) %>%
+  filter_naonly_groups %>%
+  arrange(date) %>%
+  do(water_summary_calc(.$depth))
+
+
+
+
+
+
+
+filter_naonly_groups(group_by(na_lvls, x))
+
+
 testdf <- data_frame(a = 1:3)
   x <- quote(a > 2)
 filter_(testdf, x)
