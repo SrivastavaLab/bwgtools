@@ -114,9 +114,37 @@ invert_traits <- merge_func(invert, bwg_names)
 func_groups <- sum_func_groups(invert_traits, grps = list(~site, ~site_brom.id, ~pred_prey, ~func.group))
 
 func_groups %>%
-  ggplot(aes(x = func.group, y = total_abundance)) + geom_point(position = position_jitter(width = 0.25)) + facet_wrap(~site)
+  ggplot(aes(x = func.group, y = total_abundance)) +
+  geom_point(position = position_jitter(width = 0.25)) + facet_wrap(~site)
 
 
 sum_trophic(func_groups)
 
 plot_trophic(combine_tab(sheetname = "bromeliad.final.inverts"), bwg_names)
+
+
+
+# Water -----------------------------------------------
+
+mac <- read_site_sheet(offline("Macae"), "leaf.waterdepths")
+
+mac_water <- mac %>%
+  longwater
+
+testdf <- data_frame(a = 1:3)
+  x <- quote(a > 2)
+filter_(testdf, x)
+
+mac_water %>% as.data.frame %>% .[1:3,] %>% dput
+
+## check for column names
+needed_names <- c("watered_first", "site", "trt.name", "bromeliad.id","leaf")
+testnames <- assertthat::has_name(mac_water, needed_names)
+if(!all(testnames)) stop(sprintf("must have names %s", paste(needed_names, collapse = ", ")))
+
+## check for filtering
+
+
+filter(watered_first == "yes") %>%
+  group_by(site, trt.name, bromeliad.id, leaf) %>%
+  do(water_summary_calc(.$depth))
