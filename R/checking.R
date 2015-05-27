@@ -98,7 +98,7 @@ find_site_brom <- function(df){
 filter_naonly_groups <- function(data, respvar = "depth"){
   groups(data) %>%
     paste(collapse = ", ") %>%
-    sprintf("data is grouped by %s", .) %>%
+    sprintf("Removing all NA groups: data is grouped by %s", .) %>%
     message
 
   fv <- lazyeval::interp(~!all(is.na(x)), x = as.name(respvar))
