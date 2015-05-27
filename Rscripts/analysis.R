@@ -197,12 +197,13 @@ testwater <- mac_water %>%
 calcwater <- . %>%
   ## filter out centre
   filter_centre_leaf() %>% ## add argument here
+  group_by(site, watered_first) %>%
+  filter_naonly_groups %>%
+  ungroup %>%
   ## filter out NA groups
   group_or_summarize(aggregate_leaves = FALSE) %>% ## add argument here
-  filter_naonly_groups %>%
   arrange(date) %>%
   do(water_summary_calc(.$depth))
-
 
 test_all_water <- leafwater %>%
   longwater %>%
