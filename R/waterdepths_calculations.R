@@ -69,6 +69,7 @@ water_summary_calc <- function(depth){
   ## must be sorted by date
   ## merge with support file -- must be 63 long
   dplyr::data_frame(
+    len.depth = length(depth),
     n.depth = sum(!is.na(depth)),
     max.depth = max(depth, na.rm = TRUE),
     min.depth = min(depth, na.rm = TRUE),
