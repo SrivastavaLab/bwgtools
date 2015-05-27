@@ -75,7 +75,14 @@ leaf.waterdepths_read <- function(file_to_read){
 }
 
 # terrestrial taxa
-
+bromeliad.terrestrial_read <- function(file_to_read){
+  readxl::read_excel(path = file_to_read,
+                     sheet = "bromeliad.terrestrial",
+                     na = "NA",
+                     col_types = c("text","text","text",
+                                   "date","text","numeric")
+  )
+}
 # bromeliad.terrestrial
 
 # bromeliad.ibuttons
