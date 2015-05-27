@@ -126,22 +126,32 @@ plot_trophic(combine_tab(sheetname = "bromeliad.final.inverts"), bwg_names)
 
 # Water -----------------------------------------------
 
-mac <- read_site_sheet(offline("Macae"), "leaf.waterdepths")
+mac <- read_site_sheet(offline("Macae"), "leaf.waterdepths") %>% brom_id_maker
 
 mac_water <- mac %>%
   longwater
 
 group_or_summarize <- function(data, aggregate_leaves = FALSE){
-  all_names_pres <- all(c("site", "watered_first",
-        "trt.name",
-        "leaf") %in% names(data))
+  impt_names <- c("site", "watered_first", "trt.name",
+                  "leaf", "site_brom.id")
+  test_for_names <- impt_names %in% names(data)
 
-  if (!all_names_pres) stop("some names are missing")
+  missing_names <- impt_names[!test_for_names]
+
+  if (length(missing_names) > 0) {
+    stop(
+      sprintf(
+        "missing names %s",
+        paste0(missing_names, collapse = ", ")
+      )
+    )
+  }
 
   if (aggregate_leaves) {
     data %>%
-      group_by(site, watered_first, trt.name, bromeliad.id, date) %>%
-      summarise(depth = mean(depth, na.rm = TRUE))
+      group_by(site, watered_first, trt.name, site_brom.id, date) %>%
+      summarise(depth = mean(depth, na.rm = TRUE),
+                ndepth = sum(!is.na(depth)))
   } else {
     data %>%
       group_by(site, watered_first, trt.name, leaf)
@@ -159,9 +169,12 @@ test_gr <- data_frame(site = c("macae", "macae", "macae", "macae", "macae"),
                       depth = c(74.8, 37, 56, 46.6, 10))
 
 
+group_or_summarize(test_gr, TRUE)
 
+names(test_gr)[3] <- "site_brom.id"
 
 group_or_summarize(test_gr, TRUE)
+
 group_or_summarize(test_gr, FALSE)
 
 
@@ -172,7 +185,7 @@ testwater <- mac_water %>%
   filter_centre_leaf() %>% ## add argument here
   group_by(site, watered_first) %>%
   filter_naonly_groups %>%
-  ungroup %>% sample_n(10)
+  ungroup %>%
   ## filter out NA groups
   group_or_summarize(aggregate_leaves = FALSE) %>% ## add argument here
   arrange(date) %>%
