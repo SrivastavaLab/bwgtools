@@ -38,7 +38,6 @@ leafwater <- c("Argentina", "French_Guiana", "Colombia",
 
 invert <- c("Argentina", "French_Guiana", "Colombia",
             "Macae", "PuertoRico","CostaRica") %>%
-  sapply(offline) %>%
   combine_tab("bromeliad.final.inverts")
 
 
@@ -47,6 +46,13 @@ invertI <- c("Argentina", "French_Guiana", "Colombia",
              "Macae", "PuertoRico","CostaRica") %>%
   sapply(offline) %>%
   combine_tab("bromeliad.initial.inverts")
+
+
+# terrestrial -----------------------------------------
+
+terr <- combine_tab(c("Cardoso", "French_Guiana", "Colombia",
+                      "Macae", "PuertoRico","CostaRica"),
+                    sheetname = "bromeliad.terrestrial")
 
 
 # decomposition ---------------------------------------
@@ -82,6 +88,9 @@ leaf_loss <- leaf_loss_sample(long_phys)
 means_loss <- leaf_loss_mean(leaf_loss)
 
 decomp_responses(means_loss)
+
+
+
 combine_tab("bromeliad.physical") %>%
   physical_long %>%
   leaf_loss_sample %>%
