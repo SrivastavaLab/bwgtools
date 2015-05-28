@@ -17,6 +17,42 @@ longwater <- function(df) {
 }
 
 
+
+#' Group or summarize water data (long form)
+#'
+#' @param data a data.frame created by \code{longwater()}
+#' @param aggregate_leaves should leaves be aggregated? defaults to \code{FALSE}
+#'
+#' @return if \code{aggregate = FALSE}, a data.frame of the same size as the original, but with groups defined for further processing. If \code{aggregate_leaves = TRUE}, output has one observation per bromeliad (rather than one observation per leaf within bromeliad)
+#' @export
+#' @importFrom magrittr "%>%"
+group_or_summarize <- function(data, aggregate_leaves = FALSE){
+  impt_names <- c("site", "watered_first", "trt.name",
+                  "leaf", "site_brom.id")
+  test_for_names <- impt_names %in% names(data)
+
+  missing_names <- impt_names[!test_for_names]
+
+  if (length(missing_names) > 0) {
+    stop(
+      sprintf(
+        "missing names %s",
+        paste0(missing_names, collapse = ", ")
+      )
+    )
+  }
+
+  if (aggregate_leaves) {
+    data %>%
+      dplyr::group_by(site, watered_first, trt.name, site_brom.id, date) %>%
+      dplyr::summarise(ndepth = sum(!is.na(depth)),
+                depth = mean(depth, na.rm = TRUE))
+  } else {
+    data %>%
+      dplyr::group_by(site, watered_first, trt.name, leaf)
+  }
+}
+
 #' Make the support file
 #'
 #' @return data.frame containing support file: site.name, trt.name, temporal.block, start_block and finish_block. Start_block is equivalent to start.water.addition from the site.info tab, and finish_block is equivalent to last.day.sample

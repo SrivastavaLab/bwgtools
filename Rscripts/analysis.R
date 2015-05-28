@@ -146,32 +146,6 @@ mac <- read_site_sheet(offline("Macae"), "leaf.waterdepths") %>% brom_id_maker
 mac_water <- mac %>%
   longwater
 
-group_or_summarize <- function(data, aggregate_leaves = FALSE){
-  impt_names <- c("site", "watered_first", "trt.name",
-                  "leaf", "site_brom.id")
-  test_for_names <- impt_names %in% names(data)
-
-  missing_names <- impt_names[!test_for_names]
-
-  if (length(missing_names) > 0) {
-    stop(
-      sprintf(
-        "missing names %s",
-        paste0(missing_names, collapse = ", ")
-      )
-    )
-  }
-
-  if (aggregate_leaves) {
-    data %>%
-      group_by(site, watered_first, trt.name, site_brom.id, date) %>%
-      summarise(ndepth = sum(!is.na(depth)),
-                depth = mean(depth, na.rm = TRUE))
-  } else {
-    data %>%
-      group_by(site, watered_first, trt.name, leaf)
-  }
-}
 
 test_gr <- data_frame(site = c("macae", "macae", "macae", "macae", "macae"),
                       trt.name = c("mu3k0.5", "mu0.1k2",
@@ -206,14 +180,6 @@ group_or_summarize(test_gr, TRUE)
 group_or_summarize(test_gr, FALSE)
 
 sum(!is.na(1:2))
-
-
-data_frame(x = c("a", "a"),
-           z = c("b", "b"),
-           y = 1:2) %>%
-  group_by(x) %>%
-  summarise(ny = sum(!is.na(y)),
-            n.y = n())
 
 
 ## does grouped filter work the way i expect?
