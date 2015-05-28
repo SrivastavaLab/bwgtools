@@ -55,6 +55,12 @@ terr <- combine_tab(c("Cardoso", "French_Guiana", "Colombia",
                     sheetname = "bromeliad.terrestrial")
 
 
+### taxa
+
+terr.tax <- c("Cardoso", "French_Guiana", "Colombia",
+              "Macae", "PuertoRico","CostaRica") %>% sapply(offline) %>%
+  combine_tab(sheetname = "terrestrial.taxa")
+
 # decomposition ---------------------------------------
 
 
