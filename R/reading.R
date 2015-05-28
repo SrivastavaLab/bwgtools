@@ -25,7 +25,8 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(),
                                    "site.info",
                                    "site.weather",
                                    "bromeliad.initial.inverts",
-                                   "bromeliad.terrestrial"
+                                   "bromeliad.terrestrial",
+                                   "terrestrial.taxa"
   ))
   f <- switch(sheet,
               leaf.waterdepths = leaf.waterdepths_read,
@@ -34,8 +35,10 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(),
               site.info = site.info_read,
               site.weather = site.weather_read,
               bromeliad.initial.inverts = neutral_read("bromeliad.initial.inverts"),
-              bromeliad.terrestrial = bromeliad.terrestrial_read
+              bromeliad.terrestrial = bromeliad.terrestrial_read,
+              terrestrial.taxa = terrestrial.taxa_read
   )
+
   if (file.exists(localfile)) {
     message("you downloaded that file already! reading from disk")
     f(localfile, ...)

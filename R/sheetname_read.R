@@ -74,7 +74,25 @@ leaf.waterdepths_read <- function(file_to_read){
   )
 }
 
-# terrestrial taxa
+#' Read in the terrestrial.taxa tab
+#'
+#' this function reads terrestrial.taxa sheet
+#'
+#' @param file_to_read Path to file to be read
+terrestrial.taxa_read <- function(file_to_read){
+  readxl::read_excel(path = file_to_read,
+                     sheet = "terrestrial.taxa",
+                     na = "NA",
+                     col_types = NULL,
+                     skip = 2
+  )
+}
+
+#' Read in the bromeliad.terrestrial tab
+#'
+#' this function reads bromeliad.terrestrial sheet
+#'
+#' @param file_to_read Path to file to be read
 bromeliad.terrestrial_read <- function(file_to_read){
   readxl::read_excel(path = file_to_read,
                      sheet = "bromeliad.terrestrial",
@@ -83,7 +101,7 @@ bromeliad.terrestrial_read <- function(file_to_read){
                                    "date","text","numeric")
   )
 }
-# bromeliad.terrestrial
+
 
 # bromeliad.ibuttons
 
