@@ -147,38 +147,6 @@ mac_water <- mac %>%
   longwater
 
 
-test_gr <- data_frame(site = c("macae", "macae", "macae", "macae", "macae"),
-                      trt.name = c("mu3k0.5", "mu0.1k2",
-                                   "mu1.5k0.5", "mu0.8k0.5", "mu0.1k2"),
-                      site_brom.id = c("B5", "B29", "B34", "B8", "B29"),
-                      date = structure(c(1365206400, 1367452800, 1364688000, 1368230400,1367452800), class = c("POSIXct", "POSIXt"), tzone = "UTC"),
-                      leaf = c("leafb", "centre",
-                               "leafa", "leafb", "leafb"),
-                      watered_first = c("yes", "yes", "yes", "yes", "yes"),
-                      depth = c(74.8, 37, 56, 46.6, 10))
-
-
-
-test_gr <- data_frame(
-  main_grp = c("B5", "B29", "B34", "B8", "B29"),
-  sub_grp = c("leafb", "centre",
-           "leafa", "leafb", "leafb"),
-  depth = c(74.8, 37, 56, 46.6, 10))
-
-test_gr %>%
-  group_by(main_grp) %>%
-  summarise(ndepth = sum(!is.na(depth)),
-            depth = mean(depth, na.rm = TRUE),
-            n.depth = n())
-
-group_or_summarize(test_gr, TRUE)
-
-names(test_gr)[3] <- "site_brom.id"
-
-group_or_summarize(test_gr, TRUE)
-
-group_or_summarize(test_gr, FALSE)
-
 sum(!is.na(1:2))
 
 
