@@ -18,12 +18,21 @@ test_that("waterdepth functions behave correctly", {
                                depth = c(74.8, 37, 56, 46.6, 10))
 
 
-  group_or_summarize(test_gr, TRUE)
+  expect_error(group_or_summarize(test_gr, TRUE), "missing names site_brom.id")
 
   names(test_gr)[3] <- "site_brom.id"
+  aggregated_test <- group_or_summarize(test_gr, TRUE)
+  expect_equal(nrow(aggregated_test), 4)
+  expect_equal(groups(aggregated_test),
+               lapply(list("site", "watered_first", "trt.name", "site_brom.id"),
+                      as.name))
 
-  group_or_summarize(test_gr, TRUE)
+  unagg_test <- group_or_summarize(test_gr, FALSE)
 
-  group_or_summarize(test_gr, FALSE)
+  expect_equal(nrow(unagg_test), 5)
+  expect_equal(groups(unagg_test),
+               lapply(list("site", "watered_first", "trt.name",
+                           "site_brom.id","leaf"),
+                      as.name))
 
 })

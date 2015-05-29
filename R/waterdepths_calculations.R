@@ -49,18 +49,19 @@ group_or_summarize <- function(data, aggregate_leaves = FALSE){
                 depth = mean(depth, na.rm = TRUE))
   } else {
     data %>%
-      dplyr::group_by(site, watered_first, trt.name, leaf)
+      dplyr::group_by(site, watered_first, trt.name, site_brom.id, leaf)
   }
 }
 
 #' Make the support file
 #'
+#' @param allsites combined site.info tab
+#' @param phys combined bromeliad.physical tab
+#'
 #' @return data.frame containing support file: site.name, trt.name, temporal.block, start_block and finish_block. Start_block is equivalent to start.water.addition from the site.info tab, and finish_block is equivalent to last.day.sample
 #' @export
-make_support_file <- function(){
+make_support_file <- function(allsites, phys){
   ## get the data
-  allsites <- combine_site.info()
-  phys <- combine_tab("bromeliad.physical")
 
   start_finish <- allsites %>%
     dplyr::select(site.name, start_block = start.water.addition, finish_block = last.day.sample)
