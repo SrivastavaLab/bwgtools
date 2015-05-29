@@ -4,7 +4,7 @@
 \alias{terrestrial.taxa_read}
 \title{Read in the terrestrial.taxa tab}
 \usage{
-terrestrial.taxa_read()
+terrestrial.taxa_read(file_to_read)
 }
 \arguments{
 \item{file_to_read}{Path to file to be read}
