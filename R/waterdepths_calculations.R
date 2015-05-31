@@ -125,7 +125,7 @@ make_full_timeline <- function(filtered_water_data, sitedata, physdata){
   ## (that is, the only columns which need filling in)
   simple_long <- filtered_water_data %>%
     dplyr::select(-depth, -date) %>%
-    dplyr::distinct %>%
+    dplyr::distinct(.) %>%
     dplyr::left_join(supp)
 
   ## now create a long dataset
@@ -147,7 +147,8 @@ make_full_timeline <- function(filtered_water_data, sitedata, physdata){
 #' @param rm_centre remove centre? defaults to TRUE
 #' @param aggregate_leaves aggregate leaves? defaults to FALSE
 #'
-#' @return
+#' @return the hydro variables
+#' @export
 #' @importFrom magrittr "%>%"
 hydro_variables <- function(waterdata, sitedata, physicaldata,
                             rm_centre = TRUE, aggregate_leaves = FALSE){
@@ -159,7 +160,8 @@ hydro_variables <- function(waterdata, sitedata, physicaldata,
     filter_long_water(rm_centre = rm_centre)
 
 
-  long_dates <- make_full_timeline(sites, phys)
+  long_dates <- make_full_timeline(filtered_water_data = filtered_long_water,
+                                   sites, phys)
 
   ## combining the original data with data
   ## that has been "filled in" with fun
@@ -209,8 +211,8 @@ water_summary_calc <- function(depth){
     cv.depth = (100*(sd.depth/mean.depth)),
     amplitude = max.depth - min.depth,
     wetness = mean.depth / max.depth,
-    prop.overflow.days = sum(depth > (max.depth - 10))/length(depth),
-    prop.driedout.days = sum(depth < 5)/length(depth),
+    prop.overflow.days = sum(depth > (max.depth - 10), na.rm = TRUE)/length(depth),
+    prop.driedout.days = sum(depth < 5, na.rm = TRUE)/length(depth),
     time.since.minimum =
       if (any(depth < 5) & all(!is.na(depth))) {
       length(depth) - max(which(depth < 5))
