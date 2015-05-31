@@ -104,6 +104,43 @@ filter_long_water <- function(Data, rm_centre = TRUE){
 }
 
 
+
+#' fill in the missing timeline
+#'
+#' This function fills in the complete sequence of dates,
+#' from the beginning to the end of a site.
+#'
+#' @param filtered_water_data a pre-filtered water dataset. acts as a "template" for the grouping variables to include
+#' @param sitedata contents of the site.info tab
+#' @param physdata contents of the physical.info tab
+#'
+#' @return a long dataset that contains a consecutive series of dates
+#' @export
+make_full_timeline <- function(filtered_water_data, sitedata, physdata){
+  supp <- make_support_file(allsites = sitedata,
+                            phys = physdata)
+
+  ## here, we need to make this as similar as possible to the output of longwater
+  ## we remove depth and date, the only columns which make the rows unique
+  ## (that is, the only columns which need filling in)
+  simple_long <- filtered_water_data %>%
+    select(-depth, -date) %>%
+    distinct %>%
+    left_join(supp)
+
+  ## now create a long dataset
+  ## by making a date column
+  ## that spans from start_block and goes to finish_block
+  simple_long %>%
+    #filter(!is.na(finish_block)) %>%
+    group_by(site_brom.id, site, trt.name, leaf, watered_first, temporal.block) %>%
+    do(data_frame(date = seq(from = .$start_block,
+                             to = .$finish_block,
+                             by = "days")))
+}
+
+
+
 #' Calculate water depth measurements
 #'
 #' @param depth depth measurements
