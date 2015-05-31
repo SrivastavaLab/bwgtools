@@ -31,26 +31,26 @@ test_that("data is checked correctly",{
 
 
   ## filtering NAs
-  na_lvls <- data_frame(x = c("a","a","a","b","b","b"),
+  na_lvls <- dplyr::data_frame(x = c("a","a","a","b","b","b"),
                         depth = c(NA, NA, NA, 3, NA, 2))
 
-  expect_message(filter_naonly_groups(group_by(na_lvls, x)),
+  expect_message(filter_naonly_groups(dplyr::group_by(na_lvls, x)),
                  "data is grouped by x")
 
-  test <- suppressMessages(filter_naonly_groups(group_by(na_lvls, x)))
+  test <- suppressMessages(filter_naonly_groups(dplyr::group_by(na_lvls, x)))
   expect_equal(test,
-               filter(group_by(na_lvls, x), x == "b"))
+               dplyr::filter(dplyr::group_by(na_lvls, x), x == "b"))
 
   ## removing Centre
-  tofilter <- data_frame(leaf = c("leafa", "leafb", "center"))
+  tofilter <- dplyr::data_frame(leaf = c("leafa", "leafb", "center"))
 
   expect_error(filter_centre_leaf(tofilter), "something was not filtered")
 
   expect_equal(filter_centre_leaf(tofilter, centre_filter = FALSE), tofilter)
 
 
-  tofilter <- data_frame(leaf = c("leafa", "leafb", "centre")) # correct spelling
-  expect_equal(filter_centre_leaf(tofilter), data_frame(leaf = c("leafa", "leafb")))
+  tofilter <- dplyr::data_frame(leaf = c("leafa", "leafb", "centre")) # correct spelling
+  expect_equal(filter_centre_leaf(tofilter), dplyr::data_frame(leaf = c("leafa", "leafb")))
 
 
 

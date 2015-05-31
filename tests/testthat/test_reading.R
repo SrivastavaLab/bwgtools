@@ -74,8 +74,7 @@ test_that("helper functions work correctly", {
                "BWG Drought Experiment/raw data/Drought_data_foo.xlsx")
 
   ## offline accepts only a site name
-  expect_error(offline("foo"),
-               "'arg' should be one of “Argentina”, “Cardoso”, “Colombia”, “French_Guiana”, “Macae”, “PuertoRico”, “CostaRica”")
+  expect_error(offline("foo"))
 
   ## offline creates a correct path
   expect_equal(offline("Macae"), "../../../Dropbox/BWG Drought Experiment/raw data/Drought_data_Macae.xlsx")
