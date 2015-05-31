@@ -96,7 +96,7 @@ find_site_brom <- function(df){
 #' @return a data.frame with all NA groups gone
 #' @export
 filter_naonly_groups <- function(data, respvar = "depth"){
-  groups(data) %>%
+  dplyr::groups(data) %>%
     paste(collapse = ", ") %>%
     sprintf("Removing all NA groups: data is grouped by %s", .) %>%
     message
@@ -104,7 +104,7 @@ filter_naonly_groups <- function(data, respvar = "depth"){
   fv <- lazyeval::interp(~!all(is.na(x)), x = as.name(respvar))
 
   data %>%
-    filter_(fv)
+    dplyr::filter_(fv)
 }
 
 
@@ -118,7 +118,7 @@ filter_naonly_groups <- function(data, respvar = "depth"){
 filter_centre_leaf <- function(data, centre_filter = TRUE){
   if(centre_filter){
     data2 <- data %>%
-      filter(leaf != "centre")
+      dplyr::filter(leaf != "centre")
   } else {
     data2 <- data
   }
