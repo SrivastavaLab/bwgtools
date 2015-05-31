@@ -98,7 +98,7 @@ filter_long_water <- function(Data, rm_centre = TRUE){
   Data %>%
     ## filter out centre
     filter_centre_leaf(centre_filter = rm_centre) %>% ## add argument here
-    group_by(site, watered_first) %>%
+    dplyr::group_by(site, watered_first) %>%
     filter_naonly_groups %>%
     ungroup
 }
@@ -124,22 +124,54 @@ make_full_timeline <- function(filtered_water_data, sitedata, physdata){
   ## we remove depth and date, the only columns which make the rows unique
   ## (that is, the only columns which need filling in)
   simple_long <- filtered_water_data %>%
-    select(-depth, -date) %>%
-    distinct %>%
-    left_join(supp)
+    dplyr::select(-depth, -date) %>%
+    dplyr::distinct %>%
+    dplyr::left_join(supp)
 
   ## now create a long dataset
   ## by making a date column
   ## that spans from start_block and goes to finish_block
   simple_long %>%
     #filter(!is.na(finish_block)) %>%
-    group_by(site_brom.id, site, trt.name, leaf, watered_first, temporal.block) %>%
-    do(data_frame(date = seq(from = .$start_block,
+    dplyr::group_by(site_brom.id, site, trt.name, leaf, watered_first, temporal.block) %>%
+    dplyr::do(data_frame(date = seq(from = .$start_block,
                              to = .$finish_block,
                              by = "days")))
 }
 
+#' Calculate the hydrological variables
+#'
+#' @param waterdata the leaf.waterdepths tab
+#' @param sitedata the site.info tab
+#' @param physicaldata the bromeliad.physical
+#' @param rm_centre remove centre? defaults to TRUE
+#' @param aggregate_leaves aggregate leaves? defaults to FALSE
+#'
+#' @return
+#' @importFrom magrittr "%>%"
+hydro_variables <- function(waterdata, sitedata, physicaldata,
+                            rm_centre = TRUE, aggregate_leaves = FALSE){
 
+  filtered_long_water <- waterdata %>%
+    longwater %>%
+    dplyr::filter(!(site == "argentina" &
+               watered_first == "no")) %>%
+    filter_long_water(rm_centre = rm_centre)
+
+
+  long_dates <- make_full_timeline(sites, phys)
+
+  ## combining the original data with data
+  ## that has been "filled in" with fun
+  filtered_long_water %>%
+    ## filter out NA groups
+    group_or_summarize(aggregate_leaves = aggregate_leaves) %>%
+    dplyr::left_join(long_dates, .) %>%
+    dplyr::arrange(site, date, trt.name, leaf) %>%
+    dplyr::group_by(site, trt.name, leaf) %>%
+    dplyr::do(water_summary_calc(.$depth))
+
+}
 
 #' Calculate water depth measurements
 #'
