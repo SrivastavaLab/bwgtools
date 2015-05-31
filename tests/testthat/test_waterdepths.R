@@ -35,4 +35,24 @@ test_that("waterdepth functions behave correctly", {
                            "site_brom.id","leaf"),
                       as.name))
 
+
+  #### making support file
+  data <- system.file("extdata","Drought_data_Macae.xlsx",
+                      package = "bwgtools")
+  sitedat <- suppressMessages(read_sheet(file = data, "site.info", ondisk = TRUE))
+  physdat <- suppressMessages(read_sheet(file = data, "bromeliad.physical", ondisk = TRUE))
+
+
+  supp <- make_support_file(sitedat, physdat)
+
+  expect_equal(lapply(supp, class),
+               structure(list(site = "character", trt.name = "character",
+                              temporal.block = "character",
+                              start_block = c("POSIXct", "POSIXt"),
+                              finish_block = c("POSIXct", "POSIXt")),
+                         .Names = c("site", "trt.name", "temporal.block",
+                                    "start_block", "finish_block")))
+
+  expect_equal(dim(supp), c(30, 5))
+
 })
