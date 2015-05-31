@@ -57,7 +57,7 @@ the major _disadvantage_ is that your local version of the data may be behind th
 
 ```{r results='asis'}
 library(bwgtools)
-macae <- read_site_sheet(offline("Macae"), "leaf.waterdepths")
+macae <- read_site_sheet("Macae", "leaf.waterdepths")
 knitr::kable(head(macae))
 ```
 
@@ -68,7 +68,6 @@ library(dplyr)
 library(knitr)
 c("Argentina", "French_Guiana", "Colombia",
   "Macae", "PuertoRico","CostaRica") %>%
-  sapply(offline) %>%
   combine_tab("site.info") %>% 
   head %>% 
   kable

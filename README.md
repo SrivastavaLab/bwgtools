@@ -77,9 +77,11 @@ online version whenever you can.
     ##    drop_acc() 
     ##  then enter your username and password. This should only need to be done once per directory.
 
-    macae <- read_site_sheet(offline("Macae"), "leaf.waterdepths")
+    macae <- read_site_sheet("Macae", "leaf.waterdepths")
 
-    ## you downloaded that file already! reading from disk
+[1] "fetching from dropbox"
+
+    ## /tmp/Rtmp3MwEO1/Drought_data_Macae.xlsx on disk 311.868 KB
 
     knitr::kable(head(macae))
 
@@ -181,10 +183,12 @@ combine the same tab across all sites, with a single function:
     library(knitr)
     c("Argentina", "French_Guiana", "Colombia",
       "Macae", "PuertoRico","CostaRica") %>%
-      sapply(offline) %>%
       combine_tab("site.info") %>% 
       head %>% 
       kable
+
+[1] "fetching from dropbox" [1] "fetching from dropbox" [1] "fetching
+from dropbox" [1] "fetching from dropbox" [1] "fetching from dropbox"
 
 <table>
 <thead>
