@@ -10,7 +10,7 @@ library(magrittr)
 # combine_tab -----------------------------------------
 
 ## We can read data in from all the sites and combine them. for example:
-c("Argentina", "French_Guiana", "Colombia",
+sites <- c("Argentina", "French_Guiana", "Colombia",
   "Macae", "PuertoRico","CostaRica") %>%
  # sapply(offline) %>%
   combine_tab("site.info")
@@ -25,7 +25,7 @@ weather <- c("Argentina", "French_Guiana", "Colombia",
 
 phys <- c("Argentina", "French_Guiana", "Colombia",
           "Macae", "PuertoRico","CostaRica") %>%
- # sapply(offline) %>%
+  #sapply(offline) %>%
   combine_tab("bromeliad.physical")
 # something is wrong with Cardoso site.info. too many columns?
 ## need to make the Colombia stopping rule more robust
@@ -33,7 +33,7 @@ phys <- c("Argentina", "French_Guiana", "Colombia",
 
 leafwater <- c("Argentina", "French_Guiana", "Colombia",
                "Macae", "PuertoRico","CostaRica") %>%
-  sapply(offline) %>%
+  #sapply(offline) %>%
   combine_tab("leaf.waterdepths")
 
 invert <- c("Argentina", "French_Guiana", "Colombia",
@@ -140,29 +140,102 @@ plot_trophic(combine_tab(sheetname = "bromeliad.final.inverts"), bwg_names)
 
 
 # Water -----------------------------------------------
+## We can read data in from all the sites and combine them. for example:
+sites <- c("Argentina", "French_Guiana", "Colombia",
+           "Macae", "PuertoRico","CostaRica") %>%
+  # sapply(offline) %>%
+  combine_tab("site.info")
 
-mac <- read_site_sheet(offline("Macae"), "leaf.waterdepths") %>% brom_id_maker
+phys <- c("Argentina", "French_Guiana", "Colombia",
+          "Macae", "PuertoRico","CostaRica") %>%
+  #sapply(offline) %>%
+  combine_tab("bromeliad.physical")
+# something is wrong with Cardoso site.info. too many columns?
+## need to make the Colombia stopping rule more robust
 
-mac_water <- mac %>%
+leafwater <- c("Argentina", "French_Guiana", "Colombia",
+               "Macae", "PuertoRico","CostaRica") %>%
+  #sapply(offline) %>%
+  combine_tab("leaf.waterdepths")
+
+hydro <- hydro_variables(leafwater, sites, phys)
+
+
+
+cr <- read_site_sheet(offline("CostaRica"), "leaf.waterdepths") %>%
+  brom_id_maker
+
+cr_water <- cr %>%
   longwater
 
 
-sum(!is.na(1:2))
+test_supp <- make_support_file(allsites = sites,
+                               phys = phys)
+
+leafwater
+
+test_supp
+
+## check all first dates
+leafwater %>%
+  group_by(site) %>%
+  summarize(dmin = min(date))
+
+## was the first date of water addition earlier than the
+## first date of sampling for any site?
+sites %>%
+  select(site.name, start.water.addition) %>%
+  left_join(leafwater %>%
+              group_by(site) %>%
+              summarize(first_depth_date = min(date)),
+            by = c("site.name" = "site"))
+## no, everything looks fine
 
 
-## does grouped filter work the way i expect?
-testwater <- mac_water %>%
+
+## are the minima the same
+mac_water %>%
   ## filter out centre
   filter_centre_leaf() %>% ## add argument here
   group_by(site, watered_first) %>%
   filter_naonly_groups %>%
-  ungroup %>%
-  ## filter out NA groups
-  group_or_summarize(aggregate_leaves = FALSE) %>% ## add argument here
-  arrange(date) %>%
-  do(water_summary_calc(.$depth))
+  group_by(trt.name) %>%
+  # get the minimal date, the first date
+  summarize(date = min(date)) %>%
+  # join to the start_block
+  left_join(test_supp %>%
+              filter(site == "macae") %>%
+              select(trt.name, start_block)) %>%
+  {identical(.$date, .$start_block)}
 
 
+## are the maxima the same
+mac_water %>%
+  ## filter out centre
+  filter_centre_leaf() %>% ## add argument here
+  group_by(site, watered_first) %>%
+  filter_naonly_groups %>%
+  group_by(trt.name) %>%
+  # get the minimal date, the first date
+  summarize(date = max(date)) %>%
+  # join to the start_block
+  left_join(test_supp %>%
+              filter(site == "macae") %>%
+              select(trt.name, finish_block)) %>%
+              {identical(.$date + lubridate::days(3), .$finish_block)}
+## yeah, after 4 days
+
+
+
+%>%
+  View
+
+
+
+sum(is.na(testwater2$depth))
+
+mac_water$date %>% range
+filter(long_dates, site == "macae")$date %>% range
 
 
 calcwater <- . %>%
@@ -172,13 +245,23 @@ calcwater <- . %>%
   filter_naonly_groups %>%
   ungroup %>%
   ## filter out NA groups
-  group_or_summarize(aggregate_leaves = FALSE) %>% ## add argument here
-  arrange(date) %>%
+  group_or_summarize(aggregate_leaves = TRUE) %>% ## add argument here
+  ## The useful grouping is gone from here.
+  left_join(long_dates, .) %>%
+  arrange(trt.name, leaf, date) %>%
+  ## filter out the impossible missing site_brom.id values
+  filter(!is.na(site_brom.id)) %>%
+  group_by(site, trt.name, leaf) %>% ## could just make the behaviour at this line
+  # dependent on the value of aggregate_leaves.
   do(water_summary_calc(.$depth))
 
 test_all_water <- leafwater %>%
   longwater %>%
   calcwater
+
+
+
+
 
 readr::write_csv(test_all_water, "Rscripts/test_water_calc.csv")
 
