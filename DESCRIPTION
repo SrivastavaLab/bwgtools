@@ -16,7 +16,11 @@ Imports:
     dplyr,
     magrittr,
     ggplot2,
-    stringr
+    stringr,
+    lazyeval,
+    lubridate,
+    readr,
+    tidyr
 Suggests: testthat,
     knitr,
     httpuv,
