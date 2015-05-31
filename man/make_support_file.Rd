@@ -4,7 +4,12 @@
 \alias{make_support_file}
 \title{Make the support file}
 \usage{
-make_support_file()
+make_support_file(allsites, phys)
+}
+\arguments{
+\item{allsites}{combined site.info tab}
+
+\item{phys}{combined bromeliad.physical tab}
 }
 \value{
 data.frame containing support file: site.name, trt.name, temporal.block, start_block and finish_block. Start_block is equivalent to start.water.addition from the site.info tab, and finish_block is equivalent to last.day.sample

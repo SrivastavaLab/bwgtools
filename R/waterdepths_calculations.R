@@ -81,6 +81,28 @@ make_support_file <- function(allsites, phys){
 }
 
 
+#' Filter water data (long format)
+#'
+#' This function filters long-format water data, by applying \code{filter_centre_leaf}
+#'  and \code{filter_naonly_groups}
+#'
+#' @param Data long-format water data
+#' @param rm_centre should the centre leaf be used? defaults to TRUE
+#'
+#' @return ungrouped data.frame
+#' @export
+filter_long_water <- function(Data, rm_centre = TRUE){
+  ## filter the output of longwater,
+  ### remove central leaf (if required)
+  ### get rid of any group without any numbers ie all NA
+  Data %>%
+    ## filter out centre
+    filter_centre_leaf(centre_filter = rm_centre) %>% ## add argument here
+    group_by(site, watered_first) %>%
+    filter_naonly_groups %>%
+    ungroup
+}
+
 
 #' Calculate water depth measurements
 #'
