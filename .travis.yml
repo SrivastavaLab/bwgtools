@@ -1,10 +1,10 @@
-# Sample .travis.yml for R projects
-
 sudo: required
 language: r
 warnings_are_errors: true
-
 notifications:
   email:
     on_success: change
     on_failure: change
+before_install:
+- openssl aes-256-cbc -K $encrypted_c6932ed45f2b_key -iv $encrypted_c6932ed45f2b_iv
+  -in droptoken.rds.enc -out droptoken.rds -d
