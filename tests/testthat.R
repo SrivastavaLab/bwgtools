@@ -1,4 +1,4 @@
 library(testthat)
-library(bwg)
+library(bwgtools)
 
-test_check("bwg")
+test_check("bwgtools")
