@@ -162,7 +162,7 @@ hydro <- hydro_variables(leafwater, sites, phys)
 
 
 
-cr <- read_site_sheet(offline("CostaRica"), "leaf.waterdepths") %>%
+cr <- read_site_sheet("CostaRica", "leaf.waterdepths") %>%
   brom_id_maker
 
 cr_water <- cr %>%
@@ -291,6 +291,17 @@ filter(watered_first == "yes") %>%
 
 # RLQ -------------------------------------------------
 
+## We can read data in from all the sites and combine them. for example:
+sites <- c("Argentina", "French_Guiana", "Colombia",
+           "Macae", "PuertoRico","CostaRica") %>%
+  # sapply(offline) %>%
+  combine_tab("site.info")
+
+leafwater <- c("Argentina", "French_Guiana", "Colombia",
+               "Macae", "PuertoRico","CostaRica") %>%
+  #sapply(offline) %>%
+  combine_tab("leaf.waterdepths")
+
 
 phys <- c("Argentina", "French_Guiana", "Colombia",
           "Macae", "PuertoRico","CostaRica") %>%
@@ -317,13 +328,6 @@ invert <- c("Argentina", "French_Guiana", "Colombia",
   combine_tab("bromeliad.final.inverts")
 
 
-make_matrix <- function(df, rownm = "species"){
-  if(!assertthat::has_name(df, rownm)) stop("needs a rowname column")
-  pos_rownm <- which(names(df) == rownm)
-  df[-pos_rownm] %>%
-    as.matrix %>%
-    magrittr::set_rownames(df[[rownm]])
-}
 make_matrix(data_frame(a =1))
 make_matrix(data_frame(species = "foo", abd = 1))
 
@@ -359,3 +363,25 @@ make_rlq <- function(sitename, .invert, .traits, .bromvars){
 }
 
 test <- make_rlq("frenchguiana", invert, .traits = bwg_names, .bromvars = brom_vars)
+
+
+names(test)
+
+print_mat_fn <- function(countryname){
+  force(countryname)
+  function(mat, matname){
+    filename <- paste0("../../../Dropbox/BWG Drought Experiment/RLQ/",
+                       countryname,"-", matname, ".csv")
+    write.csv(as.data.frame(mat), filename)
+  }
+}
+
+
+write_mats <- function(SITE){
+  test <- make_rlq(SITE, invert, .traits = bwg_names, .bromvars = brom_vars)
+  Map(print_mat_fn(SITE), test, names(test))
+}
+
+c("argentina", "frenchguiana", "colombia", "macae", "puertorico",
+  "costarica") %>%
+  sapply(write_mats)
