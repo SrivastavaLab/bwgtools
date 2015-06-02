@@ -10,8 +10,7 @@
 #'   the first column, which gives rownames.
 #' @param rownm name of the first column, which is to become rownames
 #'
-#' @return
-#' @export
+#' @return a numeric matrix
 make_matrix <- function(df, rownm = "species"){
   if (!assertthat::has_name(df, rownm)) stop("rownm must be a column in df")
   pos_rownm <- which(names(df) == rownm)
@@ -22,14 +21,24 @@ make_matrix <- function(df, rownm = "species"){
 
 
 
-#' Title
+#' Create matrices for RLQ analysis
 #'
-#' @param sitename
-#' @param .invert
-#' @param .traits
-#' @param .bromvars
+#' Combines data on inverts, traits and bromeliads to create RLQ matrices.
 #'
-#' @return
+#' RLQ analysis is a means of relating three datasets: species traits, habitat traits, and species abundances. There are three matrices required for this analysis:
+#'
+#' \itemize{
+#'   \item  species x traits matrix (fuzzy coding) = matrix Q
+#'   \item a species x bromeliad matrix (abundance data) = matrix L
+#'   \item a bromeliad x environmental variables (plant specific data, including physical, hydrological, ..) = matrix R
+#' }
+#'
+#' @param sitename name of site
+#' @param .invert invertebrate data.frame
+#' @param .traits trait data.frame
+#' @param .bromvars bromeliad variable data.frame
+#'
+#' @return named list of matrices: R, L and Q
 #' @export
 make_rlq <- function(sitename, .invert, .traits, .bromvars){
 
