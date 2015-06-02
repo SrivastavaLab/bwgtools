@@ -5,7 +5,7 @@ context("reading data")
 test_that("data is read correctly", {
 
   # read it back with readRDS
-  token <- readRDS("droptoken.rds")
+  token <- readRDS("../../droptoken.rds")
 
   data <- system.file("extdata","Drought_data_PuertoRico.xlsx",
                       package = "bwgtools")
