@@ -1,11 +1,9 @@
 library(bwgtools)
+options("httr_oauth_cache" = TRUE)
 
 context("reading data")
 
 test_that("data is read correctly", {
-
-  # read it back with readRDS
-  token <- readRDS("../../droptoken.rds")
 
   data <- system.file("extdata","Drought_data_PuertoRico.xlsx",
                       package = "bwgtools")
@@ -18,8 +16,7 @@ test_that("data is read correctly", {
                  "you downloaded that file already! reading from disk")
 
 
-  test_data <- read_sheet("BWG Drought Experiment/raw data/Drought_data_Macae.xlsx",
-                          "leaf.waterdepths",.token = token)
+  test_data <- read_sheet("BWG Drought Experiment/raw data/Drought_data_Macae.xlsx", "leaf.waterdepths")
   ## return value: a tbl_df
   ## with correct columns
   stereotype <- dplyr::data_frame(a = 1)

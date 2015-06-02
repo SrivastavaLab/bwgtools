@@ -1,7 +1,7 @@
 .Rproj.user
 .Rhistory
 .RData
-.httr*
 inst/extdata/D*
 Rscripts/Ana*
 droptoken.rds
+.httr-oauth
