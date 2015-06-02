@@ -7,8 +7,7 @@
 #' @param dest destination for download
 #' @export
 read_sheet <- function(file, sheetname = NULL, ondisk = FALSE,
-                       dest = tempdir(), .token = rdrop2:::get_dropbox_token(),
-                       ...) {
+                       dest = tempdir(), ...) {
   if (is.null(sheetname)) stop("c'mon give me a sheet name")
 
   ## where is the data read from? if user has said that data is ondisk
@@ -46,8 +45,7 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE,
     f(localfile, ...)
   } else {
     print("fetching from dropbox")
-    rdrop2::drop_get(file, local_file = localfile,
-                     dtoken = .token)
+    rdrop2::drop_get(file, local_file = localfile)
     f(localfile, ...)
   }
 }

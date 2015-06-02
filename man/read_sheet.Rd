@@ -4,8 +4,7 @@
 \alias{read_sheet}
 \title{Read an excel file from dropbox account}
 \usage{
-read_sheet(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(),
-  .token = rdrop2:::get_dropbox_token(), ...)
+read_sheet(file, sheetname = NULL, ondisk = FALSE, dest = tempdir(), ...)
 }
 \arguments{
 \item{file}{the file name to fetch}
