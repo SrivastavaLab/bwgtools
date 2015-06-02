@@ -328,39 +328,6 @@ invert <- c("Argentina", "French_Guiana", "Colombia",
   combine_tab("bromeliad.final.inverts")
 
 
-make_matrix(data_frame(a =1))
-make_matrix(data_frame(species = "foo", abd = 1))
-
-
-make_rlq <- function(sitename, .invert, .traits, .bromvars){
-
-  onesite <- .invert %>%
-    filter(site == sitename)
-
-
-  ## a species x bromeliad matrix (abundance data) = matrix L
-  L_mat <- onesite %>%
-    select(species, site_brom.id, abundance) %>%
-    spread(site_brom.id, abundance, fill = 0) %>%
-    make_matrix
-
-  animals <- dimnames(L_mat)[[1]]
-
-  #a species x traits matrix (fuzzy coding) = matrix Q
-  Q_mat <- .traits %>%
-    select(nickname, matches("^[A-Z]{2}.*", ignore.case = FALSE)) %>%
-    left_join(data_frame(nickname = animals), .) %>%
-    make_matrix(rownm = "nickname")
-
-  #  a bromeliad x environmental variables (plant specific data, including physical, hydrological, ..) = matrix R
-  plants <- dimnames(L_mat)[[2]]
-  R_mat <- .bromvars %>%
-    select(-site, -trt.name) %>%
-    left_join(data_frame(site_brom.id = plants), .) %>%
-    make_matrix(rownm = "site_brom.id")
-
-  list(R = R_mat, L = L_mat, Q = Q_mat)
-}
 
 test <- make_rlq("frenchguiana", invert, .traits = bwg_names, .bromvars = brom_vars)
 
