@@ -1,5 +1,5 @@
 library(bwgtools)
-options("httr_oauth_cache" = TRUE)
+#options("httr_oauth_cache" = TRUE)
 
 context("reading data")
 
