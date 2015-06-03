@@ -16,7 +16,7 @@ test_that("data is read correctly", {
                  "you downloaded that file already! reading from disk")
 
 
-  test_data <- read_sheet("BWG Drought Experiment/raw data/Drought_data_Macae.xlsx", "leaf.waterdepths")
+  # test_data <- suppressMessages(read_sheet("BWG Drought Experiment/raw data/Drought_data_Macae.xlsx", "leaf.waterdepths"))
   ## return value: a tbl_df
   ## with correct columns
   stereotype <- dplyr::data_frame(a = 1)
