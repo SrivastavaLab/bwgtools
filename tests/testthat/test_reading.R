@@ -5,8 +5,7 @@ context("reading data")
 
 test_that("data is read correctly", {
 
-  data <- system.file("extdata","Drought_data_PuertoRico.xlsx",
-                      package = "bwgtools")
+  data <- system.file("extdata/Drought_data_PuertoRico.xlsx", package = "bwgtools")
   ## no sheet name
   expect_error(read_sheet(file = data, ondisk = TRUE),
                "c'mon give me a sheet name")
