@@ -20,21 +20,6 @@ combine_tab <- function(.sites =  c("Argentina","Cardoso", "Colombia",
   ## get all the site data
   site_data <- get_all_sites(sheetname = sheetname, sites = .sites)
   ########
-  #### START CLEANING STUFF should be temporart
-  ### site.info Cleaning -- Colombia
-  if (sheetname == "site.info")
-  {
-
-    if (unique(site_data[[3]][[1]]) != "colombia")
-    {
-      stop("wait. Where *IS* Colombia!?")
-    }
-
-    message("CLEANING: I'm taking only the first row of Colombia.
-          is that still necessary?")
-    site_data[[3]] <- site_data[[3]][1, ]
-
-  }
 
   ## make names unique
   site_data <- lapply(site_data, which_names_doubled)
