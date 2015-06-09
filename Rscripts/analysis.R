@@ -10,8 +10,8 @@ library(magrittr)
 # combine_tab -----------------------------------------
 
 ## We can read data in from all the sites and combine them. for example:
-sites <- c("Argentina", "French_Guiana", "Colombia",
-  "Macae", "PuertoRico","CostaRica") %>%
+sites <- c("Argentina", "French_Guiana", "Colombia", "Cardoso",
+           "Macae", "PuertoRico","CostaRica") %>%
  # sapply(offline) %>%
   combine_tab("site.info")
 
@@ -23,7 +23,7 @@ weather <- c("Argentina", "French_Guiana", "Colombia",
 # Cardoso
 # Costa Rica
 
-phys <- c("Argentina", "French_Guiana", "Colombia",
+phys <- c("Argentina", "French_Guiana", "Colombia", "Cardoso",
           "Macae", "PuertoRico","CostaRica") %>%
   #sapply(offline) %>%
   combine_tab("bromeliad.physical")
@@ -117,7 +117,7 @@ bwg_names <- get_bwg_names(file = "../bwg_names/data/Distributions_organisms_ful
 # FUNCTIONAL groups -----------------
 
 ### get invert data
-invert <- c("Argentina", "French_Guiana", "Colombia",
+invert <- c("Argentina", "French_Guiana", "Cardoso", #"Colombia",
             "Macae", "PuertoRico","CostaRica") %>%
   sapply(offline) %>%
   combine_tab("bromeliad.final.inverts")
@@ -291,17 +291,24 @@ filter(watered_first == "yes") %>%
 
 # RLQ -------------------------------------------------
 
+## SKIPPING COLOMBIA because they modified their lea
+
+
 ## We can read data in from all the sites and combine them. for example:
-sites <- c("Argentina", "French_Guiana", "Colombia",
+sites <- c("Argentina", "French_Guiana","Colombia",
            "Macae", "PuertoRico","CostaRica") %>%
   # sapply(offline) %>%
   combine_tab("site.info")
 
-leafwater <- c("Argentina", "French_Guiana", "Colombia",
+sites <- filter(sites, site.name != "colombia")
+
+leafwater <- c("Argentina", "French_Guiana",
                "Macae", "PuertoRico","CostaRica") %>%
-  #sapply(offline) %>%
+ # sapply(offline) %>%
   combine_tab("leaf.waterdepths")
 
+
+read_site_sheet("Colombia", "leaf.waterdepths")
 
 phys <- c("Argentina", "French_Guiana", "Colombia",
           "Macae", "PuertoRico","CostaRica") %>%
@@ -322,7 +329,7 @@ brom_vars <- hydro %>%
   ungroup
 
 ### get invert data
-invert <- c("Argentina", "French_Guiana", "Colombia",
+invert <- c("Argentina", "French_Guiana",
             "Macae", "PuertoRico","CostaRica") %>%
   sapply(offline) %>%
   combine_tab("bromeliad.final.inverts")
@@ -330,6 +337,9 @@ invert <- c("Argentina", "French_Guiana", "Colombia",
 
 
 test <- make_rlq("frenchguiana", invert, .traits = bwg_names, .bromvars = brom_vars)
+
+
+test <- make_rlq("macae", invert, .traits = bwg_names, .bromvars = brom_vars)
 
 
 names(test)
