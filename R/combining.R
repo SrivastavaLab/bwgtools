@@ -113,7 +113,7 @@ which_names_doubled <- function(df){
     dup_names %>%
       paste0(collapse = ", ") %>%
       sprintf("these names were duplicates: %s", .) %>%
-      message
+      warning(.)
   }
 
   names(df) <- make.names(names(df), unique = TRUE)
