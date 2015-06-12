@@ -83,7 +83,8 @@ invert_to_long <- function(insect_data, category_vars){
   ## is there even biomass measurements?
   biomass_absent <- all(is.na(long_out$biomass))
 
-  if(!zeros_same & !biomass_absent) stop("there are inconsistencies between the abundance and biomass columns")
+  countryname <- unique(insect_data[["site"]])
+  if(!zeros_same & !biomass_absent) warning(sprintf("there are inconsistencies between the abundance and biomass columns in %s", countryname))
 
   # remove the zeros
   long_final <- long_out %>%
