@@ -1,3 +1,6 @@
+## This is a test file that reads each dataset individually
+## useful to check for warnings.
+
 library(bwgtools)
 library(dplyr)
 library(loggr)
