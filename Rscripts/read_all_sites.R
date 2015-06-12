@@ -105,5 +105,13 @@ read_site_sheet(offline("CostaRica"), "bromeliad.final.inverts")
 read_site_sheet("French_Guiana", "bromeliad.final.inverts")
 read_site_sheet("Macae", "bromeliad.final.inverts")
 read_site_sheet("PuertoRico", "bromeliad.final.inverts")
+## check for duplicate names buy running validation fns
+combine_tab("Argentina", "bromeliad.final.inverts")
+combine_tab("Cardoso", "bromeliad.final.inverts")
+combine_tab("Colombia", "bromeliad.final.inverts")
+combine_tab(offline("CostaRica"), "bromeliad.final.inverts")
+combine_tab("French_Guiana", "bromeliad.final.inverts")
+combine_tab("Macae", "bromeliad.final.inverts")
+combine_tab("PuertoRico", "bromeliad.final.inverts")
 
 
