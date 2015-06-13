@@ -1,8 +1,11 @@
+## This is a test file that reads each dataset individually
+## useful to check for warnings.
+
 library(bwgtools)
 library(dplyr)
 library(loggr)
 
-log_file("Rscripts/test.log", WARN)
+log_file("Rscripts/test.log")
 
 # site.info -------------------------------------------
 
@@ -21,7 +24,6 @@ read_site_sheet("Argentina", "site.weather")
 read_site_sheet("Cardoso", "site.weather")
 read_site_sheet("Colombia", "site.weather")
 read_site_sheet("CostaRica", "site.weather")
-warnings()
 read_site_sheet("French_Guiana", "site.weather")
 read_site_sheet("Macae", "site.weather")
 read_site_sheet("PuertoRico", "site.weather")
@@ -29,7 +31,7 @@ read_site_sheet("PuertoRico", "site.weather")
 
 # bromeliad.physical ----------------------------------
 
-read_site_sheet("Argentina", "bromeliad.physical") ## weird values in row 15, col 29 and 30
+read_site_sheet("Argentina", "bromeliad.physical")
 read_site_sheet("Cardoso", "bromeliad.physical")
 read_site_sheet("Colombia", "bromeliad.physical")
 read_site_sheet("CostaRica", "bromeliad.physical")
@@ -103,5 +105,13 @@ read_site_sheet("CostaRica", "bromeliad.final.inverts")
 read_site_sheet("French_Guiana", "bromeliad.final.inverts")
 read_site_sheet("Macae", "bromeliad.final.inverts")
 read_site_sheet("PuertoRico", "bromeliad.final.inverts")
+## check for duplicate names buy running validation fns
+combine_tab("Argentina", "bromeliad.final.inverts")
+combine_tab("Cardoso", "bromeliad.final.inverts")
+combine_tab("Colombia", "bromeliad.final.inverts")
+combine_tab("CostaRica", "bromeliad.final.inverts")
+combine_tab("French_Guiana", "bromeliad.final.inverts")
+combine_tab("Macae", "bromeliad.final.inverts")
+combine_tab("PuertoRico", "bromeliad.final.inverts")
 
 
