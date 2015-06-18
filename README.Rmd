@@ -49,7 +49,7 @@ Once you have authenticated with Dropbox, you can read data directly into R. To 
 ```{r}
 macae <- read_site_sheet("Macae", "leaf.waterdepths")
 
-knitr::kable(macae)
+knitr::kable(head(macae))
 ```
 
 ## Working offline
