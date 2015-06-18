@@ -203,6 +203,64 @@ predprey %>%
 ```
 
 
+## Hydrology -- based on rainfall schedule
+
+_under construction_ right now the only measure I'm working on is derived from the number of consecutive dry days. We can use the metric "longest period of consecutive dry days", and/or quantify their distribution in some other way
+
+## Hydrology -- based on water depths
+
+We have daily water measurements for some sites, and from these we will be able to calculate several measures of "hydrological stability". First, we obtain the `leaf.waterdepths` data in the usual way:
+
+```{r message=FALSE}
+leafwater <- c("Argentina", "French_Guiana", "Colombia",
+               "Macae", "PuertoRico","CostaRica") %>%
+  #sapply(offline) %>%
+  combine_tab("leaf.waterdepths")
+```
+
+We also need two other tabs: `site.info` and `bromeliad.physical`. The former states the beginning and end of the experiment, and the latter the block for each bromeliad. These are necessary pieces of information to calculate the date at which each bromeliad was placed in the field and removed from the field. We need this information because some groups did not measure water at the beginning (Costa Rica) or did so irregularly (Costa Rica, Argentina). Thus we need to fill in missing days.
+
+```{r message=FALSE}
+sites <- c("Argentina", "French_Guiana", "Colombia",
+           "Macae", "PuertoRico","CostaRica") %>%
+  # sapply(offline) %>%
+  combine_tab("site.info")
+
+phys <- c("Argentina", "French_Guiana", "Colombia",
+          "Macae", "PuertoRico","CostaRica") %>%
+  #sapply(offline) %>%
+  combine_tab("bromeliad.physical")
+```
+
+
+We can obtain all the hydro variables with one compound function: `hydro_variables()`:
+
+```{r}
+hydro <- hydro_variables(waterdata = leafwater,
+                         sitedata = sites,
+                         physicaldata = phys)
+kable(head(hydro))
+```
+
+This function should "just work". As you can see, it is performing one check (removing any groups which have all NA records) and performs two joins (to correct the errors discussed above).
+
+It seems that the centre leaf is not like the others. Therefore by default the fucntion removes it. If you want it anyway, set `rm_centre = TRUE` (Note the Canadian spelling).
+```{r}
+hydro2 <- hydro_variables(waterdata = leafwater,
+                         sitedata = sites,
+                         physicaldata = phys, rm_centre = FALSE)
+kable(head(hydro2))
+```
+
+The default behaviour is to calculate all these metrics at the level of the leaf well, the same scale at which the measurements were taken. If you want you can obtain these same calculations AFTER first averaging water depths across all leaves of a plant, within each day. That is, we can make these same calculations at the scale of the bromeliad:
+
+```{r}
+hydro3 <- hydro_variables(waterdata = leafwater,
+                         sitedata = sites,
+                         physicaldata = phys, aggregate_leaves = TRUE)
+kable(head(hydro3))
+```
+
 
 ### Licence
 We release the code in this repository under the MIT software license. see text of license [here](LICENSE)
