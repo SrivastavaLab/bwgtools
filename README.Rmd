@@ -161,18 +161,20 @@ kable(head(invert_traits))
 
 Now, we need to calculate the total abundance and biomass for every group defined by `site`, `site_brom.id`, and either `pred_prey` or `func.group`. We can write a function that does this for us, and allows us to control the groups that will be summed together. Using `dplyr`'s [non-standard evaluation](http://cran.r-project.org/web/packages/dplyr/vignettes/nse.html) we can define the groups. 
 
-_*REQUEST for feedback*: the syntax here is admittedly a bit strange. Should I just write little convenience functions that perform these tasks? `sum_functional()` and `sum_trophic()` for example?_
+_**REQUEST for feedback**: the syntax here is admittedly a bit strange. Should I just write little convenience functions that perform these tasks? `sum_functional()` and `sum_trophic()` for example?_
 
+For example, to summarize by functional group:
 ```{r}
 #4 summarize by functional group
 func_groups <- sum_func_groups(invert_traits,
                                grps = list(~site,
                                            ~site_brom.id,
                                            ~func.group))
+kable(head(func_groups))
+```
 
-## screenshot or table of the output
-## perhaps wrap this code into one that aggregates up to pred_prey
-
+This is a convenient format for plotting:
+```{r}
 library(ggplot2)
 ## functional group abundance
 func_groups %>%
@@ -183,6 +185,23 @@ func_groups %>%
   ggtitle("functional group abundance")
 
 ```
+
+To summarize by trophic level group, simply switch `~func.group` to `~pred_prey`:
+
+```{r}
+predprey <- sum_func_groups(invert_traits,
+                               grps = list(~site,
+                                           ~site_brom.id,
+                                           ~pred_prey))
+
+predprey %>%
+  ggplot(aes(x = as.factor(pred_prey), y = total_abundance)) +
+  geom_point(position = position_jitter(width = 0.25), alpha = 0.5) +
+  stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.6) +
+  facet_wrap(~site, ncol = 1, scales = "free_y") +
+  ggtitle("functional group abundance")
+```
+
 
 
 ### Licence

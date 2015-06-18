@@ -76,7 +76,7 @@ for a single site (for example, Macae), use the function
     ## [1] "fetching from dropbox"
 
     ## 
-    ##  /tmp/RtmpNxUzl4/Drought_data_Macae.xlsx on disk 311.868 KB
+    ##  /tmp/RtmpqhCGdH/Drought_data_Macae.xlsx on disk 311.868 KB
 
     knitr::kable(head(macae))
 
@@ -1798,18 +1798,83 @@ us to control the groups that will be summed together. Using `dplyr`'s
 evaluation](http://cran.r-project.org/web/packages/dplyr/vignettes/nse.html)
 we can define the groups.
 
-**REQUEST for feedback*: the syntax here is admittedly a bit strange.
+***REQUEST for feedback**: the syntax here is admittedly a bit strange.
 Should I just write little convenience functions that perform these
 tasks? `sum_functional()` and `sum_trophic()` for example?*
+
+For example, to summarize by functional group:
 
     #4 summarize by functional group
     func_groups <- sum_func_groups(invert_traits,
                                    grps = list(~site,
                                                ~site_brom.id,
                                                ~func.group))
+    kable(head(func_groups))
 
-    ## screenshot or table of the output
-    ## perhaps wrap this code into one that aggregates up to pred_prey
+<table>
+<thead>
+<tr class="header">
+<th align="left">site</th>
+<th align="left">site_brom.id</th>
+<th align="left">func.group</th>
+<th align="right">total_abundance</th>
+<th align="right">total_biomass</th>
+<th align="right">total_taxa</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">argentina</td>
+<td align="left">argentina_1</td>
+<td align="left">gatherer</td>
+<td align="right">7</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">argentina</td>
+<td align="left">argentina_1</td>
+<td align="left">scraper</td>
+<td align="right">14</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">argentina</td>
+<td align="left">argentina_1</td>
+<td align="left">shredder</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">argentina</td>
+<td align="left">argentina_10</td>
+<td align="left">gatherer</td>
+<td align="right">6</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">argentina</td>
+<td align="left">argentina_10</td>
+<td align="left">piercer</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">argentina</td>
+<td align="left">argentina_10</td>
+<td align="left">shredder</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+
+This is a convenient format for plotting:
 
     library(ggplot2)
     ## functional group abundance
@@ -1820,7 +1885,24 @@ tasks? `sum_functional()` and `sum_trophic()` for example?*
       facet_wrap(~site, ncol = 1, scales = "free_y") +
       ggtitle("functional group abundance")
 
-![](README_files/figure-markdown_strict/unnamed-chunk-10-1.png)
+![](README_files/figure-markdown_strict/unnamed-chunk-11-1.png)
+
+To summarize by trophic level group, simply switch `~func.group` to
+`~pred_prey`:
+
+    predprey <- sum_func_groups(invert_traits,
+                                   grps = list(~site,
+                                               ~site_brom.id,
+                                               ~pred_prey))
+
+    predprey %>%
+      ggplot(aes(x = as.factor(pred_prey), y = total_abundance)) +
+      geom_point(position = position_jitter(width = 0.25), alpha = 0.5) +
+      stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.6) +
+      facet_wrap(~site, ncol = 1, scales = "free_y") +
+      ggtitle("functional group abundance")
+
+![](README_files/figure-markdown_strict/unnamed-chunk-12-1.png)
 
 ### Licence
 
