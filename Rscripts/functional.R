@@ -10,6 +10,8 @@ invert <- c("Argentina", "French_Guiana", "Cardoso", "Colombia",
             "Macae", "PuertoRico","CostaRica") %>%
   combine_tab("bromeliad.final.inverts")
 
+## This file contains all the taxonomic and functional
+## information for all the invertebrates in the BWG database
 bwg_names <- get_bwg_names()
 
 ### merge with functional groups
@@ -22,12 +24,15 @@ func_groups <- sum_func_groups(invert_traits,
                                            ~pred_prey,
                                            ~func.group))
 
+## screenshot or table of the output
+## perhaps wrap this code into one that aggregates up to pred_prey
+
 ## functional group abundance
 func_groups %>%
   ggplot(aes(x = as.factor(func.group), y = total_abundance)) +
   geom_point(position = position_jitter(width = 0.25), alpha = 0.5) +
   stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.6) +
-  facet_wrap(~site) +
+  facet_wrap(~site, ncol = 1, scales = "free_y") +
   ggtitle("functional group abundance")
 
 
