@@ -111,7 +111,78 @@ phys_data <- c("Argentina", "French_Guiana", "Colombia",
 kable(phys_data[1:6, 1:3])
 ```
 
+## "wide" to "long" format
 
+Most of the tabs have a standard shape -- i.e. a fixed number of columns and rows. The exception is two tabs that contain insect data: `bromeliad.initial.inverts` and `bromeliad.final.inverts`. In order to combine data from these datasets, it is necessary to convert them to "long" format: i.e., to "gather" all insect columns into only three: one for the name of the species (the former column header) one for abundance, and another for biomass:
+
+```{r message=FALSE, warning=FALSE}
+invert_data <- c("Argentina", "French_Guiana", "Colombia",
+  "Macae", "PuertoRico","CostaRica") %>%
+  combine_tab(sheetname = "bromeliad.final.inverts")
+
+kable(invert_data[1:6, ])
+```
+
+# functional groups -- abundance and biomass. 
+
+Now that we can obtain data on all the invertebrates found at the end of the experiment, we can calculate the abundance and biomass of different *functional groups* by combining species that are in the same category. 
+There are two levels of groups into which we can group species:
+
+|pred_prey    |func.group|
+|:------------|:---------|
+|predator     |engulfer  |
+|             |piercer   |
+|prey         |scraper   |
+|             |gatherer  |
+|             |piercer   |
+|             |shredder  |
+
+
+## Accessing functional traits
+
+In order to do this, we will need to access data about all the species ever observed in bromeliads, combining their trait data with their BWG nicknames (the column headers from `bromeliad.final.invert`, now in the column `species` in the output of `combine_tab()`). Formerly, this data was kept in an excel sheet called "Distributions.organisms.correct.xls". Now, several of us have embarked on a project to [improve this data and fill in blanks](https://github.com/SrivastavaLab/bwg_names/). The result of these efforts (which are still ongoing, though mostly complete) is [this .tsv file](https://github.com/SrivastavaLab/bwg_names/blob/master/data/Distributions_organisms_full.tsv). Eventually, it will be added to the master database that the BWG is constructing.  In the meantime, it can be downloaded directly from github using `get_bwg_names()` :
+
+```{r}
+bwg_names <- get_bwg_names()
+
+kable(head(bwg_names))
+```
+
+## Merging and plotting functional trait data
+
+The first step in combining the functional traits and the observed insect data is to match insect names in both datasets. This is easily accomplished by the base function `merge()` or by `dplyr::left_join()`. For convenience, `bwgtools::merge_func()` does the latter for you:
+```{r}
+
+### merge with functional groups
+invert_traits <- merge_func(invert_data, bwg_names)
+
+kable(head(invert_traits))
+```
+
+Now, we need to calculate the total abundance and biomass for every group defined by `site`, `site_brom.id`, and either `pred_prey` or `func.group`. We can write a function that does this for us, and allows us to control the groups that will be summed together. Using `dplyr`'s [non-standard evaluation](http://cran.r-project.org/web/packages/dplyr/vignettes/nse.html) we can define the groups. 
+
+_*REQUEST for feedback*: the syntax here is admittedly a bit strange. Should I just write little convenience functions that perform these tasks? `sum_functional()` and `sum_trophic()` for example?_
+
+```{r}
+#4 summarize by functional group
+func_groups <- sum_func_groups(invert_traits,
+                               grps = list(~site,
+                                           ~site_brom.id,
+                                           ~func.group))
+
+## screenshot or table of the output
+## perhaps wrap this code into one that aggregates up to pred_prey
+
+library(ggplot2)
+## functional group abundance
+func_groups %>%
+  ggplot(aes(x = as.factor(func.group), y = total_abundance)) +
+  geom_point(position = position_jitter(width = 0.25), alpha = 0.5) +
+  stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.6) +
+  facet_wrap(~site, ncol = 1, scales = "free_y") +
+  ggtitle("functional group abundance")
+
+```
 
 
 ### Licence
