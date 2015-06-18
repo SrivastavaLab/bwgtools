@@ -1,5 +1,5 @@
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("Welcome to the bwg R package! in order to obtain data from the BWG dropbox folder, you need to authorize R to access your dropbox. run the following commands: \n  library(rdrop2) \n   drop_acc() \n then enter your username and password. This should only need to be done once per directory.")
+  packageStartupMessage("Welcome to the bwg R package! in order to obtain data from the BWG dropbox folder, you need to authorize R to access your dropbox. run the following commands:\n  library(rdrop2)\n  drop_auth(cache = FALSE)\nThen enter your username and password. This should only need to be done when downloading the data.")
 }
 
 # .onLoad <- function(libname, pkgname){
