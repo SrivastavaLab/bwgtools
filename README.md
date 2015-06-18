@@ -9,11 +9,11 @@ experiment. Our intention is to create a set of tools that facilitate
 all steps of the process:
 
 -   loading data into R
--   validating the data
--   combining data from different levels
+-   combining data from different replicates
 -   performing calculations
--   performing analyses and
--   creating figures
+
+At present the package allows each group of authors to obtain the
+datasets they will need to **begin** their analysis.
 
 Please [open an issue](https://github.com/SrivastavaLab/bwgtools/issues)
 if there is a feature you would like to see, or if you discover an error
@@ -28,11 +28,8 @@ Installation
     library(devtools)
     install_github("SrivastavaLab/bwgtools", dependencies = TRUE)
 
-Loading data into R
-===================
-
 Accessing Dropbox
------------------
+=================
 
 `bwgtools` uses [rdrop2](https://github.com/karthik/rdrop2) to access
 your Dropbox account, then uses
@@ -42,16 +39,27 @@ the following message:
 
     Welcome to the bwg R package! in order to obtain data from the BWG dropbox folder, you need to authorize R to access your dropbox. run the following commands: 
       library(rdrop2) 
-      drop_acc() 
+      drop_auth(cache = FALSE) 
      then enter your username and password. This should only need to be done once per directory.
 
-This will create a file called `.httr-oauth` in your directory, which
-will contain your login credentials for Dropbox. **Remember to add this
-file to your .gitignore if you are using git**. For more information,
-see `?rdrop2::drop_auth`.
+Important Note: Protect your account!
+-------------------------------------
 
-Obtaining data
---------------
+**In Dropbox:** by default, `drop_auth(cache = FALSE)` saves your
+Dropbox login to a file called `.httr-oauth`. Of course, we don't want
+this shared with everyone in our Dropbox folder! Therefore, we set
+`cache=FALSE`. This will require us to re-authenticate every time we
+want to download fresh data. This should be a quick and painless
+process, especially if you are already logged in on your computer!
+
+**Working outside of Dropbox:** running `drop_acc()` or `drop_auth()`
+will create a file called `.httr-oauth` in your directory, which will
+contain your login credentials for Dropbox. **Remember to add this file
+to your .gitignore if you are using git**. For more information, see
+`?rdrop2::drop_auth`.
+
+Reading a single sheet
+======================
 
 Once you have authenticated with Dropbox, you can read data directly
 into R . For example, the function `read_sheet_site` will get a single
@@ -72,16 +80,17 @@ online version whenever you can.
 
     library(bwgtools)
 
-    ## Welcome to the bwg R package! in order to obtain data from the BWG dropbox folder, you need to authorize R to access your dropbox. run the following commands: 
-    ##   library(rdrop2) 
-    ##    drop_acc() 
-    ##  then enter your username and password. This should only need to be done once per directory.
+    ## Welcome to the bwg R package! in order to obtain data from the BWG dropbox folder, you need to authorize R to access your dropbox. run the following commands:
+    ##   library(rdrop2)
+    ##   drop_auth(cache = FALSE)
+    ## Then enter your username and password. This should only need to be done once per directory.
 
     macae <- read_site_sheet("Macae", "leaf.waterdepths")
 
 [1] "fetching from dropbox"
 
-    ## /tmp/Rtmp3MwEO1/Drought_data_Macae.xlsx on disk 311.868 KB
+    ## 
+    ##  /tmp/Rtmpt3k7YU/Drought_data_Macae.xlsx on disk 311.868 KB
 
     knitr::kable(head(macae))
 
@@ -242,11 +251,11 @@ from dropbox" [1] "fetching from dropbox" [1] "fetching from dropbox"
 <td align="right">1060.000</td>
 <td align="right">402.8000</td>
 <td align="left">vriesea.splendens</td>
-<td align="right">0.46</td>
+<td align="right">0.460000</td>
 <td align="right">NA</td>
 <td align="right">1148.70000</td>
 <td align="right">NA</td>
-<td align="right">1.86</td>
+<td align="right">1.860000</td>
 <td align="right">1.0400000</td>
 <td align="right">50.62000</td>
 <td align="left">Melastomataceae</td>
@@ -262,14 +271,14 @@ from dropbox" [1] "fetching from dropbox" [1] "fetching from dropbox"
 <td align="right">0.3613</td>
 <td align="right">2297.898</td>
 <td align="right">830.2305</td>
-<td align="left">NA</td>
-<td align="right">-1.46</td>
-<td align="right">-0.3</td>
+<td align="left">Guzmania.spp</td>
+<td align="right">-1.093333</td>
+<td align="right">-1.296667</td>
 <td align="right">0.36653</td>
 <td align="right">0.36701</td>
-<td align="right">-3.56</td>
-<td align="right">0.7027134</td>
-<td align="right">46.06465</td>
+<td align="right">-3.768889</td>
+<td align="right">0.5749411</td>
+<td align="right">45.09735</td>
 <td align="left">alnus.acuminata</td>
 <td align="left">melastomatacea</td>
 <td align="left">alnus.acuminata</td>
@@ -309,9 +318,9 @@ from dropbox" [1] "fetching from dropbox" [1] "fetching from dropbox"
 <td align="right">NA</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
+<td align="right">-2.447934</td>
+<td align="right">1.0181657</td>
+<td align="right">48.83634</td>
 <td align="left">melostomataceae</td>
 <td align="left">NA</td>
 <td align="left">dacryodes.excelsa</td>
@@ -330,7 +339,7 @@ from dropbox" [1] "fetching from dropbox" [1] "fetching from dropbox"
 <td align="right">NA</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
-<td align="right">-1.66</td>
+<td align="right">-1.660000</td>
 <td align="right">0.4500000</td>
 <td align="right">43.78000</td>
 <td align="left">conostegia.xalapensis</td>
