@@ -97,7 +97,7 @@ decomp_responses(means_loss)
 
 
 
-combine_tab("bromeliad.physical") %>%
+combine_tab(sheetname = "bromeliad.physical") %>%
   physical_long %>%
   leaf_loss_sample %>%
   leaf_loss_mean %>%
@@ -160,17 +160,13 @@ leafwater <- c("Argentina", "French_Guiana", "Colombia",
 
 hydro <- hydro_variables(leafwater, sites, phys)
 
-
+View(hydro)
 
 cr <- read_site_sheet("CostaRica", "leaf.waterdepths") %>%
   brom_id_maker
 
 cr_water <- cr %>%
   longwater
-
-
-test_supp <- make_support_file(allsites = sites,
-                               phys = phys)
 
 leafwater
 
