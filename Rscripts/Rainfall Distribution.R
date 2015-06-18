@@ -1,6 +1,9 @@
 # delete everything from memory -------------------------------------------
 rm(list=ls(all=TRUE))
 
+sched <- rdrop2::drop_read_csv("BWG Drought Experiment/rainfall.schedules/Argentinaschedule.csv")
+
+rdrop2::drop_dir("/BWG Drought Experiment/")
 
 # load data frame ---------------------------------------------------------
 
