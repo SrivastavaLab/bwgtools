@@ -2,11 +2,7 @@
 title: "README"
 author: "Andrew MacDonald"
 date: "May 25, 2015"
-output:
-  html_document:
-    toc: true
-    theme: united
-    keep_md: true
+output: md_document
 ---
 
 [![Travis-CI Build Status](https://travis-ci.org/SrivastavaLab/bwgtools.png?branch=master)](https://travis-ci.org/SrivastavaLab/bwgtools)
