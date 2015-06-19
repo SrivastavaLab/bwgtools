@@ -123,11 +123,12 @@ invert <- c("Argentina", "French_Guiana", "Cardoso", #"Colombia",
   combine_tab("bromeliad.final.inverts")
 
 ### merge with functional groups
-invert_traits <- merge_func(invert, bwg_names)
+invert_traits <- merge_func(insect_data = insect_data, bwg_names)
 
 #4 summarize this
 func_groups <- sum_func_groups(invert_traits, grps = list(~site, ~site_brom.id, ~pred_prey, ~func.group))
 
+library(ggplot2)
 func_groups %>%
   ggplot(aes(x = func.group, y = total_abundance)) +
   geom_point(position = position_jitter(width = 0.25)) + facet_wrap(~site)
@@ -159,6 +160,9 @@ leafwater <- c("Argentina", "French_Guiana", "Colombia",
   combine_tab("leaf.waterdepths")
 
 hydro <- hydro_variables(leafwater, sites, phys)
+
+
+hydro2 <- hydro_variables(leafwater, sites, phys,rm_centre = TRUE,aggregate_leaves = FALSE)
 
 View(hydro)
 

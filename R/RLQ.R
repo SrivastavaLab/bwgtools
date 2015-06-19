@@ -25,7 +25,7 @@ make_matrix <- function(df, rownm = "species"){
 #'
 #' Combines data on inverts, traits and bromeliads to create RLQ matrices.
 #'
-#' RLQ analysis is a means of relating three datasets: species traits, habitat traits, and species abundances. There are three matrices required for this analysis:
+#' RLQ analysis is a means of relating three datasets: species traits, habitat traits, and species abundances. There are three matrices required for this analysis, as follows:
 #'
 #' \itemize{
 #'   \item  species x traits matrix (fuzzy coding) = matrix Q

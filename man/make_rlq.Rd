@@ -22,7 +22,7 @@ named list of matrices: R, L and Q
 Combines data on inverts, traits and bromeliads to create RLQ matrices.
 }
 \details{
-RLQ analysis is a means of relating three datasets: species traits, habitat traits, and species abundances. There are three matrices required for this analysis:
+RLQ analysis is a means of relating three datasets: species traits, habitat traits, and species abundances. There are three matrices required for this analysis, as follows:
 
 \itemize{
   \item  species x traits matrix (fuzzy coding) = matrix Q

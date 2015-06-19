@@ -2,7 +2,11 @@
 title: "README"
 author: "Andrew MacDonald"
 date: "May 25, 2015"
-output: md_document
+output:
+  html_document:
+    toc: true
+    theme: united
+    keep_md: true
 ---
 
 [![Travis-CI Build Status](https://travis-ci.org/SrivastavaLab/bwgtools.png?branch=master)](https://travis-ci.org/SrivastavaLab/bwgtools)
@@ -245,7 +249,7 @@ kable(head(hydro))
 This function should "just work". As you can see, it is performing one check (removing any groups which have all NA records) and performs two joins (to correct the errors discussed above).
 
 It seems that the centre leaf is not like the others. Therefore by default the fucntion removes it. If you want it anyway, set `rm_centre = TRUE` (Note the Canadian spelling).
-```{r}
+```{r eval=FALSE}
 hydro2 <- hydro_variables(waterdata = leafwater,
                          sitedata = sites,
                          physicaldata = phys, rm_centre = FALSE)
@@ -254,7 +258,7 @@ kable(head(hydro2))
 
 The default behaviour is to calculate all these metrics at the level of the leaf well, the same scale at which the measurements were taken. If you want you can obtain these same calculations AFTER first averaging water depths across all leaves of a plant, within each day. That is, we can make these same calculations at the scale of the bromeliad:
 
-```{r}
+```{r eval=FALSE}
 hydro3 <- hydro_variables(waterdata = leafwater,
                          sitedata = sites,
                          physicaldata = phys, aggregate_leaves = TRUE)

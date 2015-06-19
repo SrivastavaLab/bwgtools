@@ -6,3 +6,5 @@ Rscripts/Ana*
 droptoken.rds
 .httr-oauth
 *.log
+README.html
+README_files/figure-html/*
