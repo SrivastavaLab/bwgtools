@@ -1,8 +1,6 @@
-
-
-
-
-
+## Sometimes we have different rows that we want to filter
+## out. or problematic columns that cause trouble later.
+## These functions help us deal with those
 
 #' Filter out any groups where depth is all NA
 #'
