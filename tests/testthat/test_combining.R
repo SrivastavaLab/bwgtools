@@ -44,7 +44,7 @@ test_that("data is reshaped correctly", {
                                invert.1 = c(1, 0),
                                invert.2 = c(0, 0))
 
-  expect_error(invert_to_long(inverts_bio_err,
+  expect_warning(invert_to_long(inverts_bio_err,
                               c("site", "trt.name", "bromeliad.id",
                                 "abundance.or.biomass")),
                "there are inconsistencies between the abundance and biomass columns")
