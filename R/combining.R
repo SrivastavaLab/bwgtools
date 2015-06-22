@@ -176,29 +176,15 @@ sum_trophic <- function(func_sums){
     dplyr::summarise_each(dplyr::funs(sum), total_abundance, total_biomass, total_taxa)
 }
 
-#' Plot predator vs prey biomass
+#' Are the columns site and bromeliad.id found in this data.frame?
 #'
-#' @param insect_data data.frame of invert observations. must be long format (ie output of \code{invert.long})
-#' @param trait_data bwg_names data. output of \code{get_bwg_names}
+#' @param df data frame to check for
 #'
-#' @return a ggplot
-#' @importFrom magrittr "%>%"
-#' @export
-plot_trophic <- function(long_inverts, trait_data){
-  #2 transform the data
+#' @return are those column names present? TRUE or FALSE
+find_site_brom <- function(df){
+  has_site <- assertthat::has_name(df, "site")
+  has_brom <- assertthat::has_name(df, "bromeliad.id")
 
-  #3 combine with trait data
-  inverts_traits <- merge_func(long_inverts, trait_data)
-
-  #4 summarize this
-  sum_grps <- sum_func_groups(inverts_traits)
-
-  trophic_sums <- sum_trophic(sum_grps)
-
-
-  trophic_sums %>%
-    dplyr::filter(!is.na(pred_prey)) %>%
-    dplyr::select(-total_abundance, - total_taxa) %>%
-    tidyr::spread(pred_prey, value = total_biomass) %>%
-    ggplot2::ggplot(ggplot2::aes(x = prey, y = predator)) + ggplot2::geom_point()
+  has_site & has_brom
 }
+
