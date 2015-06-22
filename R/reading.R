@@ -95,8 +95,8 @@ get_bwg_names <- function(file = "https://raw.githubusercontent.com/SrivastavaLa
   message(msg)
   cols <- c(rep("c", chars), rep("n", nums))
   our_col_types <- Reduce(f = paste0, cols)
-  the_data <- readr::read_tsv(file,col_types = our_col_types)
-  if(nrow(readr:::problems(the_data)) != 0) stop("something is wrong")
+  the_data <- readr::read_tsv(file, col_types = our_col_types)
+  if(nrow(readr::problems(the_data)) != 0) stop("something is wrong")
   return(the_data)
 }
 

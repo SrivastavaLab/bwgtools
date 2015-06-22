@@ -3,3 +3,7 @@
 ^data-raw$
 ^Rscripts$
 ^\.travis\.yml$
+^\.git
+^\.httr-oauth
+^\.httr-oauth.enc
+^tests/testthat/\.httr-oauth
