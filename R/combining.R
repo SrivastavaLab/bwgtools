@@ -1,6 +1,6 @@
-## these are all the functions which combine data, where
-## reshaping functions are required prior to combining they
-## are found here as well
+### these are all the functions which combine data.
+### Contains the Master Function combine_tab and its helpers,
+### including functions which reshape data or create new columns
 
 
 #' Obtain data for all sites
@@ -187,4 +187,20 @@ find_site_brom <- function(df){
 
   has_site & has_brom
 }
+
+#' Check that names are all identical
+#'
+#' @param datalist list of dataframes whose names must all be identical
+#'
+#' @return are the names identical? TRUE or FALSE
+#' @export
+names_all_same <- function(datalist){
+  intersectnames <- datalist %>%
+    lapply(names) %>%
+    Reduce(intersect, .)
+
+  identical(intersectnames, names(datalist[[1]]))
+}
+
+
 
