@@ -5,14 +5,14 @@ context("reading data")
 
 test_that("data is read correctly", {
 
-  data <- system.file("extdata/Drought_data_PuertoRico.xlsx", package = "bwgtools")
-  ## no sheet name
-  expect_error(read_sheet(file = data, ondisk = TRUE),
-               "c'mon give me a sheet name")
-  ## existing sheet name, ondisk file
-  expect_message(read_sheet(file = data, "leaf.waterdepths",
-                            ondisk = TRUE),
-                 "you downloaded that file already! reading from disk")
+#   data <- system.file("extdata/Drought_data_PuertoRico.xlsx", package = "bwgtools")
+#   ## no sheet name
+#   expect_error(read_sheet(file = data, ondisk = TRUE),
+#                "c'mon give me a sheet name")
+#   ## existing sheet name, ondisk file
+#   expect_message(read_sheet(file = data, "leaf.waterdepths",
+#                             ondisk = TRUE),
+#                  "you downloaded that file already! reading from disk")
 
 
   # test_data <- suppressMessages(read_sheet("BWG Drought Experiment/raw data/Drought_data_Macae.xlsx", "leaf.waterdepths"))
