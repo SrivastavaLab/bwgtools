@@ -1,3 +1,5 @@
+## calculations of the percent decomposition in all bromeliads.
+
 
 #' Make physical data long
 #'
@@ -6,7 +8,6 @@
 #' @param physical_data physical data, as produced by \code{combine_tab()}
 #'
 #' @return data.frame
-#' @export
 #' @importFrom magrittr "%>%"
 physical_long <- function(physical_data){
   physical_data %>%
@@ -21,7 +22,6 @@ physical_long <- function(physical_data){
 #'
 #' @return adds column "loss"
 #' @importFrom magrittr "%>%"
-#' @export
 leaf_loss_sample <- function(long_phys_data){
   long_phys_data %>%
     tidyr::spread(time, mass) %>%
@@ -35,7 +35,6 @@ leaf_loss_sample <- function(long_phys_data){
 #'
 #' @return means and sample sizes for each species
 #' @importFrom magrittr "%>%"
-#' @export
 leaf_loss_mean <- function(leaf_loss_sample_data){
   leaf_loss_sample_data %>%
     dplyr::group_by(site, trt.name, site_brom.id, species)%>%
@@ -51,7 +50,6 @@ leaf_loss_mean <- function(leaf_loss_sample_data){
 #'
 #' @return a data.frame, one row per bromeliad
 #' @importFrom magrittr "%>%"
-#' @export
 decomp_responses <- function(leaf_loss_species){
   ## spread the species into columns
   sp_cols <- leaf_loss_species %>% # only samples with no values are NA because na.rm = TRUE
@@ -71,7 +69,7 @@ decomp_responses <- function(leaf_loss_species){
   dplyr::left_join(sp_cols, leaf_loss_overall, by = c("site", "trt.name", "site_brom.id"))
 }
 
-#' obtain decomposition data
+#' Obtain decomposition data
 #'
 #' @return data frame with 7 columns: site, trt.name, bromeliad.id, species1 decomposition, species2 decomposition, mean decomposition, and the number of species contained in that mean
 #' @export
