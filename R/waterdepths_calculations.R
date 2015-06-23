@@ -11,7 +11,7 @@ longwater <- function(df) {
     tidyr::separate(data_name, into = c("depth_word", "leaf",
                                         "watered_first","first")) %>%
     dplyr::select(-depth_word, -first) %>%
-    mutate(watered_first = ifelse(watered_first == "water", "yes", "no"))
+    dplyr::mutate(watered_first = ifelse(watered_first == "water", "yes", "no"))
 
   return(measures)
 }
@@ -44,6 +44,7 @@ group_or_summarize <- function(data, aggregate_leaves = FALSE){
 
   if (aggregate_leaves) {
     data %>%
+      dplyr::select(-leaf) %>%
       dplyr::group_by(site, watered_first, trt.name, site_brom.id, date) %>%
       dplyr::summarise(ndepth = sum(!is.na(depth)),
                 depth = mean(depth, na.rm = TRUE))
@@ -64,18 +65,20 @@ make_support_file <- function(allsites, phys){
   ## get the data
 
   start_finish <- allsites %>%
-    dplyr::select(site.name, start_block = start.water.addition, finish_block = last.day.sample)
+    dplyr::select(site.name,
+                  start_block = start.water.addition,
+                  finish_block = last.day.sample)
 
   which_block <- phys %>%
-    select(site, trt.name, temporal.block)
+    dplyr::select(site, trt.name, temporal.block)
 
-  support <- left_join(which_block, start_finish, by = c("site" = "site.name"))
+  support <- dplyr::left_join(which_block, start_finish, by = c("site" = "site.name"))
 
   block_days_start <- c("a" = 0, "b" = 1, "c" = 2)
   block_days_finish <- c("a" = 2, "b" = 1, "c" = 0)
 
   support %>%
-    mutate(start_block = start_block + lubridate::days(block_days_start[temporal.block]),
+    dplyr::mutate(start_block = start_block + lubridate::days(block_days_start[temporal.block]),
            finish_block = finish_block - lubridate::days(block_days_finish[temporal.block]))
 
 }
@@ -100,7 +103,7 @@ filter_long_water <- function(Data, rm_centre = TRUE){
     filter_centre_leaf(centre_filter = rm_centre) %>% ## add argument here
     dplyr::group_by(site, watered_first) %>%
     filter_naonly_groups %>%
-    ungroup
+    dplyr::ungroup(.)
 }
 
 
@@ -133,8 +136,10 @@ make_full_timeline <- function(filtered_water_data, sitedata, physdata){
   ## that spans from start_block and goes to finish_block
   simple_long %>%
     #filter(!is.na(finish_block)) %>%
-    dplyr::group_by(site_brom.id, site, trt.name, leaf, watered_first, temporal.block) %>%
-    dplyr::do(data_frame(date = seq(from = .$start_block,
+    dplyr::group_by(site_brom.id, site,
+                    trt.name, leaf, watered_first,
+                    temporal.block) %>%
+    dplyr::do(dplyr::data_frame(date = seq(from = .$start_block,
                              to = .$finish_block,
                              by = "days")))
 }
@@ -164,15 +169,39 @@ hydro_variables <- function(waterdata, sitedata, physicaldata,
                                    sitedata,
                                    physicaldata)
 
+  ## if aggregating leaves, remove from long_dates
+  ## otherwise they will be found in output
+  if (aggregate_leaves) {
+    long_dates <- long_dates %>%
+      dplyr::ungroup(.) %>%
+      dplyr::select(-leaf)
+  }
+
   ## combining the original data with data
   ## that has been "filled in" with fun
-  filtered_long_water %>%
+  filled_in <- filtered_long_water %>%
     ## filter out NA groups
     group_or_summarize(aggregate_leaves = aggregate_leaves) %>%
-    dplyr::left_join(long_dates, .) %>%
-    dplyr::arrange(site, date, trt.name, leaf) %>%
-    dplyr::group_by(site, trt.name, leaf) %>%
-    dplyr::do(water_summary_calc(.$depth))
+    dplyr::left_join(long_dates, .)
+
+  ## not everybody measured the centre! if we are keeping (not removing) the centre we need to filter out the NA groups again.
+  if (!rm_centre) {
+    filled_in <- filter_naonly_groups(filled_in)
+  }
+
+  ## if leaves have been aggregated, they are not around to
+  ## be used for grouping or arranging
+  if (aggregate_leaves) {
+    sorted_water <- filled_in %>%
+      dplyr::arrange(site, date, trt.name) %>%
+      dplyr::group_by(site, trt.name)
+  } else {
+    sorted_water <- filled_in %>%
+      dplyr::arrange(site, date, trt.name, leaf) %>%
+      dplyr::group_by(site, trt.name, leaf)
+  }
+
+    dplyr::do(sorted_water, water_summary_calc(.$depth))
 
 }
 
