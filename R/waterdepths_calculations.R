@@ -161,7 +161,8 @@ hydro_variables <- function(waterdata, sitedata, physicaldata,
 
 
   long_dates <- make_full_timeline(filtered_water_data = filtered_long_water,
-                                   sites, phys)
+                                   sitedata,
+                                   physicaldata)
 
   ## combining the original data with data
   ## that has been "filled in" with fun
