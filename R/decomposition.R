@@ -69,13 +69,20 @@ decomp_responses <- function(leaf_loss_species){
   dplyr::left_join(sp_cols, leaf_loss_overall, by = c("site", "trt.name", "site_brom.id"))
 }
 
-#' Obtain decomposition data
+#' Calculate decomposition rates for all sites
 #'
-#' @return data frame with 7 columns: site, trt.name, bromeliad.id, species1 decomposition, species2 decomposition, mean decomposition, and the number of species contained in that mean
+#' Given the data as presented in the "bromeliad.physical"
+#' tab, calculates the percent loss of detritus in each bromeliad.
+#'
+#' @param bromeliad_physical contents of the "bromeliad.physical" tab.#'
+#' @return data frame with 7 columns: site, trt.name,
+#'   bromeliad.id, species1 decomposition, species2
+#'   decomposition, mean decomposition, and the number of
+#'   species contained in that mean
 #' @export
 #' @importFrom magrittr "%>%"
-get_decomp <- function(){
-  combine_tab(sheetname = "bromeliad.physical") %>%
+get_decomp <- function(bromeliad_physical){
+  bromeliad_physical %>%
     physical_long %>%
     leaf_loss_sample %>%
     leaf_loss_mean %>%

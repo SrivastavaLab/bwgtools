@@ -2,14 +2,21 @@
 % Please edit documentation in R/decomposition.R
 \name{get_decomp}
 \alias{get_decomp}
-\title{Obtain decomposition data}
+\title{Calculate decomposition rates for all sites}
 \usage{
-get_decomp()
+get_decomp(bromeliad_physical)
+}
+\arguments{
+\item{bromeliad_physical}{contents of the "bromeliad.physical" tab.#'}
 }
 \value{
-data frame with 7 columns: site, trt.name, bromeliad.id, species1 decomposition, species2 decomposition, mean decomposition, and the number of species contained in that mean
+data frame with 7 columns: site, trt.name,
+  bromeliad.id, species1 decomposition, species2
+  decomposition, mean decomposition, and the number of
+  species contained in that mean
 }
 \description{
-Obtain decomposition data
+Given the data as presented in the "bromeliad.physical"
+tab, calculates the percent loss of detritus in each bromeliad.
 }
 
