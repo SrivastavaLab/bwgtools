@@ -76,7 +76,7 @@ for a single site (for example, Macae), use the function
     ## [1] "fetching from dropbox"
 
     ## 
-    ##  /tmp/RtmpNrQUxx/Drought_data_Macae.xlsx on disk 311.868 KB
+    ##  /tmp/RtmpwzUaR4/Drought_data_Macae.xlsx on disk 311.868 KB
 
     knitr::kable(head(macae))
 
