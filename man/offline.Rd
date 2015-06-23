@@ -4,12 +4,12 @@
 \alias{offline}
 \title{Get a file while offline}
 \usage{
-offline(sitename, default.path = "../../../Dropbox/")
+offline(sitename, default.path = "../../")
 }
 \arguments{
 \item{sitename}{Name of site you wish to read}
 
-\item{default.path}{the default path to your Dropbox folder. defaults to Andrew's}
+\item{default.path}{the default path to your Dropbox folder. Defaults to one that works within a paper folder, assuming you have not rearranged your folders within dropbox.}
 }
 \value{
 a correct relative path

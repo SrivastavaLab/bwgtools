@@ -122,12 +122,12 @@ make_default_path <- function(.sitename){
 #' If you don't have access to dropbox, you can still read files from your local dropbox folder. This function creates the path to the files.
 #'
 #' @param sitename Name of site you wish to read
-#' @param default.path the default path to your Dropbox folder. defaults to Andrew's
+#' @param default.path the default path to your Dropbox folder. Defaults to one that works within a paper folder, assuming you have not rearranged your folders within dropbox.
 #'
 #' @return a correct relative path
 #' @importFrom magrittr "%>%"
 #' @export
-offline <- function(sitename, default.path = "../../../Dropbox/"){
+offline <- function(sitename, default.path = "../../"){
 
   Site <- match.arg(sitename, c("Argentina","Cardoso", "Colombia",
                                         "French_Guiana", "Macae", "PuertoRico",
