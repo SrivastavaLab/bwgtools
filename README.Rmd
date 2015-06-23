@@ -174,21 +174,21 @@ kable(head(func_groups))
 ```
 
 This is a convenient format for plotting:
-```{r}
+```{r functional_abd}
 library(ggplot2)
 ## functional group abundance
 func_groups %>%
   ggplot(aes(x = as.factor(func.group), y = total_abundance)) +
   geom_point(position = position_jitter(width = 0.25), alpha = 0.5) +
   stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.6) +
-  facet_wrap(~site, ncol = 1, scales = "free_y") +
-  ggtitle("functional group abundance")
+  facet_wrap(~site, scales = "free_y") +
+  ggtitle("Functional group abundance")
 
 ```
 
 To summarize by trophic level group, simply switch `~func.group` to `~pred_prey`:
 
-```{r}
+```{r trophic_abd}
 predprey <- sum_func_groups(invert_traits,
                                grps = list(~site,
                                            ~site_brom.id,
@@ -198,8 +198,8 @@ predprey %>%
   ggplot(aes(x = as.factor(pred_prey), y = total_abundance)) +
   geom_point(position = position_jitter(width = 0.25), alpha = 0.5) +
   stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.6) +
-  facet_wrap(~site, ncol = 1, scales = "free_y") +
-  ggtitle("functional group abundance")
+  facet_wrap(~site, scales = "free_y") +
+  ggtitle("Trophic level abundance")
 ```
 
 
@@ -214,7 +214,6 @@ We have daily water measurements for some sites, and from these we will be able 
 ```{r message=FALSE}
 leafwater <- c("Argentina", "French_Guiana", "Colombia",
                "Macae", "PuertoRico","CostaRica") %>%
-  #sapply(offline) %>%
   combine_tab("leaf.waterdepths")
 ```
 
@@ -223,12 +222,10 @@ We also need two other tabs: `site.info` and `bromeliad.physical`. The former st
 ```{r message=FALSE}
 sites <- c("Argentina", "French_Guiana", "Colombia",
            "Macae", "PuertoRico","CostaRica") %>%
-  # sapply(offline) %>%
   combine_tab("site.info")
 
 phys <- c("Argentina", "French_Guiana", "Colombia",
           "Macae", "PuertoRico","CostaRica") %>%
-  #sapply(offline) %>%
   combine_tab("bromeliad.physical")
 ```
 
@@ -245,7 +242,7 @@ kable(head(hydro))
 This function should "just work". As you can see, it is performing one check (removing any groups which have all NA records) and performs two joins (to correct the errors discussed above).
 
 It seems that the centre leaf is not like the others. Therefore by default the fucntion removes it. If you want it anyway, set `rm_centre = TRUE` (Note the Canadian spelling).
-```{r eval=FALSE}
+```{r }
 hydro2 <- hydro_variables(waterdata = leafwater,
                          sitedata = sites,
                          physicaldata = phys, rm_centre = FALSE)
@@ -254,7 +251,7 @@ kable(head(hydro2))
 
 The default behaviour is to calculate all these metrics at the level of the leaf well, the same scale at which the measurements were taken. If you want you can obtain these same calculations AFTER first averaging water depths across all leaves of a plant, within each day. That is, we can make these same calculations at the scale of the bromeliad:
 
-```{r eval=FALSE}
+```{r }
 hydro3 <- hydro_variables(waterdata = leafwater,
                          sitedata = sites,
                          physicaldata = phys, aggregate_leaves = TRUE)

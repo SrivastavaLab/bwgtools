@@ -76,7 +76,7 @@ for a single site (for example, Macae), use the function
     ## [1] "fetching from dropbox"
 
     ## 
-    ##  /tmp/RtmpwzUaR4/Drought_data_Macae.xlsx on disk 311.868 KB
+    ##  /tmp/Rtmpcs0nbf/Drought_data_Macae.xlsx on disk 311.868 KB
 
     knitr::kable(head(macae))
 
@@ -1882,10 +1882,10 @@ This is a convenient format for plotting:
       ggplot(aes(x = as.factor(func.group), y = total_abundance)) +
       geom_point(position = position_jitter(width = 0.25), alpha = 0.5) +
       stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.6) +
-      facet_wrap(~site, ncol = 1, scales = "free_y") +
-      ggtitle("functional group abundance")
+      facet_wrap(~site, scales = "free_y") +
+      ggtitle("Functional group abundance")
 
-![](README_files/figure-markdown_strict/unnamed-chunk-11-1.png)
+![](README_files/figure-markdown_strict/functional_abd-1.png)
 
 To summarize by trophic level group, simply switch `~func.group` to
 `~pred_prey`:
@@ -1899,10 +1899,10 @@ To summarize by trophic level group, simply switch `~func.group` to
       ggplot(aes(x = as.factor(pred_prey), y = total_abundance)) +
       geom_point(position = position_jitter(width = 0.25), alpha = 0.5) +
       stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.6) +
-      facet_wrap(~site, ncol = 1, scales = "free_y") +
-      ggtitle("functional group abundance")
+      facet_wrap(~site, scales = "free_y") +
+      ggtitle("Trophic level abundance")
 
-![](README_files/figure-markdown_strict/unnamed-chunk-12-1.png)
+![](README_files/figure-markdown_strict/trophic_abd-1.png)
 
 Hydrology -- based on rainfall schedule
 ---------------------------------------
@@ -1921,7 +1921,6 @@ First, we obtain the `leaf.waterdepths` data in the usual way:
 
     leafwater <- c("Argentina", "French_Guiana", "Colombia",
                    "Macae", "PuertoRico","CostaRica") %>%
-      #sapply(offline) %>%
       combine_tab("leaf.waterdepths")
 
 We also need two other tabs: `site.info` and `bromeliad.physical`. The
@@ -1935,12 +1934,10 @@ days.
 
     sites <- c("Argentina", "French_Guiana", "Colombia",
                "Macae", "PuertoRico","CostaRica") %>%
-      # sapply(offline) %>%
       combine_tab("site.info")
 
     phys <- c("Argentina", "French_Guiana", "Colombia",
               "Macae", "PuertoRico","CostaRica") %>%
-      #sapply(offline) %>%
       combine_tab("bromeliad.physical")
 
 We can obtain all the hydro variables with one compound function:
@@ -2114,7 +2111,160 @@ default the fucntion removes it. If you want it anyway, set
     hydro2 <- hydro_variables(waterdata = leafwater,
                              sitedata = sites,
                              physicaldata = phys, rm_centre = FALSE)
+
+    ## Removing all NA groups: data is grouped by site, watered_first
+    ## Joining by: c("site", "trt.name")
+    ## Joining by: c("site_brom.id", "site", "trt.name", "leaf", "watered_first", "date")
+    ## Removing all NA groups: data is grouped by site_brom.id, site, trt.name, leaf, watered_first, temporal.block
+
     kable(head(hydro2))
+
+<table>
+<thead>
+<tr class="header">
+<th align="left">site</th>
+<th align="left">trt.name</th>
+<th align="left">leaf</th>
+<th align="right">len.depth</th>
+<th align="right">n.depth</th>
+<th align="right">max.depth</th>
+<th align="right">min.depth</th>
+<th align="right">mean.depth</th>
+<th align="right">var.depth</th>
+<th align="right">sd.depth</th>
+<th align="right">net_fluct</th>
+<th align="right">total_fluct</th>
+<th align="right">cv.depth</th>
+<th align="right">amplitude</th>
+<th align="right">wetness</th>
+<th align="right">prop.overflow.days</th>
+<th align="right">prop.driedout.days</th>
+<th align="left">time.since.minimum</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">argentina</td>
+<td align="left">mu0.1k0.5</td>
+<td align="left">centre</td>
+<td align="right">66</td>
+<td align="right">4</td>
+<td align="right">102.50</td>
+<td align="right">70.70</td>
+<td align="right">82.33750</td>
+<td align="right">209.5990</td>
+<td align="right">14.47753</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">17.58316</td>
+<td align="right">31.80</td>
+<td align="right">0.8032927</td>
+<td align="right">0.0151515</td>
+<td align="right">0.0000000</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">argentina</td>
+<td align="left">mu0.1k0.5</td>
+<td align="left">leafa</td>
+<td align="right">66</td>
+<td align="right">4</td>
+<td align="right">64.55</td>
+<td align="right">0.00</td>
+<td align="right">32.67500</td>
+<td align="right">934.6975</td>
+<td align="right">30.57282</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">93.56641</td>
+<td align="right">64.55</td>
+<td align="right">0.5061967</td>
+<td align="right">0.0151515</td>
+<td align="right">0.0151515</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">argentina</td>
+<td align="left">mu0.1k0.5</td>
+<td align="left">leafb</td>
+<td align="right">66</td>
+<td align="right">4</td>
+<td align="right">42.75</td>
+<td align="right">0.00</td>
+<td align="right">15.10000</td>
+<td align="right">409.0150</td>
+<td align="right">20.22412</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">133.93456</td>
+<td align="right">42.75</td>
+<td align="right">0.3532164</td>
+<td align="right">0.0151515</td>
+<td align="right">0.0303030</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">argentina</td>
+<td align="left">mu0.1k1</td>
+<td align="left">centre</td>
+<td align="right">66</td>
+<td align="right">6</td>
+<td align="right">118.20</td>
+<td align="right">87.05</td>
+<td align="right">106.38333</td>
+<td align="right">121.2147</td>
+<td align="right">11.00975</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">10.34913</td>
+<td align="right">31.15</td>
+<td align="right">0.9000282</td>
+<td align="right">0.0454545</td>
+<td align="right">0.0000000</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">argentina</td>
+<td align="left">mu0.1k1</td>
+<td align="left">leafa</td>
+<td align="right">66</td>
+<td align="right">6</td>
+<td align="right">55.50</td>
+<td align="right">0.00</td>
+<td align="right">13.65000</td>
+<td align="right">465.8800</td>
+<td align="right">21.58425</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">158.12640</td>
+<td align="right">55.50</td>
+<td align="right">0.2459459</td>
+<td align="right">0.0151515</td>
+<td align="right">0.0454545</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">argentina</td>
+<td align="left">mu0.1k1</td>
+<td align="left">leafb</td>
+<td align="right">66</td>
+<td align="right">6</td>
+<td align="right">93.70</td>
+<td align="right">18.75</td>
+<td align="right">61.08333</td>
+<td align="right">735.9147</td>
+<td align="right">27.12775</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">44.41105</td>
+<td align="right">74.95</td>
+<td align="right">0.6519032</td>
+<td align="right">0.0303030</td>
+<td align="right">0.0000000</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
 
 The default behaviour is to calculate all these metrics at the level of
 the leaf well, the same scale at which the measurements were taken. If
@@ -2125,7 +2275,152 @@ can make these same calculations at the scale of the bromeliad:
     hydro3 <- hydro_variables(waterdata = leafwater,
                              sitedata = sites,
                              physicaldata = phys, aggregate_leaves = TRUE)
+
+    ## Removing all NA groups: data is grouped by site, watered_first
+    ## Joining by: c("site", "trt.name")
+    ## Joining by: c("site_brom.id", "site", "trt.name", "watered_first", "date")
+
     kable(head(hydro3))
+
+<table>
+<thead>
+<tr class="header">
+<th align="left">site</th>
+<th align="left">trt.name</th>
+<th align="right">len.depth</th>
+<th align="right">n.depth</th>
+<th align="right">max.depth</th>
+<th align="right">min.depth</th>
+<th align="right">mean.depth</th>
+<th align="right">var.depth</th>
+<th align="right">sd.depth</th>
+<th align="right">net_fluct</th>
+<th align="right">total_fluct</th>
+<th align="right">cv.depth</th>
+<th align="right">amplitude</th>
+<th align="right">wetness</th>
+<th align="right">prop.overflow.days</th>
+<th align="right">prop.driedout.days</th>
+<th align="left">time.since.minimum</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">argentina</td>
+<td align="left">mu0.1k0.5</td>
+<td align="right">132</td>
+<td align="right">8</td>
+<td align="right">53.650</td>
+<td align="right">0.000</td>
+<td align="right">23.88750</td>
+<td align="right">435.7680</td>
+<td align="right">20.87506</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">87.38904</td>
+<td align="right">53.650</td>
+<td align="right">0.4452470</td>
+<td align="right">0.0151515</td>
+<td align="right">0.0151515</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">argentina</td>
+<td align="left">mu0.1k1</td>
+<td align="right">132</td>
+<td align="right">12</td>
+<td align="right">74.600</td>
+<td align="right">9.375</td>
+<td align="right">37.36667</td>
+<td align="right">433.9820</td>
+<td align="right">20.83223</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">55.75085</td>
+<td align="right">65.225</td>
+<td align="right">0.5008937</td>
+<td align="right">0.0151515</td>
+<td align="right">0.0000000</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">argentina</td>
+<td align="left">mu0.1k2</td>
+<td align="right">132</td>
+<td align="right">20</td>
+<td align="right">54.575</td>
+<td align="right">0.000</td>
+<td align="right">22.72000</td>
+<td align="right">560.7702</td>
+<td align="right">23.68059</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">104.22794</td>
+<td align="right">54.575</td>
+<td align="right">0.4163078</td>
+<td align="right">0.0454545</td>
+<td align="right">0.0757576</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">argentina</td>
+<td align="left">mu0.2k0.5</td>
+<td align="right">132</td>
+<td align="right">8</td>
+<td align="right">57.625</td>
+<td align="right">0.000</td>
+<td align="right">14.40625</td>
+<td align="right">711.5658</td>
+<td align="right">26.67519</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">185.16402</td>
+<td align="right">57.625</td>
+<td align="right">0.2500000</td>
+<td align="right">0.0151515</td>
+<td align="right">0.0454545</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">argentina</td>
+<td align="left">mu0.2k1</td>
+<td align="right">132</td>
+<td align="right">14</td>
+<td align="right">62.150</td>
+<td align="right">0.000</td>
+<td align="right">27.78236</td>
+<td align="right">681.6890</td>
+<td align="right">26.10917</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">93.97753</td>
+<td align="right">62.150</td>
+<td align="right">0.4470210</td>
+<td align="right">0.0303030</td>
+<td align="right">0.0454545</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">argentina</td>
+<td align="left">mu0.2k2</td>
+<td align="right">132</td>
+<td align="right">22</td>
+<td align="right">65.500</td>
+<td align="right">0.000</td>
+<td align="right">38.94705</td>
+<td align="right">349.9938</td>
+<td align="right">18.70812</td>
+<td align="right">3.45</td>
+<td align="right">3.45</td>
+<td align="right">48.03477</td>
+<td align="right">65.500</td>
+<td align="right">0.5946114</td>
+<td align="right">0.0303030</td>
+<td align="right">0.0151515</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
 
 ### Licence
 
