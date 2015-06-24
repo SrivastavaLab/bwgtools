@@ -4,7 +4,6 @@
 \alias{get_bwg_names}
 \title{obtain the full name data from github}
 \usage{
-
   get_bwg_names(file = "https://raw.githubusercontent.com/SrivastavaLab/bwg_names/master/data/Distributions_organisms_full.tsv",
   chars = 23, nums = 54)
 }
@@ -18,5 +17,9 @@
 \description{
 Gets the complete insect taxonomic data from github. This is good
 because it will always be accurate.
+Just type in \code{get_bwg_names()} in R's Console and you will get all the taxonomic information.
 }
 
+\value{
+A dataframe containing all information as in the excel file in Dropbox: "Distribution organisms_correct2015"
+}
