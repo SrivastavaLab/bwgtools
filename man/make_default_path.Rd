@@ -4,7 +4,8 @@
 \alias{make_default_path}
 \title{Make default dropbox path}
 \usage{
-make_default_path(.sitename)
+make_default_path(.sitename = c("Argentina", "Cardoso", "Colombia", "French_Guiana",
+  "Macae", "PuertoRico", "CostaRica"))
 }
 \arguments{
 \item{.sitename}{quoted site name}
