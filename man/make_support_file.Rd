@@ -17,4 +17,12 @@ data.frame containing support file: site.name, trt.name, temporal.block, start_b
 \description{
 Make the support file
 }
+\examples{
+sites <- combine_tab(c("Argentina", "French_Guiana"),"site.info")
 
+phys <- combine_tab(c("Argentina", "French_Guiana"),"bromeliad.physical")
+
+sup_file <- make_support_file(sites,phys)
+
+sup_file
+}
