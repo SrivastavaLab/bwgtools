@@ -7,9 +7,11 @@
 from_start(depthdata)
 }
 \arguments{
-\item{df}{the leaf.waterdepths data.frame}
+\item{df}{a dataframe containing \code{sheetname="leaf.waterdepths"}}
 }
 \description{
-calculate the difference in days to the start of the experiment
+Calculate the difference in days to the start of the experiment
 }
-
+\value{
+A dataframe combining the \code{date} and the \code{bromeliad.id}, plus a new column (\code{nday}) for the number of days since the begining of the experiment
+}
