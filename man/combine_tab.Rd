@@ -5,7 +5,7 @@
 \title{Obtain data for all sites}
 \usage{
 combine_tab(.sites = c("Argentina", "Cardoso", "Colombia", "French_Guiana",
-  "Macae", "PuertoRico", "CostaRica"), sheetname)
+  "Macae", "PuertoRico", "CostaRica"), sheetname="leaf.waterdepths", "bromeliad.physical", "bromeliad.final.inverts", "site.info", "site.weather", "bromeliad.initial.inverts", "bromeliad.terrestrial", "terrestrial.taxa")
 }
 \arguments{
 \item{.sites}{the sites you want. defaults to all of them}
