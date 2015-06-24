@@ -7,10 +7,12 @@
 #'
 #' This function reads data from the same tab for all the sites (via \code{get_all_sites()}) , then combines thme with \code{dplyr::rbind_all()}
 #'
-#' @param sheetname The name of the sheet you'd like to have
+#' @param sheetname The name of the sheet you'd like to have (\code{"leaf.waterdepths"}, \code{"bromeliad.physical"}, \code{"bromeliad.final.inverts"}, \code{"site.info"}, \code{"site.weather"}, \code{"bromeliad.initial.inverts"}, \code{"bromeliad.terrestrial"}, \code{"terrestrial.taxa"}).
 #' @param .sites The sites you want. defaults to all of them
 #'
 #' @return data.frame of all bromeliad.physical tabs
+#' @examples
+#' combine_tab("French_Guiana","site.info")
 #' @export
 combine_tab <- function(.sites =  c("Argentina","Cardoso", "Colombia",
                                     "French_Guiana", "Macae", "PuertoRico",
