@@ -5,10 +5,7 @@ context("reading data")
 
 test_that("data is read correctly", {
   ## no sheet name
-  expect_error(read_sheet(file = data, ondisk = TRUE),
-               "c'mon give me a sheet name")
-  ## existing sheet name, ondisk file
-
+  options("httr_oauth_cache" = TRUE)
 
   data <- suppressMessages(read_sheet("BWG Drought Experiment/raw data/Drought_data_Macae.xlsx", "leaf.waterdepths"))
   ## return value: a tbl_df
