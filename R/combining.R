@@ -8,7 +8,7 @@
 #' This function reads data from the same tab for all the sites (via \code{get_all_sites()}) , then combines thme with \code{dplyr::rbind_all()}
 #'
 #' @param sheetname The name of the sheet you'd like to have
-#' @param .sites the sites you want. defaults to all of them
+#' @param .sites The sites you want. defaults to all of them
 #'
 #' @return data.frame of all bromeliad.physical tabs
 #' @export
