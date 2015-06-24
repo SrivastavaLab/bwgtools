@@ -10,6 +10,6 @@ firstday(df)
 \item{df}{the dataframe of water depths}
 }
 \description{
-We want to get the first date for each bromeliad
+We want to get the first date for each bromeliad. This function only works if the dataframe contains the \code{date} and the \code{bromeliad.id} columns (ex: \code{sheetname="leaf.waterdepth"}).
 }
 
