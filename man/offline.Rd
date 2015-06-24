@@ -4,10 +4,11 @@
 \alias{offline}
 \title{Get a file while offline}
 \usage{
-offline(sitename, default.path = "../../")
+offline(sitename = c("Argentina", "Cardoso", "Colombia", "French_Guiana",
+  "Macae", "PuertoRico", "CostaRica"), default.path = "../../")
 }
 \arguments{
-\item{sitename}{Name of site you wish to read}
+\item{sitename}{Name of a single site you wish to read}
 
 \item{default.path}{the default path to your Dropbox folder. Defaults to one that works within a paper folder, assuming you have not rearranged your folders within dropbox.}
 }
