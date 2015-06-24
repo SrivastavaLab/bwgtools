@@ -24,4 +24,15 @@ the hydro variables
 \description{
 Calculate the hydrological variables
 }
+\examples{
+leafwater <- combine_tab(c("Argentina", "French_Guiana"),"leaf.waterdepths")
 
+sites <- combine_tab(c("Argentina", "French_Guiana"),"site.info")
+
+phys <- combine_tab(c("Argentina", "French_Guiana"),"bromeliad.physical")
+
+hydro <- hydro_variables(waterdata = leafwater,
+                         sitedata = sites,
+                         physicaldata = phys)
+hydro
+}
