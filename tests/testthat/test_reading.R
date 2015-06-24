@@ -4,24 +4,19 @@ library(bwgtools)
 context("reading data")
 
 test_that("data is read correctly", {
-
-#   data <- system.file("extdata/Drought_data_PuertoRico.xlsx", package = "bwgtools")
-#   ## no sheet name
-#   expect_error(read_sheet(file = data, ondisk = TRUE),
-#                "c'mon give me a sheet name")
-#   ## existing sheet name, ondisk file
-#   expect_message(read_sheet(file = data, "leaf.waterdepths",
-#                             ondisk = TRUE),
-#                  "you downloaded that file already! reading from disk")
+  ## no sheet name
+  expect_error(read_sheet(file = data, ondisk = TRUE),
+               "c'mon give me a sheet name")
+  ## existing sheet name, ondisk file
 
 
-  # test_data <- suppressMessages(read_sheet("BWG Drought Experiment/raw data/Drought_data_Macae.xlsx", "leaf.waterdepths"))
+  data <- suppressMessages(read_sheet("BWG Drought Experiment/raw data/Drought_data_Macae.xlsx", "leaf.waterdepths"))
   ## return value: a tbl_df
   ## with correct columns
   stereotype <- dplyr::data_frame(a = 1)
 
   ## LEAF.WATERDEPTHS --------
-  testdat <- suppressMessages(read_sheet(file = data, "leaf.waterdepths", ondisk = TRUE))
+  testdat <- suppressMessages(read_sheet("BWG Drought Experiment/raw data/Drought_data_Macae.xlsx", "leaf.waterdepths"))
   expect_equal(class(testdat), class(stereotype))
   testdat_classes <- unlist(lapply(testdat, class))
   names(testdat_classes) <- NULL
@@ -30,7 +25,7 @@ test_that("data is read correctly", {
   ))
 
   ## BROMELIAD.PHYSICAL --------
-  testdat <- suppressMessages(read_sheet(file = data, "bromeliad.physical", ondisk = TRUE))
+  testdat <- suppressMessages(read_sheet(file = "BWG Drought Experiment/raw data/Drought_data_Macae.xlsx", "bromeliad.physical"))
   expect_equal(class(testdat), class(stereotype))
   testdat_classes <- unlist(lapply(testdat, class))
   names(testdat_classes) <- NULL
@@ -44,12 +39,12 @@ test_that("data is read correctly", {
                                   "numeric", "numeric", "numeric", "numeric"))
 
   # BROMELIAD.FINAL.INVERTS -----------------------------
-  testdat <- suppressMessages(read_sheet(file = data, "bromeliad.final.inverts", ondisk = TRUE))
+  testdat <- suppressMessages(read_sheet("BWG Drought Experiment/raw data/Drought_data_Macae.xlsx", "bromeliad.final.inverts"))
   expect_equal(class(testdat), class(stereotype))
-  expect_message(read_sheet(file = data, "bromeliad.final.inverts", ondisk = TRUE), "reading with NULL coltypes!")
+  expect_message(read_sheet("BWG Drought Experiment/raw data/Drought_data_Macae.xlsx", "bromeliad.final.inverts"), "reading with NULL coltypes!")
 
   ## SITE.INFO -----------------
-  testdat <- suppressMessages(read_sheet(file = data, "site.info", ondisk = TRUE))
+  testdat <- suppressMessages(read_sheet("BWG Drought Experiment/raw data/Drought_data_Macae.xlsx", "site.info"))
   expect_equal(class(testdat), class(stereotype))
   testdat_classes <- unlist(lapply(testdat, class))
   names(testdat_classes) <- NULL
@@ -61,7 +56,7 @@ test_that("data is read correctly", {
 
 
   ## SITE.WEATHER ----------
-  testdat <- suppressMessages(read_sheet(file = data, "site.weather", ondisk = TRUE))
+  testdat <- suppressMessages(read_sheet("BWG Drought Experiment/raw data/Drought_data_Macae.xlsx", "site.weather"))
   expect_equal(class(testdat), class(stereotype))
   testdat_classes <- unlist(lapply(testdat, class))
   names(testdat_classes) <- NULL
@@ -80,7 +75,7 @@ test_that("helper functions work correctly", {
   expect_error(offline("foo"))
 
   ## offline creates a correct path
-  expect_equal(offline("Macae"), "../../../Dropbox/BWG Drought Experiment/raw data/Drought_data_Macae.xlsx")
+  expect_equal(offline("Macae"), "../../BWG Drought Experiment/raw data/Drought_data_Macae.xlsx")
 
   ## brom_id_maker errors
   testdf <- dplyr::data_frame(site = c("a", "a"), bromeliad.id = 1:2)
