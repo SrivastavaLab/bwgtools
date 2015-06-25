@@ -7,7 +7,9 @@
 #' @seealso \url{https://github.com/SrivastavaLab/bwgtools/blob/master/README.Rmd}
 #' 
 #' @section Accessing data:
-#' \code{\link{offline}}
+#' \itemize{
+#' \item \code{\link{offline}}
+#' }
 #' 
 #' @section Combining data:
 #' \itemize{
@@ -30,8 +32,9 @@
 #' }
 #' 
 #' @section Analyzing data:
-#' \code{\link{make_rlq}}
-#' 
+#' \itemize{
+#' \item \code{\link{make_rlq}}
+#' }
 #' @docType package
 #' @name bwgtools
 NULL

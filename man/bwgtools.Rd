@@ -11,7 +11,9 @@ Accessing data, Combining data, Calulating metrics, and Analyzing data.
 }
 \section{Accessing data}{
 
-\code{\link{offline}}
+\itemize{
+\item \code{\link{offline}}
+}
 }
 
 \section{Combining data}{
@@ -40,7 +42,9 @@ Accessing data, Combining data, Calulating metrics, and Analyzing data.
 
 \section{Analyzing data}{
 
-\code{\link{make_rlq}}
+\itemize{
+\item \code{\link{make_rlq}}
+}
 }
 \seealso{
 \url{https://github.com/SrivastavaLab/bwgtools/blob/master/README.Rmd}
