@@ -7,7 +7,9 @@
 read_site_sheet(sitename, sheetname = NULL, ...)
 }
 \arguments{
-\item{sheetname}{Either the name of the site you want to read data from, or a path to where the excel files are on your local computer (for offline work). Examples of sheetnames: \code{"leaf.waterdepths"}, \code{"bromeliad.physical"}, \code{"bromeliad.final.inverts"}, \code{"site.info"}, \code{"site.weather"}, \code{"bromeliad.initial.inverts"}, \code{"bromeliad.terrestrial"}, \code{"terrestrial.taxa"}}
+\item{sitename}{The name of the site you want to read data from, or a path to where the excel files are on your local computer (for offline work):\code{"Argentina"}, \code{"Cardoso"}, \code{"Colombia"}, \code{"French_Guiana"}, \code{"Macae"}, \code{"PuertoRico"}, \code{"CostaRica"}}
+
+\item{sheetname}{The name of the sheetname you want: \code{"leaf.waterdepths"}, \code{"bromeliad.physical"}, \code{"bromeliad.final.inverts"}, \code{"site.info"}, \code{"site.weather"}, \code{"bromeliad.initial.inverts"}, \code{"bromeliad.terrestrial"}, \code{"terrestrial.taxa"}}
 
 \item{file}{The file name to fetch}
 
