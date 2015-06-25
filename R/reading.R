@@ -127,9 +127,10 @@ make_default_path <- function(.sitename){
 #'
 #' If you don't have access to dropbox, you can still read files from your local dropbox folder. This function creates the path to the files.
 #'
-#' @param sitename Name of site you wish to read
-#' @param default.path the default path to your Dropbox folder. Defaults to one that works within a paper folder, assuming you have not rearranged your folders within dropbox.
-#'
+#' @param sitename Name of a single site you wish to read. It could be either: (\code{"Argentina"}, \code{"Cardoso"}, \code{"Colombia"}, \code{"French_Guiana"},\code{"Macae"}, \code{"PuertoRico"}, \code{"CostaRica"})
+#' @param default.path The default path to your Dropbox folder. Defaults to one that works within a paper folder, assuming you have not rearranged your folders within dropbox.
+#' @examples 
+#' offline("Colombia")
 #' @return a correct relative path
 #' @importFrom magrittr "%>%"
 #' @export
