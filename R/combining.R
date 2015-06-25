@@ -143,7 +143,38 @@ merge_func <- function(insect_data, trait_data){
 #'
 #' @param merged_data data formed by merging insect data to trait data
 #' @param grps using the formula, indicate the grouping factors required
-#'
+#' @examples 
+#' invert_data <- combine_tab(c("Argentina", "French_Guiana", "Colombia","Macae", "PuertoRico","CostaRica"),"bromeliad.final.inverts")
+#' bwg_names <- get_bwg_names()
+#' invert_traits <- merge_func(invert_data, bwg_names)
+#' # Functional Groups
+#' func_groups <- sum_func_groups(invert_traits,
+#'                               grps = list(~site,
+#'                                           ~site_brom.id,
+#'                                           ~func.group))
+#' func_groups
+#' library(ggplot2) #require the 'ggplot2' package
+#' ## plot by functional group abundance
+#' func_groups %>%
+#'  ggplot(aes(x = as.factor(func.group), y = total_abundance)) +
+#'  geom_point(position = position_jitter(width = 0.25), alpha = 0.5) +
+#'  stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.6) +
+#'  facet_wrap(~site, scales = "free_y") +
+#'  ggtitle("Functional group abundance")
+#' # Trophic level
+#' # To summarize by trophic level group, simply switch \code{~func.group} to \code{~pred_prey}:
+#' predprey <- sum_func_groups(invert_traits,
+#'                          grps = list(~site,
+#'                                      ~site_brom.id,
+#'                                      ~pred_prey))
+#' predprey
+#' ## plot by trophic level abundance
+#' predprey %>%
+#'  ggplot(aes(x = as.factor(pred_prey), y = total_abundance)) +
+#'  geom_point(position = position_jitter(width = 0.25), alpha = 0.5) +
+#'  stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.6) +
+#'  facet_wrap(~site, scales = "free_y") +
+#'  ggtitle("Trophic level abundance")
 #' @return summarized data. NOTE that this data will be grouped!
 #' @importFrom magrittr "%>%"
 #' @export
