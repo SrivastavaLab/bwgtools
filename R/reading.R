@@ -53,10 +53,12 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE,
 
 #' read in a sheet from all sites
 #'
-#' this function reads all the sheets in an excel book on dropbox
-#' @param file the file name to fetch
-#' @param sheetname Either the name of the site you want to read data from, or a path to where the excel files are on your local computer (for offline work)
+#' This function reads all the sheets in an excel book on dropbox
+#' @param file The file name to fetch
+#' @param sheetname Either the name of the site you want to read data from, or a path to where the excel files are on your local computer (for offline work). Examples of sheetnames: \code{"leaf.waterdepths"}, \code{"bromeliad.physical"}, \code{"bromeliad.final.inverts"}, \code{"site.info"}, \code{"site.weather"}, \code{"bromeliad.initial.inverts"}, \code{"bromeliad.terrestrial"}, \code{"terrestrial.taxa"}
 #' @param OnDisk Are you reading from a local copy or Dropbox? defaults to FALSE
+#' @examples 
+#' macae <- read_site_sheet(("Macae"), "leaf.waterdepths")
 #' @export
 read_site_sheet <- function(sitename, sheetname = NULL, ...){
   is_path <- file.exists(sitename)
