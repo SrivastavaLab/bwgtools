@@ -151,8 +151,15 @@ make_full_timeline <- function(filtered_water_data, sitedata, physdata){
 #' @param physicaldata the bromeliad.physical
 #' @param rm_centre remove centre? defaults to TRUE
 #' @param aggregate_leaves aggregate leaves? defaults to FALSE
-#'
-#' @return the hydro variables
+#' @examples 
+#' leafwater <- combine_tab(c("Argentina", "French_Guiana"),"leaf.waterdepths")
+#' sites <- combine_tab(c("Argentina", "French_Guiana"),"site.info")
+#' phys <- combine_tab(c("Argentina", "French_Guiana"),"bromeliad.physical")
+#' hydro <- hydro_variables(waterdata = leafwater,
+#'                           sitedata = sites,
+#'                       physicaldata = phys)
+#' hydro
+#' @return The hydrological variables
 #' @export
 #' @importFrom magrittr "%>%"
 hydro_variables <- function(waterdata, sitedata, physicaldata,
