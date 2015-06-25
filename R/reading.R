@@ -85,10 +85,15 @@ get_all_sites <- function(sites = c("Argentina","Cardoso", "Colombia",
 #' obtain the full name data from github
 #'
 #' Gets the complete insect taxonomic data from github. This is good
-#' because it will always be accurate.
+#' because it will always be accurate. 
+#' Just type in \code{get_bwg_names()} in R's Console and you will get all the taxonomic information (among other things).
 #' @param file the location of the file. defaults to the internet
 #' @param chars the number of character columns. defaults to 21
 #' @param nums the number of numeric columns. defaults to 54
+#' @return A dataframe containing all information as in the excel file in Dropbox: "Distribution organisms_correct2015"
+#' @example 
+#' taxo_info <- get_bwg_names()
+#' names(taxo_info)
 #' @export
 get_bwg_names <- function(file = "https://raw.githubusercontent.com/SrivastavaLab/bwg_names/master/data/Distributions_organisms_full.tsv", chars = 23, nums = 54){
   msg <- sprintf("this function thinks there are %d character columns followed by %d numeric columns", chars, nums)
