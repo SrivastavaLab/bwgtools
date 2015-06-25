@@ -109,7 +109,8 @@ get_bwg_names <- function(file = "https://raw.githubusercontent.com/SrivastavaLa
 #' Make default dropbox path
 #'
 #' @param .sitename quoted site name
-#'
+#' @examples 
+#' make_default_path(c("Argentina", "Cardoso", "Colombia", "French_Guiana","Macae", "PuertoRico", "CostaRica"))
 #' @return the default path to file from dropbox
 #' @export
 make_default_path <- function(.sitename){
