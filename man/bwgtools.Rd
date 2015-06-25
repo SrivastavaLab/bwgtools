@@ -21,7 +21,7 @@ Accessing data, Combining data, Calulating metrics, and Analyze data.
 
 \section{Calculating metrics}{
 
-\code{\link{hydro_variable}}
+\code{\link{hydro_variables}}
 }
 
 \section{Analyzing data}{

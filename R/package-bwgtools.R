@@ -3,7 +3,7 @@
 #' The bwgtools package provides four categories of important functions:
 #' Accessing data, Combining data, Calulating metrics, and Analyze data.
 #' 
-#' @aliases bwgtools-package
+#' @aliases bwgtools
 #' 
 #' @section Accessing data:
 #' \code{\link{offline}}
@@ -12,7 +12,7 @@
 #' \code{\link{combine_tab}}
 #' 
 #' @section Calculating metrics:
-#' \code{\link{hydro_variable}}
+#' \code{\link{hydro_variables}}
 #' 
 #' @section Analyzing data:
 #' \code{\link{make_rlq}}
