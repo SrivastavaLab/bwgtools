@@ -2,7 +2,6 @@
 % Please edit documentation in R/package-bwgtools.R
 \docType{package}
 \name{bwgtools}
-\alias{bwg}
 \alias{bwgtools}
 \alias{bwgtools-package}
 \title{bwgtools: A package for the bromeliad working group: the rainfall experiment}
@@ -27,5 +26,6 @@ Accessing data, Combining data, Calulating metrics, and Analyze data.
 
 \section{Analyzing data}{
 
+\code{\link{make_rlq}}
 }
 
