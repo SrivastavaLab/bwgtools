@@ -90,7 +90,7 @@ get_all_sites <- function(sites = c("Argentina","Cardoso", "Colombia",
 #' @param chars the number of character columns. defaults to 21
 #' @param nums the number of numeric columns. defaults to 54
 #' @export
-get_bwg_names <- function(file = "https://raw.githubusercontent.com/SrivastavaLab/bwg_names/master/data/Distributions_organisms_full.tsv", chars = 23, nums = 54){
+get_bwg_names <- function(file = "https://raw.githubusercontent.com/SrivastavaLab/bwg_names/master/data/Distributions_organisms_full.tsv", chars = 23, nums = 49){
   msg <- sprintf("this function thinks there are %d character columns followed by %d numeric columns", chars, nums)
   message(msg)
   cols <- c(rep("c", chars), rep("n", nums))
