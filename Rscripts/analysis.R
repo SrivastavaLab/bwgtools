@@ -162,9 +162,13 @@ leafwater <- c("Argentina", "French_Guiana", "Colombia",
 hydro <- hydro_variables(leafwater, sites, phys)
 
 
-hydro2 <- hydro_variables(leafwater, sites, phys,rm_centre = TRUE,aggregate_leaves = FALSE)
+hydro2 <- hydro_variables(leafwater, sites, phys,rm_centre = FALSE,aggregate_leaves = FALSE)
+
+hydro3 <- hydro_variables(leafwater, sites, phys,rm_centre = TRUE,aggregate_leaves = TRUE)
 
 View(hydro)
+View(hydro2)
+View(hydro3)
 
 cr <- read_site_sheet("CostaRica", "leaf.waterdepths") %>%
   brom_id_maker
@@ -293,72 +297,3 @@ filter(watered_first == "yes") %>%
 
 ## SKIPPING COLOMBIA because they modified their lea
 
-
-## We can read data in from all the sites and combine them. for example:
-sites <- c("Argentina", "French_Guiana","Colombia",
-           "Macae", "PuertoRico","CostaRica") %>%
-  # sapply(offline) %>%
-  combine_tab("site.info")
-
-sites <- filter(sites, site.name != "colombia")
-
-leafwater <- c("Argentina", "French_Guiana",
-               "Macae", "PuertoRico","CostaRica") %>%
- # sapply(offline) %>%
-  combine_tab("leaf.waterdepths")
-
-
-read_site_sheet("Colombia", "leaf.waterdepths")
-
-phys <- c("Argentina", "French_Guiana", "Colombia",
-          "Macae", "PuertoRico","CostaRica") %>%
-  #sapply(offline) %>%
-  combine_tab("bromeliad.physical")
-bwg_names <- get_bwg_names(file = "../bwg_names/data/Distributions_organisms_full.tsv")
-
-decomp_vars <- get_decomp()
-
-hydro <- hydro_variables(leafwater, sites, phys)
-
-brom_vars <- hydro %>%
-  group_by(site, trt.name) %>%
-  select(-leaf) %>%
-  summarise_each(funs(mean)) %>%
-  left_join(decomp_vars) %>%
-  select(-len.depth, -n.depth) %>%
-  ungroup
-
-### get invert data
-invert <- c("Argentina", "French_Guiana",
-            "Macae", "PuertoRico","CostaRica") %>%
-  sapply(offline) %>%
-  combine_tab("bromeliad.final.inverts")
-
-
-
-test <- make_rlq("frenchguiana", invert, .traits = bwg_names, .bromvars = brom_vars)
-
-
-test <- make_rlq("macae", invert, .traits = bwg_names, .bromvars = brom_vars)
-
-
-names(test)
-
-print_mat_fn <- function(countryname){
-  force(countryname)
-  function(mat, matname){
-    filename <- paste0("../../../Dropbox/BWG Drought Experiment/RLQ/",
-                       countryname,"-", matname, ".csv")
-    write.csv(as.data.frame(mat), filename)
-  }
-}
-
-
-write_mats <- function(SITE){
-  test <- make_rlq(SITE, invert, .traits = bwg_names, .bromvars = brom_vars)
-  Map(print_mat_fn(SITE), test, names(test))
-}
-
-c("argentina", "frenchguiana", "colombia", "macae", "puertorico",
-  "costarica") %>%
-  sapply(write_mats)
