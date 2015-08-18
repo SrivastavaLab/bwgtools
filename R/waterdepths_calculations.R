@@ -58,8 +58,12 @@ group_or_summarize <- function(data, aggregate_leaves = FALSE){
 #'
 #' @param allsites combined site.info tab
 #' @param phys combined bromeliad.physical tab
-#'
-#' @return data.frame containing support file: site.name, trt.name, temporal.block, start_block and finish_block. Start_block is equivalent to start.water.addition from the site.info tab, and finish_block is equivalent to last.day.sample
+#' @examples 
+#' sites <- combine_tab(c("Argentina", "French_Guiana"),"site.info")
+#' phys <- combine_tab(c("Argentina", "French_Guiana"),"bromeliad.physical")
+#' sup_file <- make_support_file(sites,phys)
+#' sup_file
+#' @return A dataframe containing support file: site.name, trt.name, temporal.block, start_block and finish_block. Start_block is equivalent to start.water.addition from the site.info tab, and finish_block is equivalent to last.day.sample
 #' @export
 make_support_file <- function(allsites, phys){
   ## get the data
@@ -151,8 +155,15 @@ make_full_timeline <- function(filtered_water_data, sitedata, physdata){
 #' @param physicaldata the bromeliad.physical
 #' @param rm_centre remove centre? defaults to TRUE
 #' @param aggregate_leaves aggregate leaves? defaults to FALSE
-#'
-#' @return the hydro variables
+#' @examples 
+#' leafwater <- combine_tab(c("Argentina", "French_Guiana"),"leaf.waterdepths")
+#' sites <- combine_tab(c("Argentina", "French_Guiana"),"site.info")
+#' phys <- combine_tab(c("Argentina", "French_Guiana"),"bromeliad.physical")
+#' hydro <- hydro_variables(waterdata = leafwater,
+#'                           sitedata = sites,
+#'                       physicaldata = phys)
+#' hydro
+#' @return The hydrological variables
 #' @export
 #' @importFrom magrittr "%>%"
 hydro_variables <- function(waterdata, sitedata, physicaldata,
