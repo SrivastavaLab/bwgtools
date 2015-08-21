@@ -53,10 +53,13 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE,
 
 #' read in a sheet from all sites
 #'
-#' this function reads all the sheets in an excel book on dropbox
-#' @param file the file name to fetch
-#' @param sheetname Either the name of the site you want to read data from, or a path to where the excel files are on your local computer (for offline work)
+#' This function reads all the sheets in an excel book on dropbox
+#' @param sitename The name of the site you want to read data from, or a path to where the excel files are on your local computer (for offline work):\code{"Argentina"}, \code{"Cardoso"}, \code{"Colombia"}, \code{"French_Guiana"}, \code{"Macae"}, \code{"PuertoRico"}, \code{"CostaRica"} 
+#' @param file The file name to fetch
+#' @param sheetname The name of the sheetname you want: \code{"leaf.waterdepths"}, \code{"bromeliad.physical"}, \code{"bromeliad.final.inverts"}, \code{"site.info"}, \code{"site.weather"}, \code{"bromeliad.initial.inverts"}, \code{"bromeliad.terrestrial"}, \code{"terrestrial.taxa"}
 #' @param OnDisk Are you reading from a local copy or Dropbox? defaults to FALSE
+#' @examples 
+#' macae <- read_site_sheet(("Macae"), "leaf.waterdepths")
 #' @export
 read_site_sheet <- function(sitename, sheetname = NULL, ...){
   is_path <- file.exists(sitename)
@@ -85,12 +88,17 @@ get_all_sites <- function(sites = c("Argentina","Cardoso", "Colombia",
 #' obtain the full name data from github
 #'
 #' Gets the complete insect taxonomic data from github. This is good
-#' because it will always be accurate.
+#' because it will always be accurate. 
+#' Just type in \code{get_bwg_names()} in R's Console and you will get all the taxonomic information (among other things).
 #' @param file the location of the file. defaults to the internet
 #' @param chars the number of character columns. defaults to 21
 #' @param nums the number of numeric columns. defaults to 54
+#' @return A dataframe containing all information as in the excel file in Dropbox: "Distribution organisms_correct2015"
+#' @examples 
+#' taxo <- get_bwg_names()
+#' names(taxo)
 #' @export
-get_bwg_names <- function(file = "https://raw.githubusercontent.com/SrivastavaLab/bwg_names/master/data/Distributions_organisms_full.tsv", chars = 23, nums = 54){
+get_bwg_names <- function(file = "https://raw.githubusercontent.com/SrivastavaLab/bwg_names/master/data/Distributions_organisms_full.tsv", chars = 23, nums = 49){
   msg <- sprintf("this function thinks there are %d character columns followed by %d numeric columns", chars, nums)
   message(msg)
   cols <- c(rep("c", chars), rep("n", nums))
@@ -104,7 +112,8 @@ get_bwg_names <- function(file = "https://raw.githubusercontent.com/SrivastavaLa
 #' Make default dropbox path
 #'
 #' @param .sitename quoted site name
-#'
+#' @examples 
+#' make_default_path(c("Argentina", "Cardoso", "Colombia", "French_Guiana","Macae", "PuertoRico", "CostaRica"))
 #' @return the default path to file from dropbox
 #' @export
 make_default_path <- function(.sitename){
@@ -121,9 +130,10 @@ make_default_path <- function(.sitename){
 #'
 #' If you don't have access to dropbox, you can still read files from your local dropbox folder. This function creates the path to the files.
 #'
-#' @param sitename Name of site you wish to read
-#' @param default.path the default path to your Dropbox folder. Defaults to one that works within a paper folder, assuming you have not rearranged your folders within dropbox.
-#'
+#' @param sitename Name of a single site you wish to read. It could be either: (\code{"Argentina"}, \code{"Cardoso"}, \code{"Colombia"}, \code{"French_Guiana"},\code{"Macae"}, \code{"PuertoRico"}, \code{"CostaRica"})
+#' @param default.path The default path to your Dropbox folder. Defaults to one that works within a paper folder, assuming you have not rearranged your folders within dropbox.
+#' @examples 
+#' offline("Colombia")
 #' @return a correct relative path
 #' @importFrom magrittr "%>%"
 #' @export

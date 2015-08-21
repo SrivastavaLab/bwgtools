@@ -23,7 +23,11 @@ firstday <- function(df){
 #' Difference in days
 #'
 #' calculate the difference in days to the start of the experiment
-#' @param df the leaf.waterdepths data.frame
+#' @param df a dataframe containing \code{sheetname="leaf.waterdepths"}
+#' @return A dataframe combining the \code{date} and the \code{bromeliad.id}, plus a new column (\code{nday}) for the number of days since the begining of the experiment.
+#' @examples
+#' Arg <- read_site_sheet("Argentina","leaf.waterdepths")
+#' from_start(Arg)
 #' @export
 from_start <- function(depthdata){
   startdays <- firstday(depthdata)
