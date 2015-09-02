@@ -53,7 +53,8 @@ bromeliad.physical_read <- function(file_to_read){
                                    "numeric","numeric","numeric","numeric","numeric",
                                    "numeric","numeric","numeric","numeric","numeric",
                                    "numeric","numeric","numeric","numeric","numeric",
-                                   "numeric","numeric")
+                                   "numeric","numeric","numeric","numeric","numeric",
+                                   "numeric")
   )
 }
 
