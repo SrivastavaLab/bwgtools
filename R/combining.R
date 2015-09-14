@@ -133,7 +133,7 @@ which_names_doubled <- function(df){
 #' @export
 merge_func <- function(insect_data, trait_data){
 
-  merged <- dplyr::left_join(insect_data, trait_data, by = c("species" = "nickname"))
+  merged <- dplyr::left_join(insect_data, trait_data, by = c("species" = "bwg_name"))
 
   return(merged)
 

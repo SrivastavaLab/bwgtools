@@ -59,7 +59,7 @@ make_rlq <- function(sitename, .invert, .traits, .bromvars){
   Q_mat <- .traits %>%
     dplyr::select(nickname, matches("^[A-Z]{2}.*", ignore.case = FALSE)) %>%
     dplyr::left_join(dplyr::data_frame(nickname = animals), .) %>%
-    make_matrix(rownm = "nickname")
+    make_matrix(rownm = "bwg_name")
 
   #  a bromeliad x environmental variables (plant specific data, including physical, hydrological, ..) = matrix R
   plants <- dimnames(L_mat)[[2]]
