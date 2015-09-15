@@ -4,7 +4,7 @@
 \alias{sum_func_groups}
 \title{summarize functional groups}
 \usage{
-sum_func_groups(merged_data, grps = list(~site, ~site_brom.id, ~pred_prey,
+sum_func_groups(merged_data, grps = list(~site, ~site_brom.id, ~predation,
   ~functional_group))
 }
 \arguments{
@@ -37,7 +37,7 @@ func_groups \%>\%
  facet_wrap(~site, scales = "free_y") +
  ggtitle("Functional group abundance")
 # Trophic level
-# To summarize by trophic level group, simply switch \\code{~functional_group} to \\code{~pred_prey}:
+# To summarize by trophic level group, simply switch \\code{~functional_group} to \\code{~predation}:
 predprey <- sum_func_groups(invert_traits,
                          grps = list(~site,
                                      ~site_brom.id,

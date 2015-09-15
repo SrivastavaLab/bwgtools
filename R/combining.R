@@ -162,15 +162,15 @@ merge_func <- function(insect_data, trait_data){
 #'  facet_wrap(~site, scales = "free_y") +
 #'  ggtitle("Functional group abundance")
 #' # Trophic level
-#' # To summarize by trophic level group, simply switch \code{~functional_group} to \code{~pred_prey}:
+#' # To summarize by trophic level group, simply switch \code{~functional_group} to \code{~predation}:
 #' predprey <- sum_func_groups(invert_traits,
 #'                          grps = list(~site,
 #'                                      ~site_brom.id,
-#'                                      ~pred_prey))
+#'                                      ~predation))
 #' predprey
 #' ## plot by trophic level abundance
 #' predprey %>%
-#'  ggplot(aes(x = as.factor(pred_prey), y = total_abundance)) +
+#'  ggplot(aes(x = as.factor(predation), y = total_abundance)) +
 #'  geom_point(position = position_jitter(width = 0.25), alpha = 0.5) +
 #'  stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.6) +
 #'  facet_wrap(~site, scales = "free_y") +
@@ -179,7 +179,7 @@ merge_func <- function(insect_data, trait_data){
 #' @importFrom magrittr "%>%"
 #' @export
 #'
-sum_func_groups <- function(merged_data, grps = list(~site, ~site_brom.id, ~pred_prey, ~functional_group)){
+sum_func_groups <- function(merged_data, grps = list(~site, ~site_brom.id, ~predation, ~functional_group)){
   merged_data %>%
     dplyr::group_by_(.dots = grps) %>%
     dplyr::summarize(total_abundance = sum(abundance),
@@ -191,7 +191,7 @@ sum_func_groups <- function(merged_data, grps = list(~site, ~site_brom.id, ~pred
 
 #' Summarize functional groups still farther into trophic ranks
 #'
-#' @param func_sums must be a grouped tbl.df, the groups must be bromeliad.id and pred_prey, in that order
+#' @param func_sums must be a grouped tbl.df, the groups must be bromeliad.id and predation, in that order
 #'
 #' @return summarized data
 #' @importFrom magrittr "%>%"
@@ -200,10 +200,10 @@ sum_trophic <- function(func_sums){
 
   test_groups <- identical(dplyr::groups(func_sums),
                            lapply(list("site","site_brom.id",
-                                       "pred_prey"),
+                                       "predation"),
                                   as.name))
 
-  if(!test_groups) stop("the input must be grouped by bromeliad.id and pred_prey, in that order")
+  if(!test_groups) stop("the input must be grouped by bromeliad.id and predation, in that order")
 
   func_sums %>%
     dplyr::summarise_each(dplyr::funs(sum), total_abundance, total_biomass, total_taxa)
