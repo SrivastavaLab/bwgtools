@@ -5,7 +5,7 @@
 \title{summarize functional groups}
 \usage{
 sum_func_groups(merged_data, grps = list(~site, ~site_brom.id, ~pred_prey,
-  ~func.group))
+  ~functional_group))
 }
 \arguments{
 \item{merged_data}{data formed by merging insect data to trait data}
@@ -26,18 +26,18 @@ invert_traits <- merge_func(invert_data, bwg_names)
 func_groups <- sum_func_groups(invert_traits,
                               grps = list(~site,
                                           ~site_brom.id,
-                                          ~func.group))
+                                          ~functional_group))
 func_groups
 library(ggplot2) #require the 'ggplot2' package
 ## plot by functional group abundance
 func_groups \%>\%
- ggplot(aes(x = as.factor(func.group), y = total_abundance)) +
+ ggplot(aes(x = as.factor(functional_group), y = total_abundance)) +
  geom_point(position = position_jitter(width = 0.25), alpha = 0.5) +
  stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.6) +
  facet_wrap(~site, scales = "free_y") +
  ggtitle("Functional group abundance")
 # Trophic level
-# To summarize by trophic level group, simply switch \\code{~func.group} to \\code{~pred_prey}:
+# To summarize by trophic level group, simply switch \\code{~functional_group} to \\code{~pred_prey}:
 predprey <- sum_func_groups(invert_traits,
                          grps = list(~site,
                                      ~site_brom.id,

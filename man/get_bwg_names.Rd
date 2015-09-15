@@ -5,8 +5,8 @@
 \title{obtain the full name data from github}
 \usage{
 
-  get_bwg_names(file = "https://raw.githubusercontent.com/SrivastavaLab/bwg_names/master/data/Distributions_organisms_full.tsv",
-  chars = 23, nums = 49)
+  get_bwg_names(file = "https://raw.githubusercontent.com/SrivastavaLab/bwg_names/master/data/15_Distributsions_organism_full.tsv",
+  chars = 22, nums = 49)
 }
 \arguments{
 \item{file}{the location of the file. defaults to the internet}
