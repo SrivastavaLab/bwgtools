@@ -41,11 +41,11 @@ func_groups \%>\%
 predprey <- sum_func_groups(invert_traits,
                          grps = list(~site,
                                      ~site_brom.id,
-                                     ~pred_prey))
+                                     ~predation))
 predprey
 ## plot by trophic level abundance
 predprey \%>\%
- ggplot(aes(x = as.factor(pred_prey), y = total_abundance)) +
+ ggplot(aes(x = as.factor(predation), y = total_abundance)) +
  geom_point(position = position_jitter(width = 0.25), alpha = 0.5) +
  stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.6) +
  facet_wrap(~site, scales = "free_y") +

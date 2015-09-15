@@ -7,7 +7,7 @@
 sum_trophic(func_sums)
 }
 \arguments{
-\item{func_sums}{must be a grouped tbl.df, the groups must be bromeliad.id and pred_prey, in that order}
+\item{func_sums}{must be a grouped tbl.df, the groups must be bromeliad.id and predation, in that order}
 }
 \value{
 summarized data
