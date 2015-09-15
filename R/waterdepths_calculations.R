@@ -6,13 +6,37 @@
 #' @importFrom magrittr "%>%"
 #' @export
 longwater <- function(df) {
+  inputnames <- c("site_brom.id", "site", "trt.name", "date", "depth.centre.measure.first", 
+    "depth.leafa.measure.first", "depth.leafb.measure.first", "depth.centre.water.first", 
+    "depth.leafa.water.first", "depth.leafb.water.first")
+  
+  inputcheck <- assertthat::has_name(df, inputnames)
+  
+  if (!all(inputcheck)) stop("the leaf.waterdepths names are wrong!")
+  if (length(inputcheck) != ncol(df)) stop("leaf.waterdepths missing columns!")
+  
+  
   measures  <- df %>%
-    tidyr::gather("data_name", "depth", starts_with("depth")) %>%
+    tidyr::gather("data_name", "depth", starts_with("depth"), convert = TRUE) %>%
     tidyr::separate(data_name, into = c("depth_word", "leaf",
                                         "watered_first","first")) %>%
     dplyr::select(-depth_word, -first) %>%
+    ## filter out measurements from argentina
+    ## ONLY WHERE water first is no 
+    ## in other words, where they measured depth first.
+    ## all depth should be measured AFTER watering.
+    dplyr::filter(!(site == "argentina" & watered_first == "no")) %>% 
     dplyr::mutate(watered_first = ifelse(watered_first == "water", "yes", "no"))
-
+  
+  correct_names <- c("site_brom.id", "site", "trt.name", "date", "leaf", "watered_first", 
+    "depth")
+  
+  ## check the names
+  namecheck <- assertthat::has_name(measures, correct_names)
+  
+  if (!all(namecheck)) stop("the column names are wrong!")
+  if (length(namecheck) != ncol(measures)) stop("output missing columns!")
+  
   return(measures)
 }
 
@@ -171,8 +195,6 @@ hydro_variables <- function(waterdata, sitedata, physicaldata,
 
   filtered_long_water <- waterdata %>%
     longwater %>%
-    dplyr::filter(!(site == "argentina" &
-               watered_first == "no")) %>%
     filter_long_water(rm_centre = rm_centre)
 
 
