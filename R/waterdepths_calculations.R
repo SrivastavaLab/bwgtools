@@ -92,23 +92,44 @@ group_or_summarize <- function(data, aggregate_leaves = FALSE){
 make_support_file <- function(allsites, phys){
   ## get the data
 
+  ## to get the start and the end date of the experiment for
+  ## each site:
   start_finish <- allsites %>%
     dplyr::select(site.name,
                   start_block = start.water.addition,
                   finish_block = last.day.sample)
 
+  ## Get the exact date that each bromeliad started. This is
+  ## based on the temporal block.
   which_block <- phys %>%
     dplyr::select(site, trt.name, temporal.block)
 
+  ## Join these two data frames, so that we can add the
+  ## RELATIVE  start time of each block to the ABSOLUTE
+  ## start time of each experiment
   support <- dplyr::left_join(which_block, start_finish, by = c("site" = "site.name"))
 
+  ## recode blocks as numbers
   block_days_start <- c("a" = 0, "b" = 1, "c" = 2)
   block_days_finish <- c("a" = 2, "b" = 1, "c" = 0)
 
-  support %>%
+  ## add the constants to the start and finish date.
+  ### the start date for each block is always positive (after the beginning)
+  ### the end date is always earlier
+  final_support <- support %>%
     dplyr::mutate(start_block = start_block + lubridate::days(block_days_start[temporal.block]),
            finish_block = finish_block - lubridate::days(block_days_finish[temporal.block]))
 
+  test_final <- final_support %>% 
+    dplyr::mutate(exp_duration = as.numeric(finish_block - start_block)) %>% 
+    dplyr::select(site, exp_duration) %>% 
+    dplyr::filter(exp_duration != 65 | is.na(exp_duration)) %>% 
+    dplyr::distinct()
+  
+  ## perhaps print out the test_final or perhaps some other measurement.
+  
+  return(final_support)
+  
 }
 
 
