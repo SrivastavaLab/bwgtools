@@ -25,8 +25,7 @@ longwater <- function(df) {
     ## ONLY WHERE water first is no 
     ## in other words, where they measured depth first.
     ## all depth should be measured AFTER watering.
-    dplyr::filter(!(site == "argentina" & watered_first == "no")) %>% 
-    dplyr::mutate(watered_first = ifelse(watered_first == "water", "yes", "no"))
+    dplyr::filter(watered_first == "water")
   
   correct_names <- c("site_brom.id", "site", "trt.name", "date", "leaf", "watered_first", 
     "depth")
@@ -279,24 +278,18 @@ hydro_variables <- function(waterdata, sitedata, physicaldata,
 #' @return a 1 x n row \code{tbl_df}
 #' @export
 water_summary_calc <- function(depth){
+  ## modify functions to remove the na values
+  noNA <- function(f, x) f(x, na.rm = TRUE)
   ## check that it looks like mm
   ## must be sorted by date
   ## merge with support file -- must be 63 long
   dplyr::data_frame(
     len.depth = length(depth),
     n.depth = sum(!is.na(depth)),
-    max.depth = max(depth, na.rm = TRUE),
-    min.depth = min(depth, na.rm = TRUE),
-    mean.depth = mean(depth, na.rm = TRUE),
-    var.depth = var(depth, na.rm = TRUE),
-    sd.depth = sd(depth, na.rm = TRUE),
-    net_fluct = sum(diff(depth), na.rm = TRUE),
-    total_fluct = sum(abs(diff(depth)), na.rm = TRUE),
-    cv.depth = (100*(sd.depth/mean.depth)),
-    amplitude = max.depth - min.depth,
-    wetness = mean.depth / max.depth,
-    prop.overflow.days = sum(depth > (max.depth - 10), na.rm = TRUE)/length(depth),
-    prop.driedout.days = sum(depth < 5, na.rm = TRUE)/length(depth),
+    cv.depth = (100*(noNA(sd, depth)/noNA(mean, depth))),
+    wetness = noNA(mean, depth) / noNA(max, depth),
+    prop.overflow.days = noNA(sum, depth > (noNA(max, depth) - 10))/n.depth,
+    prop.driedout.days = noNA(sum, depth < 5)/n.depth,
     time.since.minimum =
       if (any(depth < 5) & all(!is.na(depth))) {
       length(depth) - max(which(depth < 5))
