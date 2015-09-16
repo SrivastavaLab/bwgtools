@@ -315,6 +315,35 @@ water_summary_calc <- function(depth, .site_brom.id){
   cbind(var_measures, extreme)
 }
 
+
+# extreme events --------------------------------------
+
+check_increasing <- function(vec){
+  all_but_last <- vec[-length(vec)]
+  all_but_frst <- vec[-1]
+  
+  compares <- Map(`<`, all_but_last, all_but_frst)
+  all(unlist(compares))
+  
+  if (any(vec < 0)) NA
+}
+
+extreme_vector <- function(vec, bounds){
+  if (bounds[1] != 0) stop("first boundary should be 0")
+  
+  if (max(vec) != bounds[4]) stop("last boundary should be maximum")
+  
+  ans <- cut(vec, breaks = bounds,
+             labels = c("driedout",
+                        "normal",
+                        "overflow"),
+             include.lowest = TRUE)
+
+  as.character(ans)
+  
+}
+
+
 ## takes a vector and returns a data_frame
 extremity <- function(dep){
   ## dep should be 65
@@ -323,23 +352,19 @@ extremity <- function(dep){
   empty <- 5
   
   boundaries <- c(0, empty, full, maxdep)
-  
-  ## each should be bigger than the next:
-  bigger <- Reduce(`<`, boundaries)
+  bigger <- check_increasing(boundaries)
   
   if (!isTRUE(bigger) | all(is.na(dep))) {
     warning("it broke!")
-    final <- data_frame(event = NA,
-               prior = NA)
+    final <- dplyr::data_frame(event = NA,
+                               prior = NA)
   } else {
     
-    event_vec <- cut(dep, breaks = c(0, empty, full, maxdep),
-                     labels = c("driedout", "normal", "overflow"),
-                     include.lowest = TRUE)
+    event_vec <- extreme_vector(dep, boundaries)
     
     ## just the words pls
-    df_extreme <- data_frame(event = as.character(event_vec),
-                             prior = rev(seq_along(event)))
+    df_extreme <- dplyr::data_frame(event = event_vec,
+                                    prior = rev(seq_along(event)))
     
     ## now filter for extreme events
     final <- df_extreme %>% 
