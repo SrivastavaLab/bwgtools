@@ -33,7 +33,7 @@ test_that("data is read correctly", {
                                   "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",
                                   "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",
                                   "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",
-                                  "numeric", "numeric", "numeric", "numeric"))
+                                  "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"))
 
   # BROMELIAD.FINAL.INVERTS -----------------------------
   testdat <- suppressMessages(read_sheet("BWG Drought Experiment/raw data/Drought_data_Macae.xlsx", "bromeliad.final.inverts"))

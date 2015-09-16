@@ -25,7 +25,7 @@ longwater <- function(df) {
     ## ONLY WHERE water first is no 
     ## in other words, where they measured depth first.
     ## all depth should be measured AFTER watering.
-    dplyr::filter(watered_first == "water")
+    dplyr::filter(watered_first == "measure")
   
   correct_names <- c("site_brom.id", "site", "trt.name", "date", "leaf", "watered_first", 
     "depth")
@@ -251,10 +251,10 @@ hydro_variables <- function(waterdata, sitedata, physicaldata,
   } else {
     sorted_water <- filled_in %>%
       dplyr::arrange(site, date, trt.name, leaf) %>%
-      dplyr::group_by(site, trt.name, leaf)
+      dplyr::group_by(site, site_brom.id, trt.name, leaf)
   }
 
-    dplyr::do(sorted_water, water_summary_calc(.$depth))
+    dplyr::do(sorted_water, water_summary_calc(.$depth, .$site_brom.id))
 
 }
 
@@ -295,13 +295,13 @@ overflow <- function(dep){
 #'
 #' @return a 1 x n row \code{tbl_df}
 #' @export
-water_summary_calc <- function(depth){
+water_summary_calc <- function(depth, .site_brom.id){
   ## modify functions to remove the na values
   noNA <- function(f, x) f(x, na.rm = TRUE)
   ## check that it looks like mm
   ## must be sorted by date
   ## merge with support file -- must be 63 long
-  dplyr::data_frame(
+  var_measures <- dplyr::data_frame(
     len.depth = length(depth),
     n.depth = sum(!is.na(depth)),
     cv.depth = (100*(noNA(sd, depth)/noNA(mean, depth))),
@@ -309,25 +309,121 @@ water_summary_calc <- function(depth){
     prop.overflow.days = overflow(depth),
     prop.driedout.days = noNA(sum, depth < 5)/n.depth
   )
+  message(sprintf("trying %s", unique(.site_brom.id)))
+  extreme <- get_last_extremity(depth)
+  
+  cbind(var_measures, extreme)
 }
 
 
-time_since <- function(dep, type){
-  ## check argument
-  if (!(type %in% c("overflow", "dry"))) {
-    stop("type must be either 'overflow' or 'dry'")
+# extreme events --------------------------------------
+
+check_increasing <- function(vec){
+  all_but_last <- vec[-length(vec)]
+  all_but_frst <- vec[-1]
+  
+  compares <- Map(`<`, all_but_last, all_but_frst)
+  
+  res <- all(unlist(compares))
+  
+  if (any(vec < 0) | any(is.na(vec))) {
+    res <- NA
+  }
+  return(res)
+}
+
+extreme_vector <- function(vec, bounds){
+  if (bounds[1] != 0) stop("first boundary should be 0")
+  
+  if (max(vec, na.rm = TRUE) != bounds[4]) stop("last boundary should be maximum")
+  
+  ans <- cut(vec, breaks = bounds,
+             labels = c("driedout",
+                        "normal",
+                        "overflow"),
+             include.lowest = TRUE)
+
+  as.character(ans)
+  
+}
+
+
+find_bounds_wet_overflow <- function(depth){
+  ## dep should be 65
+  maxdep <- max(depth, na.rm = TRUE)
+  full <- maxdep - 10
+  empty <- 5
+  
+  if (maxdep < 10 | full < 0) {
+    boundaries <- rep(NA, 4)
+    warning("this leaf was too dry")
   }
   
-  if (type == "overflow") {
-    maxdep <- max(dep, na.rm = TRUE)
-    extremes <- dep > (maxdep - 10)
+  boundaries <- c(0, empty, full, maxdep)
+  
+  return(boundaries)
+}
+
+## takes a vector and returns a data_frame
+extremity <- function(dep){
+
+  boundaries <- find_bounds_wet_overflow(dep)
+  
+  bigger <- check_increasing(boundaries)
+  
+  if (!isTRUE(bigger) | all(is.na(dep))) {
+    warning("it broke!")
+    final <- dplyr::data_frame(event = NA,
+                               prior = NA)
   } else {
-    extremes <- dep < 5
+    
+    event_vec <- extreme_vector(dep, boundaries)
+    
+    ## just the words pls
+    df_extreme <- dplyr::data_frame(event = event_vec,
+                                    prior = rev(seq_along(event)))
+    
+    ## now filter for extreme events
+    final <- df_extreme %>% 
+      dplyr::filter(event %in% c("driedout", "overflow"))
   }
-  
-  last_extreme <- max(which(extremes))
-  length(dep) - last_extreme
+  return(final)
 }
 
+last_extremity <- function(df){
+  ## check event has only those levels
+  ## check prior is integer
+  
+  #data_frame(.event[which.min(.prior)])
+  
+  res <- dplyr::filter(df, prior == min(prior))
+  
+  res2 <- df %>% 
+    dplyr::group_by(event) %>% 
+    dplyr::tally(.) %>% 
+    dplyr::mutate(s = 1, 
+                  event = paste0("n_", event)) %>% 
+    tidyr::spread(event, n) %>% 
+    dplyr::select(-s)
+  
+  
+  
+  if (nrow(res) == 1 & nrow(res2) == 1) {
+    cbind(res, res2)
+  } else if (nrow(res) == 0 | nrow(res) == 0 ) {
+    dplyr::data_frame(event = NA,
+                      prior = NA,
+                      n_driedout = NA,
+                      n_overflow = NA
+                      )
+  } else {
+    stop("wtf")
+  }
+  
+}
+
+get_last_extremity <- . %>% 
+  extremity() %>% 
+  dplyr::do(last_extremity(.))
 
 
