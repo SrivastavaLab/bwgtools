@@ -335,7 +335,7 @@ check_increasing <- function(vec){
 extreme_vector <- function(vec, bounds){
   if (bounds[1] != 0) stop("first boundary should be 0")
   
-  if (max(vec) != bounds[4]) stop("last boundary should be maximum")
+  if (max(vec, na.rm = TRUE) != bounds[4]) stop("last boundary should be maximum")
   
   ans <- cut(vec, breaks = bounds,
              labels = c("driedout",
@@ -367,6 +367,8 @@ find_bounds_wet_overflow <- function(depth){
 ## takes a vector and returns a data_frame
 extremity <- function(dep){
 
+  boundaries <- find_bounds_wet_overflow(dep)
+  
   bigger <- check_increasing(boundaries)
   
   if (!isTRUE(bigger) | all(is.na(dep))) {
@@ -383,7 +385,7 @@ extremity <- function(dep){
     
     ## now filter for extreme events
     final <- df_extreme %>% 
-      filter(event %in% c("driedout", "overflow"))
+      dplyr::filter(event %in% c("driedout", "overflow"))
   }
   return(final)
 }
@@ -394,13 +396,26 @@ last_extremity <- function(df){
   
   #data_frame(.event[which.min(.prior)])
   
-  res <- filter(df, prior == min(prior))
+  res <- dplyr::filter(df, prior == min(prior))
   
-  if (nrow(res) == 1) {
-    res
-  } else if (nrow(res) == 0) {
+  res2 <- df %>% 
+    dplyr::group_by(event) %>% 
+    dplyr::tally(.) %>% 
+    dplyr::mutate(s = 1, 
+                  event = paste0("n_", event)) %>% 
+    tidyr::spread(event, n) %>% 
+    dplyr::select(-s)
+  
+  
+  
+  if (nrow(res) == 1 & nrow(res2) == 1) {
+    cbind(res, res2)
+  } else if (nrow(res) == 0 | nrow(res) == 0 ) {
     dplyr::data_frame(event = NA,
-               prior = NA)
+                      prior = NA,
+                      n_driedout = NA,
+                      n_overflow = NA
+                      )
   } else {
     stop("wtf")
   }
