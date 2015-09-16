@@ -258,6 +258,24 @@ hydro_variables <- function(waterdata, sitedata, physicaldata,
 
 }
 
+overflow <- function(dep){
+  ## find the maximum
+  md <- max(dep, na.rm = TRUE)
+  ## a leaf is full if it is 10 ml below maximum
+  full <- md - 10
+  ## relative to the number of observations:
+  n_obs <- sum(!is.na(dep)) 
+  
+  if (md == 0) {
+    ov <- 0
+  } else {
+    ov <- sum(dep > full, na.rm = TRUE)
+  }
+  
+  ov/n_obs
+}
+
+
 #' Calculate water depth measurements
 #'
 #' @param depth depth measurements
@@ -288,11 +306,28 @@ water_summary_calc <- function(depth){
     n.depth = sum(!is.na(depth)),
     cv.depth = (100*(noNA(sd, depth)/noNA(mean, depth))),
     wetness = noNA(mean, depth) / noNA(max, depth),
-    prop.overflow.days = noNA(sum, depth > (noNA(max, depth) - 10))/n.depth,
-    prop.driedout.days = noNA(sum, depth < 5)/n.depth,
-    time.since.minimum =
-      if (any(depth < 5) & all(!is.na(depth))) {
-      length(depth) - max(which(depth < 5))
-      } else NA
+    prop.overflow.days = overflow(depth),
+    prop.driedout.days = noNA(sum, depth < 5)/n.depth
   )
 }
+
+
+time_since <- function(dep, type){
+  ## check argument
+  if (!(type %in% c("overflow", "dry"))) {
+    stop("type must be either 'overflow' or 'dry'")
+  }
+  
+  if (type == "overflow") {
+    maxdep <- max(dep, na.rm = TRUE)
+    extremes <- dep > (maxdep - 10)
+  } else {
+    extremes <- dep < 5
+  }
+  
+  last_extreme <- max(which(extremes))
+  length(dep) - last_extreme
+}
+
+
+
