@@ -58,7 +58,7 @@ terr <- combine_tab(c("Cardoso", "French_Guiana", "Colombia",
 ### taxa
 
 terr.tax <- c("Cardoso", "French_Guiana", "Colombia",
-              "Macae", "PuertoRico","CostaRica") %>% sapply(offline) %>%
+              "Macae", "PuertoRico","CostaRica") %>%# sapply(offline) %>%
   combine_tab(sheetname = "terrestrial.taxa")
 
 # decomposition ---------------------------------------
@@ -144,22 +144,26 @@ plot_trophic(combine_tab(sheetname = "bromeliad.final.inverts"), bwg_names)
 ## We can read data in from all the sites and combine them. for example:
 sites <- c("Argentina", "French_Guiana", "Colombia",
            "Macae", "PuertoRico","CostaRica") %>%
-  # sapply(offline) %>%
+   sapply(offline,"../../../Dropbox/") %>%
   combine_tab("site.info")
 
 phys <- c("Argentina", "French_Guiana", "Colombia",
           "Macae", "PuertoRico","CostaRica") %>%
-  #sapply(offline) %>%
+  sapply(offline,"../../../Dropbox/") %>%
   combine_tab("bromeliad.physical")
 # something is wrong with Cardoso site.info. too many columns?
 ## need to make the Colombia stopping rule more robust
 
 leafwater <- c("Argentina", "French_Guiana", "Colombia",
                "Macae", "PuertoRico","CostaRica") %>%
-  #sapply(offline) %>%
+  sapply(offline,"../../../Dropbox/") %>%
   combine_tab("leaf.waterdepths")
 
 hydro <- hydro_variables(leafwater, sites, phys)
+
+leafwater %>% 
+  filter(site == "frenchguiana") %>% 
+  hydro_variables(sites, phys)
 
 
 hydro2 <- hydro_variables(leafwater, sites, phys,rm_centre = FALSE,aggregate_leaves = FALSE)
@@ -178,7 +182,7 @@ cr_water <- cr %>%
 
 leafwater
 
-test_supp
+# test_supp
 
 ## check all first dates
 leafwater %>%
