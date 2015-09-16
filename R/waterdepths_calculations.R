@@ -323,9 +323,13 @@ check_increasing <- function(vec){
   all_but_frst <- vec[-1]
   
   compares <- Map(`<`, all_but_last, all_but_frst)
-  all(unlist(compares))
   
-  if (any(vec < 0)) NA
+  res <- all(unlist(compares))
+  
+  if (any(vec < 0) | any(is.na(vec))) {
+    res <- NA
+  }
+  return(res)
 }
 
 extreme_vector <- function(vec, bounds){
@@ -344,14 +348,25 @@ extreme_vector <- function(vec, bounds){
 }
 
 
-## takes a vector and returns a data_frame
-extremity <- function(dep){
+find_bounds_wet_overflow <- function(depth){
   ## dep should be 65
-  maxdep <- max(dep, na.rm = TRUE)
-  full <- maxdep - maxdep/10
+  maxdep <- max(depth, na.rm = TRUE)
+  full <- maxdep - 10
   empty <- 5
   
+  if (maxdep < 10 | full < 0) {
+    boundaries <- rep(NA, 4)
+    warning("this leaf was too dry")
+  }
+  
   boundaries <- c(0, empty, full, maxdep)
+  
+  return(boundaries)
+}
+
+## takes a vector and returns a data_frame
+extremity <- function(dep){
+
   bigger <- check_increasing(boundaries)
   
   if (!isTRUE(bigger) | all(is.na(dep))) {
@@ -384,7 +399,7 @@ last_extremity <- function(df){
   if (nrow(res) == 1) {
     res
   } else if (nrow(res) == 0) {
-    data_frame(event = NA,
+    dplyr::data_frame(event = NA,
                prior = NA)
   } else {
     stop("wtf")
@@ -394,6 +409,6 @@ last_extremity <- function(df){
 
 get_last_extremity <- . %>% 
   extremity() %>% 
-  do(last_extremity(.))
+  dplyr::do(last_extremity(.))
 
 
