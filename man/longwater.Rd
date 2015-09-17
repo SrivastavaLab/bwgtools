@@ -4,7 +4,7 @@
 \alias{longwater}
 \title{make the water data long}
 \usage{
-longwater(df)
+longwater(df, which_columns = "measure")
 }
 \arguments{
 \item{df}{the water data to make long}

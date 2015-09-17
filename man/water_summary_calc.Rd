@@ -4,7 +4,7 @@
 \alias{water_summary_calc}
 \title{Calculate water depth measurements}
 \usage{
-water_summary_calc(depth)
+water_summary_calc(depth, .site_brom.id)
 }
 \arguments{
 \item{depth}{depth measurements}

@@ -5,7 +5,7 @@
 \title{Calculate the hydrological variables}
 \usage{
 hydro_variables(waterdata, sitedata, physicaldata, rm_centre = TRUE,
-  aggregate_leaves = FALSE)
+  aggregate_leaves = FALSE, .columns = "measure")
 }
 \arguments{
 \item{waterdata}{the leaf.waterdepths tab}
