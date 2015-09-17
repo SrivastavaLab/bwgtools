@@ -305,8 +305,12 @@ water_summary_calc <- function(depth, .site_brom.id){
   var_measures <- dplyr::data_frame(
     len.depth = length(depth),
     n.depth = sum(!is.na(depth)),
-    cv.depth = (100*(noNA(sd, depth)/noNA(mean, depth))),
-    wetness = noNA(mean, depth) / noNA(max, depth),
+    mean.depth = noNA(mean, depth),
+    max.depth = noNA(max, depth),
+    min.depth = noNA(min, depth),
+    sd.depth = noNA(sd, depth),
+    cv.depth = 100*(sd.depth/mean.depth),
+    wetness = mean.depth / max.depth,
     prop.overflow.days = overflow(depth),
     prop.driedout.days = noNA(sum, depth < 5)/n.depth
   )
