@@ -28,7 +28,6 @@ firstday <- function(df){
 #' @examples
 #' Arg <- read_site_sheet("Argentina","leaf.waterdepths")
 #' from_start(Arg)
-#' @export
 from_start <- function(depthdata){
   startdays <- firstday(depthdata)
 
