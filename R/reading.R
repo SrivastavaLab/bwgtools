@@ -98,7 +98,7 @@ get_all_sites <- function(sites = c("Argentina","Cardoso", "Colombia",
 #' taxo <- get_bwg_names()
 #' names(taxo)
 #' @export
-get_bwg_names <- function(file = "https://raw.githubusercontent.com/SrivastavaLab/bwg_names/master/data/15_Distributsions_organism_full.tsv", chars = 22, nums = 49){
+get_bwg_names <- function(file = "https://raw.githubusercontent.com/SrivastavaLab/bwg_names/master/data/16_Distributions_organism_full.tsv", chars = 22, nums = 49){
   msg <- sprintf("this function thinks there are %d character columns followed by %d numeric columns", chars, nums)
   message(msg)
   cols <- c(rep("c", chars), rep("n", nums))
