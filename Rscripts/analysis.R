@@ -30,6 +30,7 @@ phys <- c("Argentina", "French_Guiana", "Colombia", "Cardoso",
 # something is wrong with Cardoso site.info. too many columns?
 ## need to make the Colombia stopping rule more robust
 
+identical(phys$site_brom.id, unique(phys$site_brom.id))
 
 leafwater <- c("Argentina", "French_Guiana", "Colombia",
                "Macae", "PuertoRico","CostaRica") %>%
