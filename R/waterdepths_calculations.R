@@ -358,11 +358,7 @@ find_bounds_wet_overflow <- function(depth){
   maxdep <- max(depth, na.rm = TRUE)
   full <- maxdep - 10
   empty <- 5
-  
-  if (maxdep < 10 | full < 0) {
-    boundaries <- rep(NA, 4)
-    warning("this leaf was too dry")
-  }
+
   
   boundaries <- c(0, empty, full, maxdep)
   
