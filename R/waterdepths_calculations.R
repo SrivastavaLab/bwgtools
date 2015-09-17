@@ -5,7 +5,7 @@
 #' @return long water data
 #' @importFrom magrittr "%>%"
 #' @export
-longwater <- function(df) {
+longwater <- function(df, which_columns = "measure") {
   inputnames <- c("site_brom.id", "site", "trt.name", "date", "depth.centre.measure.first", 
     "depth.leafa.measure.first", "depth.leafb.measure.first", "depth.centre.water.first", 
     "depth.leafa.water.first", "depth.leafb.water.first")
@@ -25,7 +25,7 @@ longwater <- function(df) {
     ## ONLY WHERE water first is no 
     ## in other words, where they measured depth first.
     ## all depth should be measured AFTER watering.
-    dplyr::filter(watered_first == "measure")
+    dplyr::filter(watered_first == which_columns)
   
   correct_names <- c("site_brom.id", "site", "trt.name", "date", "leaf", "watered_first", 
     "depth")
@@ -211,10 +211,11 @@ make_full_timeline <- function(filtered_water_data, sitedata, physdata){
 #' @export
 #' @importFrom magrittr "%>%"
 hydro_variables <- function(waterdata, sitedata, physicaldata,
-                            rm_centre = TRUE, aggregate_leaves = FALSE){
+                            rm_centre = TRUE, aggregate_leaves = FALSE,
+                            .columns = "measure"){
 
   filtered_long_water <- waterdata %>%
-    longwater %>%
+    longwater(which_columns = .columns) %>%
     filter_long_water(rm_centre = rm_centre)
 
 
@@ -371,8 +372,17 @@ extremity <- function(dep){
   
   bigger <- check_increasing(boundaries)
   
-  if (!isTRUE(bigger) | all(is.na(dep))) {
-    warning("it broke!")
+  if (!isTRUE(bigger)) {
+    warning(sprintf("boundaries are %s. These are not increasing!
+                    Probably this leaf was too dry.
+                    Answer is NA",
+                    paste(boundaries,
+                          collapse = ", ")))
+    
+    final <- dplyr::data_frame(event = NA,
+                               prior = NA)
+  } else if (all(is.na(dep))) {
+    warning("depth measurements completely absent. Did you choose the correct measurement time?")
     final <- dplyr::data_frame(event = NA,
                                prior = NA)
   } else {
