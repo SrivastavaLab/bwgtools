@@ -379,12 +379,15 @@ extremity <- function(dep){
   if (!isTRUE(bigger)) {
     warning(sprintf("boundaries are %s. These are not increasing!
                     Probably this leaf was too dry.
-                    Answer is NA",
+                    Answer is drought, forever",
                     paste(boundaries,
                           collapse = ", ")))
-    
-    final <- dplyr::data_frame(event = NA,
-                               prior = NA)
+    ## ok we define such leaves as being in drought forever
+    ev <- rep("driedout", length(dep))
+    pr <- rev(seq_along(dep))
+              
+    final <- dplyr::data_frame(event = ev,
+                               prior = pr)
   } else if (all(is.na(dep))) {
     warning("depth measurements completely absent. Did you choose the correct measurement time?")
     final <- dplyr::data_frame(event = NA,
