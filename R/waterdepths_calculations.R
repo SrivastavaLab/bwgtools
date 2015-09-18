@@ -454,10 +454,8 @@ last_extremity <- function(df){
   ## check prior is integer
   
   ## find the most recent extreme event
-  res <- df %>% 
-    #dplyr::group_by(event) %>% 
-    dplyr::filter(prior == min(prior))
-    ### NEXT STEP GOES HERE
+  res <- most_recent(df)
+
   
   res2 <- df %>% 
     dplyr::group_by(event) %>% 
@@ -487,4 +485,25 @@ get_last_extremity <- . %>%
   extremity() %>% 
   dplyr::do(last_extremity(.))
 
+most_recent <- function(extreme_df){
+  last_dry <- min(extreme_df$prior[extreme_df$event == "driedout"])
+  last_wet <- min(extreme_df$prior[extreme_df$event == "overflow"])
+  
+  last_dry <- ifelse(is.finite(last_dry), last_dry, NA)
+  last_wet <- ifelse(is.finite(last_wet), last_wet, NA)
+  
+  dplyr::data_frame(last_dry = last_dry,
+                    last_wet = last_wet)
+}
+
+longest_stretch <- function(extreme_df, filt){
+  lagged <- extreme_df %>% 
+    dplyr::filter(event == filt) %>% 
+    dplyr::mutate(l = lag(prior) - prior)
+
+  #lag of 1 means consecutive
+  grps <- rle(lagged$l)
+  consec <- grps$value == 1
+  max(grps$lengths[consec], na.rm = TRUE) + 1
+}
 
