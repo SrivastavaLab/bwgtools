@@ -213,11 +213,34 @@ make_full_timeline <- function(filtered_water_data, sitedata, physdata){
 hydro_variables <- function(waterdata, sitedata, physicaldata,
                             rm_centre = TRUE, aggregate_leaves = FALSE,
                             .columns = "measure"){
-
-  filtered_long_water <- waterdata %>%
-    longwater(which_columns = .columns) %>%
+  ## should point out to ppl that you contrl the output by
+  ## manipulating waterdata
+  if (any(is.na(waterdata$site))) {
+    message("removing NA values in the 'site' column. Perhaps somebody has added blank rows to a dataset! please check")
+    waterdata <- data.frame(waterdata[!is.na(waterdata$site),])
+  }
+  
+  ## find macae
+  assertthat::assert_that(assertthat::has_name(waterdata, "site"))
+  find_macae <- waterdata[["site"]] == "macae"
+  meas_macae <- ifelse(find_macae, "water", "measure")
+  ## split the list
+  ## set arguments for that list
+  water_split <- split(waterdata, meas_macae)
+  
+  ## Map
+  longwater_type <- function(water_split, x){
+    force(x)
+    longwater(water_split, which_columns = x)
+  }
+  answer <- Map(longwater_type,
+                water_split,
+                unique(meas_macae))
+  
+  long_water <- dplyr::rbind_all(answer)
+  
+  filtered_long_water <- long_water %>%
     filter_long_water(rm_centre = rm_centre)
-
 
   long_dates <- make_full_timeline(filtered_water_data = filtered_long_water,
                                    sitedata,
