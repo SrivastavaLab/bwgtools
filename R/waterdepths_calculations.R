@@ -366,7 +366,7 @@ water_summary_calc <- function(depth, .site_brom.id){
   #message(sprintf("trying %s", unique(.site_brom.id)))
   extreme <- get_last_extremity(depth)
   
-  message("Everything is OK / Tudo otimo / Esta bien")
+  #message("Everything is OK / Tudo otimo / Esta bien")
   cbind(var_measures, extreme)
 }
 
@@ -474,7 +474,6 @@ last_extremity <- function(df){
     dplyr::select(-s)
   
   
-  
   if (nrow(res) == 1 & nrow(res2) == 1) {
     cbind(res, res2)
   } else if (nrow(res) == 0 | nrow(res) == 0 ) {
@@ -500,8 +499,16 @@ most_recent <- function(extreme_df){
   last_dry <- ifelse(is.finite(last_dry), last_dry, NA)
   last_wet <- ifelse(is.finite(last_wet), last_wet, NA)
   
+  long_dry <- longest_stretch(extreme_df, "driedout")
+  long_wet <- longest_stretch(extreme_df, "overflow")
+  
+  long_dry <- ifelse(is.finite(long_dry), long_dry, NA)
+  long_wet <- ifelse(is.finite(long_wet), long_wet, NA)
+  
   dplyr::data_frame(last_dry = last_dry,
-                    last_wet = last_wet)
+                    last_wet = last_wet,
+                    long_dry = long_dry,
+                    long_wet = long_wet)
 }
 
 longest_stretch <- function(extreme_df, filt){
@@ -519,5 +526,5 @@ summarize_hydro <- function(hydro_data){
   hydro_data %>% 
     dplyr::select(-leaf) %>% 
     dplyr::group_by(site, site_brom.id, trt.name) %>% 
-    dplyr::summarise_each(funs(median))
+    dplyr::summarise_each(dplyr::funs(median))
 }
