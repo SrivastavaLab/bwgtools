@@ -401,6 +401,7 @@ extremity <- function(dep){
     ev <- ifelse(!is.na(dep),"driedout",NA)
     pr <- rev(seq_along(dep))
               
+    ## could add a "overflow" at 66 here
     final <- dplyr::data_frame(event = ev,
                                prior = pr)
   } else if (all(is.na(dep))) {
@@ -430,8 +431,10 @@ last_extremity <- function(df){
   ## check prior is integer
   
   ## find the most recent extreme event
-  res <- dplyr::filter(df, prior == min(prior))
-  
+  res <- df %>% 
+    #dplyr::group_by(event) %>% 
+    dplyr::filter(prior == min(prior))
+    ### NEXT STEP GOES HERE
   
   res2 <- df %>% 
     dplyr::group_by(event) %>% 
