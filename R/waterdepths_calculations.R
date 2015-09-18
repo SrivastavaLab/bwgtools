@@ -396,8 +396,9 @@ extremity <- function(dep){
                     Answer is drought, forever",
                     paste(boundaries,
                           collapse = ", ")))
-    ## ok we define such leaves as being in drought forever
-    ev <- rep("driedout", length(dep))
+    ## ok we define such leaves as being in drought forevere
+    ## err at least as long as a measurement was taken
+    ev <- ifelse(!is.na(dep),"driedout",NA)
     pr <- rev(seq_along(dep))
               
     final <- dplyr::data_frame(event = ev,
@@ -418,7 +419,10 @@ extremity <- function(dep){
     final <- df_extreme %>% 
       dplyr::filter(event %in% c("driedout", "overflow"))
   }
-  return(final)
+  
+  Final <- final %>% 
+    dplyr::filter(!is.na(event))
+  return(Final)
 }
 
 last_extremity <- function(df){
