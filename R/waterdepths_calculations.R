@@ -356,7 +356,7 @@ water_summary_calc <- function(depth, .site_brom.id){
     prop.overflow.days = overflow(depth),
     prop.driedout.days = driedout(depth)
   )
-  message(sprintf("trying %s", unique(.site_brom.id)))
+  #message(sprintf("trying %s", unique(.site_brom.id)))
   extreme <- get_last_extremity(depth)
   
   cbind(var_measures, extreme)
@@ -444,7 +444,7 @@ extremity <- function(dep){
     final <- df_extreme %>% 
       dplyr::filter(event %in% c("driedout", "overflow"))
   }
-  
+  message("Everything is OK / Tudo otimo / Esta bien")
   Final <- final %>% 
     dplyr::filter(!is.na(event))
   return(Final)
@@ -487,8 +487,8 @@ get_last_extremity <- . %>%
   dplyr::do(last_extremity(.))
 
 most_recent <- function(extreme_df){
-  last_dry <- min(extreme_df$prior[extreme_df$event == "driedout"])
-  last_wet <- min(extreme_df$prior[extreme_df$event == "overflow"])
+  last_dry <- suppressWarnings(min(extreme_df$prior[extreme_df$event == "driedout"]))
+  last_wet <- suppressWarnings(min(extreme_df$prior[extreme_df$event == "overflow"]))
   
   last_dry <- ifelse(is.finite(last_dry), last_dry, NA)
   last_wet <- ifelse(is.finite(last_wet), last_wet, NA)
