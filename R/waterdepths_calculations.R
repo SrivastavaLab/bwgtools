@@ -267,13 +267,31 @@ overflow <- function(dep){
   ## relative to the number of observations:
   n_obs <- sum(!is.na(dep)) 
   
-  if (md == 0) {
+  if (md <= 10) {
     ov <- 0
   } else {
     ov <- sum(dep > full, na.rm = TRUE)
   }
   
   ov/n_obs
+}
+
+driedout <- function(dep){ 
+  ## find the maximum 
+  md <- max(dep, na.rm = TRUE)
+  ## define dryness
+  dry <- 5
+  ## relative to the number of observations:
+  n_obs <- sum(!is.na(dep)) 
+  
+  ## if max is less than 10 everything is dry
+  if (md <= 10) {
+    dr <- n_obs
+  } else {
+    dr <- sum(dep <= dry, na.rm = TRUE)
+  }
+  
+  dr/n_obs
 }
 
 
@@ -312,7 +330,7 @@ water_summary_calc <- function(depth, .site_brom.id){
     cv.depth = 100*(sd.depth/mean.depth),
     wetness = mean.depth / max.depth,
     prop.overflow.days = overflow(depth),
-    prop.driedout.days = noNA(sum, depth < 5)/n.depth
+    prop.driedout.days = driedout(depth)
   )
   message(sprintf("trying %s", unique(.site_brom.id)))
   extreme <- get_last_extremity(depth)
@@ -407,16 +425,16 @@ last_extremity <- function(df){
   ## check event has only those levels
   ## check prior is integer
   
-  #data_frame(.event[which.min(.prior)])
-  
+  ## find the most recent extreme event
   res <- dplyr::filter(df, prior == min(prior))
+  
   
   res2 <- df %>% 
     dplyr::group_by(event) %>% 
     dplyr::tally(.) %>% 
     dplyr::mutate(s = 1, 
                   event = paste0("n_", event)) %>% 
-    tidyr::spread(event, n) %>% 
+    tidyr::spread(event, n, fill = 0) %>% 
     dplyr::select(-s)
   
   
