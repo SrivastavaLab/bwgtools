@@ -105,6 +105,24 @@ bromeliad.terrestrial_read <- function(file_to_read){
 
 
 # bromeliad.ibuttons
+#' Read in the bromeliad.ibuttons tab
+#'
+#' this function reads one site.info sheet
+#'
+#' @param file_to_read Path to file to be read
+bromeliad.ibuttons_read <- function(file_to_read){
+  
+  true_cols <- c("text","text","text","date",
+                 "numeric","numeric","numeric")
+  
+  
+  readxl::read_excel(path = file_to_read,
+                     sheet = "bromeliad.ibuttons",
+                     na = "NA",
+                     col_types = true_cols
+  )
+}
+
 
 # bromeliad.initial.inverts
 
@@ -125,3 +143,5 @@ neutral_read <- function(sheetname){
     )
   }
 }
+
+

@@ -28,7 +28,8 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE,
                                    "bromeliad.initial.inverts",
                                    "bromeliad.terrestrial",
                                    "terrestrial.taxa",
-                                   "bromeliad.final.inverts.terr"
+                                   "bromeliad.final.inverts.terr",
+                                   "bromeliad.ibuttons"
   ))
   f <- switch(sheet,
               leaf.waterdepths = leaf.waterdepths_read,
@@ -39,7 +40,8 @@ read_sheet <- function(file, sheetname = NULL, ondisk = FALSE,
               bromeliad.initial.inverts = neutral_read("bromeliad.initial.inverts"),
               bromeliad.final.inverts.terr = neutral_read("bromeliad.final.inverts.terr"),
               bromeliad.terrestrial = bromeliad.terrestrial_read,
-              terrestrial.taxa = terrestrial.taxa_read
+              terrestrial.taxa = terrestrial.taxa_read,
+              bromeliad.ibuttons = bromeliad.ibuttons_read
   )
 
   if (file.exists(localfile)) {
