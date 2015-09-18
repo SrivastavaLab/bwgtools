@@ -80,18 +80,23 @@ invert_to_long <- function(insect_data, category_vars){
     tidyr::separate(trt.name, c("mu", "k"), "k")%>%
     dplyr::mutate(mu = tidyr::extract_numeric(mu), k = tidyr::extract_numeric(k))
 
-  zeros_same <- identical(which(long_out$abundance==0), which(long_out$biomass == 0))
-
-  ## is there even biomass measurements?
-  biomass_absent <- all(is.na(long_out$biomass))
-
-  countryname <- unique(insect_data[["site"]])
-  if(!zeros_same & !biomass_absent) warning(sprintf("there are inconsistencies between the abundance and biomass columns in %s", countryname))
-
-  # remove the zeros
-  long_final <- long_out %>%
-    dplyr::filter(abundance != 0 | biomass != 0)
-
+  has_biomass <- assertthat::has_name(long_out, "biomass")
+  if (has_biomass) {
+    zeros_same <- identical(which(long_out$abundance==0), which(long_out$biomass == 0))
+    
+    ## is there even biomass measurements?
+    biomass_absent <- all(is.na(long_out$biomass))
+    
+    countryname <- unique(insect_data[["site"]])
+    if(!zeros_same & !biomass_absent) warning(sprintf("there are inconsistencies between the abundance and biomass columns in %s", countryname))
+  
+    # remove the zeros
+    long_final <- long_out %>%
+      dplyr::filter(abundance != 0 | biomass != 0)
+  } 
+    long_final <- long_out %>% 
+      dplyr::filter(abundance != 0)
+    
   return(long_final)
 }
 
