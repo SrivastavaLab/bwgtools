@@ -279,8 +279,12 @@ hydro_variables <- function(waterdata, sitedata, physicaldata,
       dplyr::group_by(site, site_brom.id, trt.name, leaf)
   }
 
-    dplyr::do(sorted_water, water_summary_calc(.$depth, .$site_brom.id))
+    hydrovars <- dplyr::do(sorted_water, water_summary_calc(.$depth, .$site_brom.id))
 
+    message("if last_dry and last_wet is NA, we use 65 days (end of experiment)\nif n_driedout and n_overflow are NA, they are 0")
+    hydrovars %>% 
+      tidyr::replace_na(list(last_dry = 65, last_wet = 65, n_driedout = 0, n_overflow = 0))
+    
 }
 
 overflow <- function(dep){
@@ -350,6 +354,9 @@ water_summary_calc <- function(depth, .site_brom.id){
     mean.depth = noNA(mean, depth),
     max.depth = noNA(max, depth),
     min.depth = noNA(min, depth),
+    amplitude = max.depth - min.depth,
+    net_fluc = sum(depth[-1] - depth[-length(depth)], na.rm = TRUE),
+    tot_fluc = sum(abs(depth[-1] - depth[-length(depth)]), na.rm = TRUE),
     sd.depth = noNA(sd, depth),
     cv.depth = 100*(sd.depth/mean.depth),
     wetness = mean.depth / max.depth,
@@ -359,6 +366,7 @@ water_summary_calc <- function(depth, .site_brom.id){
   #message(sprintf("trying %s", unique(.site_brom.id)))
   extreme <- get_last_extremity(depth)
   
+  message("Everything is OK / Tudo otimo / Esta bien")
   cbind(var_measures, extreme)
 }
 
@@ -444,7 +452,6 @@ extremity <- function(dep){
     final <- df_extreme %>% 
       dplyr::filter(event %in% c("driedout", "overflow"))
   }
-  message("Everything is OK / Tudo otimo / Esta bien")
   Final <- final %>% 
     dplyr::filter(!is.na(event))
   return(Final)
@@ -508,3 +515,9 @@ longest_stretch <- function(extreme_df, filt){
   max(grps$lengths[consec], na.rm = TRUE) + 1
 }
 
+summarize_hydro <- function(hydro_data){
+  hydro_data %>% 
+    dplyr::select(-leaf) %>% 
+    dplyr::group_by(site, site_brom.id, trt.name) %>% 
+    dplyr::summarise_each(funs(median))
+}
