@@ -27,8 +27,9 @@ longwater <- function(df, which_columns = "measure") {
     ## all depth should be measured AFTER watering.
     dplyr::filter(watered_first == which_columns)
   
-  correct_names <- c("site_brom.id", "site", "trt.name", "date", "leaf", "watered_first", 
-    "depth")
+  correct_names <- c("site_brom.id", "site", "trt.name",
+                     "date", "leaf", "watered_first", 
+                     "depth")
   
   ## check the names
   namecheck <- assertthat::has_name(measures, correct_names)
