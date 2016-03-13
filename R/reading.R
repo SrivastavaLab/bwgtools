@@ -102,13 +102,16 @@ get_all_sites <- function(sites = c("Argentina","Cardoso", "Colombia",
 #' taxo <- get_bwg_names()
 #' names(taxo)
 #' @export
-get_bwg_names <- function(file = "https://raw.githubusercontent.com/SrivastavaLab/bwg_names/master/data/16_Distributions_organism_full.tsv", chars = 22, nums = 49){
-  msg <- sprintf("this function thinks there are %d character columns followed by %d numeric columns", chars, nums)
-  message(msg)
-  cols <- c(rep("c", chars), rep("n", nums))
-  our_col_types <- Reduce(f = paste0, cols)
-  the_data <- readr::read_tsv(file, col_types = our_col_types)
-  if(nrow(readr::problems(the_data)) != 0) stop("something is wrong")
+get_bwg_names <- function(){
+  
+  if (!exists("token", envir = bwgdata:::credentials)) {
+    bwgdata::bwg_auth()
+  } 
+  
+  trts <- bwgdata::bwg_get("species")
+  
+  the_data <- trts$species
+  
   return(the_data)
 }
 
