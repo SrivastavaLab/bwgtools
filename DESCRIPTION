@@ -1,7 +1,7 @@
 Package: bwgtools
 Type: Package
 Title: Access data from the bromeliad working group
-Version: 0.4.1
+Version: 0.4.2
 Date: 2015-04-20
 Authors@R : c(person("Andrew" "MacDonald", email = "aammacdonald@gmail.com",
     role = c("aut", "cre")))
