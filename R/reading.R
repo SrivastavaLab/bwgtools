@@ -106,7 +106,9 @@ get_bwg_names <- function(){
   
   if (!exists("token", envir = bwgdata:::credentials)) {
     bwgdata::bwg_auth()
-  } 
+  } else {
+    message("looks like you're already signed in! using existing credentials")
+  }
   
   trts <- bwgdata::bwg_get("species")
   
