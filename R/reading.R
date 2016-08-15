@@ -110,9 +110,7 @@ get_bwg_names <- function(){
     message("looks like you're already signed in! using existing credentials")
   }
   
-  trts <- bwgdata::bwg_get("species")
-  
-  the_data <- trts$species
+  the_data <- bwgdata::bwg_get("species")
   
   return(the_data)
 }
