@@ -213,7 +213,7 @@ make_full_timeline <- function(filtered_water_data, sitedata, physdata){
 #' @importFrom magrittr "%>%"
 hydro_variables <- function(waterdata, sitedata, physicaldata,
                             rm_centre = TRUE, aggregate_leaves = FALSE,
-                            .columns = "measure"){
+                            .columns = "measure", dohydro = TRUE){
   ## should point out to ppl that you contrl the output by
   ## manipulating waterdata
   if (any(is.na(waterdata$site))) {
@@ -279,13 +279,23 @@ hydro_variables <- function(waterdata, sitedata, physicaldata,
       dplyr::group_by(site, site_brom.id, trt.name, leaf)
   }
 
+  if (isTRUE(dohydro)){
     hydrovars <- dplyr::do(sorted_water, water_summary_calc(.$depth, .$site_brom.id))
-
+    
     message("if last_dry and last_wet is NA, we use 65 days (end of experiment)\nif n_driedout and n_overflow are NA, they are 0")
-    hydrovars %>% 
+    ret <- hydrovars %>% 
       tidyr::replace_na(list(last_dry = 65, last_wet = 65, n_driedout = 0, n_overflow = 0))
     
+    
+    return(ret)   
+  } else {
+    ret <- sorted_water
+  }
+  
+  return(ret)
+ 
 }
+
 
 overflow <- function(dep){
   ## find the maximum
