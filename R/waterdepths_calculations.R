@@ -238,7 +238,7 @@ hydro_variables <- function(waterdata, sitedata, physicaldata,
                 water_split,
                 unique(meas_macae))
   
-  long_water <- dplyr::rbind_all(answer)
+  long_water <- dplyr::bind_rows(answer)
   
   filtered_long_water <- long_water %>%
     filter_long_water(rm_centre = rm_centre)
@@ -280,7 +280,7 @@ hydro_variables <- function(waterdata, sitedata, physicaldata,
   }
 
   if (isTRUE(dohydro)){
-    hydrovars <- dplyr::do(sorted_water, water_summary_calc(.$depth, .$site_brom.id))
+    hydrovars <- dplyr::do(sorted_water, water_summary_calc(.$depth))
     
     message("if last_dry and last_wet is NA, we use 65 days (end of experiment)\nif n_driedout and n_overflow are NA, they are 0")
     ret <- hydrovars %>% 
@@ -352,7 +352,7 @@ driedout <- function(dep){
 #'
 #' @return a 1 x n row \code{tbl_df}
 #' @export
-water_summary_calc <- function(depth, .site_brom.id){
+water_summary_calc <- function(depth){
   ## modify functions to remove the na values
   noNA <- function(f, x) f(x, na.rm = TRUE)
   ## check that it looks like mm

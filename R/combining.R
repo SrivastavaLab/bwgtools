@@ -46,7 +46,7 @@ combine_tab <- function(.sites =  c("Argentina","Cardoso", "Colombia",
   if(!names_all_same(site_data)) stop("names are different!")
 
   ## finally, rbind all
-  allsite <- dplyr::rbind_all(site_data)
+  allsite <- dplyr::bind_rows(site_data)
   return(allsite)
 }
 
@@ -78,7 +78,7 @@ invert_to_long <- function(insect_data, category_vars){
     tidyr::gather_("species", "quantity", insect_names, convert = TRUE)%>%
     tidyr::spread(abundance.or.biomass, quantity)%>%
     tidyr::separate(trt.name, c("mu", "k"), "k")%>%
-    dplyr::mutate(mu = tidyr::extract_numeric(mu), k = tidyr::extract_numeric(k))
+    dplyr::mutate(mu = readr::parse_number(mu), k = readr::parse_number(k))
 
   has_biomass <- assertthat::has_name(long_out, "biomass")
   if (has_biomass) {
