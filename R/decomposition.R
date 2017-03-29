@@ -11,8 +11,8 @@
 #' @importFrom magrittr "%>%"
 physical_long <- function(physical_data){
   physical_data %>%
-    dplyr::select(site, trt.name, site_brom.id, contains("leafpack")) %>%
-    tidyr::gather("leafpackvar", "mass", contains("leafpack")) %>%
+    dplyr::select(site, trt.name, site_brom.id, dplyr::contains("leafpack")) %>%
+    tidyr::gather("leafpackvar", "mass", dplyr::contains("leafpack")) %>%
     tidyr::separate(leafpackvar, c("rep","species","word_mass","time"))
 }
 
