@@ -1,6 +1,10 @@
 [![Travis-CI Build
 Status](https://travis-ci.org/SrivastavaLab/bwgtools.png?branch=master)](https://travis-ci.org/SrivastavaLab/bwgtools)
 
+[![DOI](https://zenodo.org/badge/34411031.svg)](https://zenodo.org/badge/latestdoi/34411031)
+
+Andrew MacDonald, Dézerald Olivier, Nicholas Marino, A.D. Letaw, & Ethan White. (2017, December 20). SrivastavaLab/bwgtools: First release of bwgtools (Version 1.0.0). Zenodo. http://doi.org/10.5281/zenodo.1120419
+
 Introduction
 ============
 
